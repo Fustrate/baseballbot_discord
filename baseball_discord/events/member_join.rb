@@ -6,10 +6,8 @@ module BaseballDiscord
       extend Discordrb::EventContainer
 
       member_join do |event|
-        if event.server.id == BaseballDiscord::Bot::SERVER_ID
-          $stdout << event.server.inspect
-          $stdout << event.user.inspect
-        end
+        # Same as when they type !verify
+        # BaseballDiscord::Commands::Verify::RedditAuthCommand.new(event).run
 
         nil
       end

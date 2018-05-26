@@ -11,17 +11,20 @@ module BaseballDiscord
       end
 
       class RedditAuthCommand < Command
+        VERIFY_MESSAGE = <<~PM
+          Click the following link to verify your reddit account:'
+          %<auth_url>s
+          This link is active for 7 days, after which you can message me with `!verify` to receive a new link.
+        PM
+
         def run
           if user.roles.map(&:name).include?('Verified')
             user.pm 'You have already been verified.'
-          else
-            user.pm 'Click the following link to verify your reddit account:'
-            user.pm reddit_auth_url
-            user.pm <<~PM.tr("\n", ' ').strip
-              This link is active for 7 days, after which you can
-              message me with `!verify` to receive a new link.
-            PM
+
+            return
           end
+
+          user.pm format(VERIFY_MESSAGE, auth_url: reddit_auth_url)
         end
 
         def reddit_auth_url

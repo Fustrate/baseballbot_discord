@@ -34,6 +34,7 @@ module BaseballDiscord
 
       @redis = Redis.new
       @logger = Logger.new($stdout)
+      @mlb = MLBStatsAPI::Client.new(logger: @logger, cache: @redis)
     end
 
     def self.parse_date(date)
