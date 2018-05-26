@@ -7,7 +7,7 @@ module BaseballDiscord
       extend Discordrb::Commands::CommandContainer
 
       command(:verify) do |event, *args|
-        RedditAuthCommand.run(event, *args)
+        RedditAuthCommand.new(event, *args).run
       end
 
       class RedditAuthCommand < Command

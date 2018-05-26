@@ -10,7 +10,7 @@ module BaseballDiscord
       USAGE = 'scoreboard [today|yesterday|tomorrow|Date]'
 
       command(COMMAND, description: DESCRIPTION, usage: USAGE) do |event, *args|
-        ScoreboardCommand.run(event, *args)
+        ScoreboardCommand.new(event, *args).run
       end
 
       class ScoreboardCommand < Command

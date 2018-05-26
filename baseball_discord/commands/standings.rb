@@ -15,7 +15,7 @@ module BaseballDiscord
         description: DESCRIPTION,
         usage: USAGE
       ) do |event, *args|
-        StandingsCommand.run(event, *args)
+        StandingsCommand.new(event, *args).run
       end
 
       class StandingsCommand < Command

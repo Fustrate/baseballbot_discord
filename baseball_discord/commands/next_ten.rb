@@ -10,7 +10,7 @@ module BaseballDiscord
       USAGE = 'next [N=10] [team]'
 
       command(COMMAND, description: DESCRIPTION, usage: USAGE) do |event, *args|
-        NextTenCommand.run(event, *args)
+        NextTenCommand.new(event, *args).run
       end
 
       class NextTenCommand < Command
