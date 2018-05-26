@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class BaseballDiscord
+module BaseballDiscord
   module Events
     module MemberJoin
       extend Discordrb::EventContainer

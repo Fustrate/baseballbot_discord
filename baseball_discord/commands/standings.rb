@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class BaseballDiscord
+module BaseballDiscord
   module Commands
     module Standings
       extend Discordrb::Commands::CommandContainer

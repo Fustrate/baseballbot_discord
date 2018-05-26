@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class BaseballDiscord
+module BaseballDiscord
   module Commands
     module NextTen
       extend Discordrb::Commands::CommandContainer
