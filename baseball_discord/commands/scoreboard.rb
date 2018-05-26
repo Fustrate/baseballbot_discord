@@ -27,7 +27,7 @@ module BaseballDiscord
         ].freeze
 
         def run
-          date = BaseballDiscord::Bot.parse_date(args.join(' '))
+          date = BaseballDiscord::Utilities.parse_date args.join(' ')
 
           return react_to_message('❓') unless date
 
@@ -138,7 +138,8 @@ module BaseballDiscord
             return innings == 9 ? 'F' : "F/#{innings}"
           end
 
-          BaseballDiscord::Bot.parse_time(game['gameDate']).strftime('%-I:%M')
+          BaseballDiscord::Utilities.parse_time(game['gameDate'])
+            .strftime('%-I:%M')
         end
       end
     end

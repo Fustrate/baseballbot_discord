@@ -2,12 +2,15 @@
 
 require_relative 'baseball_discord/bot'
 require_relative 'baseball_discord/command'
+require_relative 'baseball_discord/utilities'
+
 require_relative 'baseball_discord/commands/debug'
 require_relative 'baseball_discord/commands/last_ten'
 require_relative 'baseball_discord/commands/next_ten'
 require_relative 'baseball_discord/commands/scoreboard'
 require_relative 'baseball_discord/commands/standings'
 require_relative 'baseball_discord/commands/verify'
+
 require_relative 'baseball_discord/events/member_join'
 
 @discord_bot = BaseballDiscord::Bot.new(
