@@ -11,9 +11,11 @@ module BaseballDiscord
 
         event.message.react '✅'
 
-        event.bot.logger.debug 'Debug Info:'
-        event.bot.logger.debug "\tServer: #{event.server.inspect}"
-        event.bot.logger.debug "\tUser: #{event.user.distinct}"
+        prefix = "[#{event.message.id}] [#{event.user.distinct}]"
+
+        event.bot.logger.debug "#{prefix} Debug Info:"
+        event.bot.logger.debug "#{prefix} Server: #{event.server.inspect}"
+        event.bot.logger.debug "#{prefix} User: #{event.user.distinct}"
 
         nil
       end
