@@ -67,27 +67,20 @@ module BaseballDiscord
           rows
         end
 
-        def append_single_game_rows(rows, game)
-          rows << [
-            game[:away_name], game[:away_score], game[:status], '', '', ''
-          ]
+        def append_game_rows(rows, games)
+          first_game = game_rows(games[0])
+          second_game = game_rows(games[1])
 
-          rows << [
-            game[:home_name], game[:home_score], '', '', '', ''
-          ]
+          rows << (first_game[0] + second_game[0])
+          rows << (first_game[1] + second_game[1])
         end
 
-        def append_game_rows(rows, games)
-          return append_single_game_rows(rows, games[0]) if games.length == 1
+        def game_rows(game)
+          return [['', '', ''], ['', '', '']] unless game
 
-          rows << [
-            games[0][:away_name], games[0][:away_score], games[0][:status],
-            games[1][:away_name], games[1][:away_score], games[1][:status]
-          ]
-
-          rows << [
-            games[0][:home_name], games[0][:home_score], '',
-            games[1][:home_name], games[1][:home_score], ''
+          [
+            [game[:away_name], game[:away_score], game[:status]],
+            [game[:home_name], game[:home_score], '']
           ]
         end
 
@@ -134,7 +127,7 @@ module BaseballDiscord
         end
 
         def game_inning(game)
-          (game.dig('linescore', 'isTopInning') ? '▲' : '▼') +
+          (game.dig('linescore', 'isTopInning') ? '▲' : '▼') + ' ' +
             game.dig('linescore', 'currentInning').to_s
         end
 
