@@ -8,7 +8,7 @@ module BaseballDiscord
 
       command(:debug, help_available: false) do |event|
         if event.server.id == BaseballDiscord::Bot::SERVER_ID
-          $stdout << event.server.inspect
+          @logger.debug event.server.inspect
         end
 
         nil
