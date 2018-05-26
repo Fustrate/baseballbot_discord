@@ -17,7 +17,7 @@ module BaseballDiscord
         'Final', 'Game Over', 'Postponed', 'Completed Early'
       ].freeze
 
-      discord_bot.command(
+      command(
         :scoreboard,
         description: 'Shows scores and stuff',
         usage: 'scoreboard [today|yesterday|tomorrow|Date]'
