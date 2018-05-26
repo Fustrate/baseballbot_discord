@@ -14,7 +14,7 @@ module BaseballDiscord
         StandingsCommand.run(event, *args)
       end
 
-      class StandingsCommand
+      class StandingsCommand < Command
         STATS_STANDINGS = \
           'https://statsapi.mlb.com/api/v1/standings/regularSeason?' \
           'leagueId=103,104&season=%<year>d&t=%<t>d&date=%<date>s'
@@ -27,10 +27,6 @@ module BaseballDiscord
           204 => %w[nle nleast],
           205 => %w[nlc nlcentral]
         }.freeze
-
-        def self.run(*args)
-          new.run(*args)
-        end
 
         def run(_event, *args)
           division_id, date = parse_standings_args(args)

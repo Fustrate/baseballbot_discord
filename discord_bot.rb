@@ -11,6 +11,7 @@ require 'terminal-table'
 require 'tzinfo'
 
 require_relative 'baseball_discord/bot'
+require_relative 'baseball_discord/command'
 require_relative 'baseball_discord/commands/auth'
 require_relative 'baseball_discord/commands/debug'
 require_relative 'baseball_discord/commands/last_ten'

@@ -25,40 +25,5 @@ module BaseballDiscord
 
       Time.parse "#{with_offset.strftime('%FT%T')} #{period.zone_identifier}"
     end
-
-    protected
-
-    def load_data_from_stats_api(url, interpolations = {})
-      date = interpolations[:date] || (Time.now - 7200)
-
-      filename = format(
-        url,
-        interpolations.merge(
-          year: date.year,
-          t: Time.now.to_i,
-          date: date.strftime('%m/%d/%Y')
-        )
-      )
-
-      JSON.parse(URI.parse(filename).open.read)
-    end
-
-    def names_from_context(event)
-      search_for = []
-
-      channel_name = event.channel.name.gsub(/[^a-z]/, ' ')
-
-      search_for << channel_name unless NON_TEAM_CHANNELS.include?(channel_name)
-
-      role_names = event.user.roles.map(&:name).map(&:downcase) - %w[mods]
-
-      search_for + role_names
-    end
-
-    def react_to_event(event, reaction)
-      event.message.react reaction
-
-      nil
-    end
   end
 end
