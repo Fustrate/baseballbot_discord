@@ -5,16 +5,6 @@ module BaseballDiscord
     module NextTen
       extend Discordrb::Commands::CommandContainer
 
-      SCHEDULE = \
-        'http://statsapi.mlb.com/api/v1/schedule?teamId=%<team_id>d&' \
-        'startDate=%<start_date>s&endDate=%<end_date>s&sportId=1&' \
-        'eventTypes=primary&scheduleTypes=games&hydrate=team' \
-        '(venue(timezone)),game(content(summary)),linescore,broadcasts(all)'
-
-      PREGAME_STATUSES = [
-        'Preview', 'Warmup', 'Pre-Game', 'Delayed Start', 'Scheduled'
-      ].freeze
-
       command(
         :next,
         description: 'Display the next N games for a team',
@@ -22,135 +12,147 @@ module BaseballDiscord
       ) do |event, *args|
         $stdout << "[Command] !next #{args.join(' ').strip}"
 
-        baseballbot.upcoming_games event, args.join(' ').strip
+        NextTenCommand.run event, args.join(' ').strip
       end
 
-      def upcoming_games(event, input)
-        number, name = parse_upcoming_games_input(input)
+      class NextTenCommand < Command
+        SCHEDULE = \
+          'http://statsapi.mlb.com/api/v1/schedule?teamId=%<team_id>d&' \
+          'startDate=%<start_date>s&endDate=%<end_date>s&sportId=1&' \
+          'eventTypes=primary&scheduleTypes=games&hydrate=team' \
+          '(venue(timezone)),game(content(summary)),linescore,broadcasts(all)'
 
-        potential_names = name ? [name.downcase] : names_from_context(event)
+        PREGAME_STATUSES = [
+          'Preview', 'Warmup', 'Pre-Game', 'Delayed Start', 'Scheduled'
+        ].freeze
 
-        team_id = find_team_by_name(potential_names)
+        def run(event, input)
+          number, name = parse_upcoming_games_input(input)
 
-        return react_to_event(event, '❓') unless team_id
+          potential_names = name ? [name.downcase] : names_from_context(event)
 
-        number = (number || 10).clamp 1, 15
+          team_id = find_team_by_name(potential_names)
 
-        next_ten_data(team_id, number)
-      end
+          return react_to_event(event, '❓') unless team_id
 
-      def parse_upcoming_games_input(input)
-        case input
-        when /\A(\d+)\s+(.+)\z/
-          [Regexp.last_match[1].to_i, Regexp.last_match[2]]
-        when /\A(\D+)\z/
-          [10, Regexp.last_match[1]]
-        when /\A(\d+)\z/
-          [Regexp.last_match[1].to_i, nil]
-        else
-          [10, nil]
-        end
-      end
+          number = (number || 10).clamp 1, 15
 
-      def next_ten_data(team_id, number)
-        start_date = Time.now - 7200
-        end_date = start_date + (number + 5) * 24 * 3600
-
-        data = load_data_from_stats_api(
-          SCHEDULE,
-          team_id: team_id,
-          start_date: start_date.strftime('%m/%d/%Y'),
-          end_date: end_date.strftime('%m/%d/%Y')
-        )
-
-        upcoming_games_table extract_next_ten_games(data, team_id, number)
-      end
-
-      def upcoming_games_table(games)
-        table = Terminal::Table.new(
-          rows: upcoming_games_table_rows(games),
-          headings: ['Date', '', 'Team', 'Time'],
-          title: games.first[:team]
-        )
-
-        table.align_column(0, :right)
-        table.align_column(3, :right)
-
-        "```\n#{table}\n```"
-      end
-
-      def upcoming_games_table_rows(games)
-        last_series = nil
-        rows = []
-
-        games.map do |game|
-          series = "#{game[:home] ? 'vs' : '@'} #{game[:opponent][:name]}"
-          versus_or_at = game[:home] ? 'vs' : '@'
-
-          rows << :separator if last_series && series != last_series
-
-          rows << [
-            game[:date].strftime('%-m/%-d'),
-            series != last_series ? versus_or_at : '',
-            game[:opponent][:name],
-            game[:date].strftime('%-I:%M %p')
-          ]
-
-          last_series = series
+          next_ten_data(team_id, number)
         end
 
-        rows
-      end
-
-      def extract_next_ten_games(data, team_id, number)
-        games = []
-
-        data['dates'].each do |date|
-          next unless date['totalGames'].positive?
-
-          date['games'].each do |game|
-            status = game.dig('status', 'abstractGameState')
-
-            next unless PREGAME_STATUSES.include?(status)
-
-            games << upcoming_game_data(game, team_id)
+        def parse_upcoming_games_input(input)
+          case input
+          when /\A(\d+)\s+(.+)\z/
+            [Regexp.last_match[1].to_i, Regexp.last_match[2]]
+          when /\A(\D+)\z/
+            [10, Regexp.last_match[1]]
+          when /\A(\d+)\z/
+            [Regexp.last_match[1].to_i, nil]
+          else
+            [10, nil]
           end
         end
 
-        games.first(number)
-      end
+        def next_ten_data(team_id, number)
+          start_date = Time.now - 7200
+          end_date = start_date + (number + 5) * 24 * 3600
 
-      def upcoming_game_data(game, team_id)
-        home_team = game.dig('teams', 'home', 'team', 'id') == team_id
-
-        team = game.dig('teams', (home_team ? 'home' : 'away'))
-        opponent = game.dig('teams', (home_team ? 'away' : 'home'))
-
-        time_zone = team.dig('team', 'venue', 'timeZone')
-
-        {
-          home: home_team,
-          opponent: {
-            name: opponent.dig('team', 'teamName'),
-            wins: opponent.dig('leagueRecord', 'wins'),
-            losses: opponent.dig('leagueRecord', 'losses')
-          },
-          team: team.dig('team', 'name'),
-          date: BaseballDiscord::Bot.parse_time(
-            game['gameDate'],
-            time_zone: time_zone['id']
+          data = load_data_from_stats_api(
+            SCHEDULE,
+            team_id: team_id,
+            start_date: start_date.strftime('%m/%d/%Y'),
+            end_date: end_date.strftime('%m/%d/%Y')
           )
-        }
-      end
 
-      def find_team_by_name(names)
-        names.each do |name|
-          MLB::TEAMS_BY_NAME.each do |id, potential_names|
-            return id.to_i if potential_names.include?(name)
-          end
+          upcoming_games_table extract_next_ten_games(data, team_id, number)
         end
 
-        nil
+        def upcoming_games_table(games)
+          table = Terminal::Table.new(
+            rows: upcoming_games_table_rows(games),
+            headings: ['Date', '', 'Team', 'Time'],
+            title: games.first[:team]
+          )
+
+          table.align_column(0, :right)
+          table.align_column(3, :right)
+
+          "```\n#{table}\n```"
+        end
+
+        def upcoming_games_table_rows(games)
+          last_series = nil
+          rows = []
+
+          games.map do |game|
+            series = "#{game[:home] ? 'vs' : '@'} #{game[:opponent][:name]}"
+            versus_or_at = game[:home] ? 'vs' : '@'
+
+            rows << :separator if last_series && series != last_series
+
+            rows << [
+              game[:date].strftime('%-m/%-d'),
+              series != last_series ? versus_or_at : '',
+              game[:opponent][:name],
+              game[:date].strftime('%-I:%M %p')
+            ]
+
+            last_series = series
+          end
+
+          rows
+        end
+
+        def extract_next_ten_games(data, team_id, number)
+          games = []
+
+          data['dates'].each do |date|
+            next unless date['totalGames'].positive?
+
+            date['games'].each do |game|
+              status = game.dig('status', 'abstractGameState')
+
+              next unless PREGAME_STATUSES.include?(status)
+
+              games << upcoming_game_data(game, team_id)
+            end
+          end
+
+          games.first(number)
+        end
+
+        def upcoming_game_data(game, team_id)
+          home_team = game.dig('teams', 'home', 'team', 'id') == team_id
+
+          team = game.dig('teams', (home_team ? 'home' : 'away'))
+          opponent = game.dig('teams', (home_team ? 'away' : 'home'))
+
+          time_zone = team.dig('team', 'venue', 'timeZone')
+
+          {
+            home: home_team,
+            opponent: {
+              name: opponent.dig('team', 'teamName'),
+              wins: opponent.dig('leagueRecord', 'wins'),
+              losses: opponent.dig('leagueRecord', 'losses')
+            },
+            team: team.dig('team', 'name'),
+            date: BaseballDiscord::Bot.parse_time(
+              game['gameDate'],
+              time_zone: time_zone['id']
+            )
+          }
+        end
+
+        def find_team_by_name(names)
+          names.each do |name|
+            MLB::TEAMS_BY_NAME.each do |id, potential_names|
+              return id.to_i if potential_names.include?(name)
+            end
+          end
+
+          nil
+        end
       end
     end
   end
