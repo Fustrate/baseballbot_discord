@@ -7,12 +7,11 @@ module BaseballDiscord
       extend Discordrb::Commands::CommandContainer
 
       command(:debug, help_available: false) do |event|
-        # if event.server&.id == BaseballDiscord::Bot::SERVER_ID
-        @logger.debug 'Debug Info:'
-        @logger.debug "\tServer: #{event.server.inspect}"
-        @logger.debug "\tUser: #{event.user.inspect}"
-        @logger.debug "\tEvent: #{event.inspect}"
-        # end
+        # event.server&.id == BaseballDiscord::Bot::SERVER_ID
+
+        event.bot.logger.debug 'Debug Info:'
+        event.bot.logger.debug "\tServer: #{event.server.inspect}"
+        event.bot.logger.debug "\tUser: #{event.user.inspect}"
 
         nil
       end
