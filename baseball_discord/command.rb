@@ -3,7 +3,12 @@
 module BaseballDiscord
   class Command
     def self.run(event, *args)
-      new.run(event, *args)
+      new(event, *args).run
+    end
+
+    def initialize(event, *args)
+      @event = event
+      @args = args
     end
 
     protected
@@ -23,22 +28,22 @@ module BaseballDiscord
       JSON.parse(URI.parse(filename).open.read)
     end
 
-    def names_from_context(event)
+    def names_from_context
       search_for = []
 
-      channel_name = event.channel.name.gsub(/[^a-z]/, ' ')
+      channel_name = @event.channel.name.gsub(/[^a-z]/, ' ')
 
       unless BaseballDiscord::Bot::NON_TEAM_CHANNELS.include?(channel_name)
         search_for << channel_name
       end
 
-      role_names = event.user.roles.map(&:name).map(&:downcase) - %w[mods]
+      role_names = @event.user.roles.map(&:name).map(&:downcase) - %w[mods]
 
       search_for + role_names
     end
 
-    def react_to_event(event, reaction)
-      event.message.react reaction
+    def react_to_message(reaction)
+      @event.message.react reaction
 
       nil
     end

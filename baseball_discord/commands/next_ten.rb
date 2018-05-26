@@ -5,14 +5,12 @@ module BaseballDiscord
     module NextTen
       extend Discordrb::Commands::CommandContainer
 
-      command(
-        :next,
-        description: 'Display the next N games for a team',
-        usage: 'next [N=10] [team]'
-      ) do |event, *args|
-        $stdout << "[Command] !next #{args.join(' ').strip}"
+      COMMAND = :next
+      DESCRIPTION = 'Display the next N games for a team'
+      USAGE = 'next [N=10] [team]'
 
-        NextTenCommand.run event, args.join(' ').strip
+      command(COMMAND, description: DESCRIPTION, usage: USAGE) do |event, *args|
+        NextTenCommand.run(event, *args)
       end
 
       class NextTenCommand < Command
@@ -26,14 +24,18 @@ module BaseballDiscord
           'Preview', 'Warmup', 'Pre-Game', 'Delayed Start', 'Scheduled'
         ].freeze
 
-        def run(event, input)
+        def run
+          input = @args.join(' ').strip
+
+          $stdout << "[Command] !next #{input}"
+
           number, name = parse_upcoming_games_input(input)
 
-          potential_names = name ? [name.downcase] : names_from_context(event)
+          potential_names = name ? [name.downcase] : names_from_context
 
           team_id = find_team_by_name(potential_names)
 
-          return react_to_event(event, '❓') unless team_id
+          return react_to_message('❓') unless team_id
 
           number = (number || 10).clamp 1, 15
 

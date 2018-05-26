@@ -6,22 +6,23 @@ module BaseballDiscord
     module Auth
       extend Discordrb::Commands::CommandContainer
 
-      command(:auth) do |event|
-        RedditAuthCommand.run event
+      command(:auth) do |event, *args|
+        RedditAuthCommand.run(event, *args)
       end
 
       class RedditAuthCommand < Command
-        def run(event)
-          if event.user.roles.map(&:name).include?('Verified')
-            event.user.pm 'You have already been verified.'
+        def run
+          if @event.user.roles.map(&:name).include?('Verified')
+            @event.user.pm 'You have already been verified.'
           else
-            event.user.pm 'Click the following link to verify your reddit account:'
-            event.user.pm reddit_auth_url(event.user)
+            @event.user.pm 'Click the following link to verify your reddit account:'
+            @event.user.pm reddit_auth_url
           end
         end
 
-        def reddit_auth_url(event)
-          event.user # We need to put this in the state, or shove stuff in Redis
+        def reddit_auth_url
+          # We need to put this in the state, or shove stuff in Redis
+          # @event.user
 
           Redd.url(
             client_id: ENV['DISCORD_REDDIT_CLIENT_ID'],

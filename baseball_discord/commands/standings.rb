@@ -5,11 +5,15 @@ module BaseballDiscord
     module Standings
       extend Discordrb::Commands::CommandContainer
 
+      COMMAND = :standings
+      DESCRIPTION = 'Displays the standings for a division'
+      USAGE = 'standings [division]'
+
       command(
-        :standings,
+        COMMAND,
         min_args: 1,
-        description: 'Displays the standings for a division',
-        usage: 'standings [division]'
+        description: DESCRIPTION,
+        usage: USAGE
       ) do |event, *args|
         StandingsCommand.run(event, *args)
       end
@@ -28,10 +32,10 @@ module BaseballDiscord
           205 => %w[nlc nlcentral]
         }.freeze
 
-        def run(_event, *args)
-          division_id, date = parse_standings_args(args)
+        def run
+          division_id, date = parse_standings_args
 
-          return react_to_event(event, '❓') unless division_id
+          return react_to_message('❓') unless division_id
 
           rows = load_data_from_stats_api(STATS_STANDINGS, date: date)
             .dig('records')
@@ -46,8 +50,8 @@ module BaseballDiscord
         protected
 
         # This should be expanded upon to allow for more date formats
-        def parse_standings_args(args)
-          input = args.join('').downcase
+        def parse_standings_args
+          input = @args.join('').downcase
 
           if input =~ /\A([a-z]+)(\d{4})\z/
             division_id = find_division(Regexp.last_match[1])

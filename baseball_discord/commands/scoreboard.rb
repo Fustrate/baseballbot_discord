@@ -5,12 +5,12 @@ module BaseballDiscord
     module Scoreboard
       extend Discordrb::Commands::CommandContainer
 
-      command(
-        :scoreboard,
-        description: 'Shows scores and stuff',
-        usage: 'scoreboard [today|yesterday|tomorrow|Date]'
-      ) do |event, *date|
-        ScoreboardCommand.run event, date.join(' ')
+      COMMAND = :scoreboard
+      DESCRIPTION = 'Shows scores and stuff'
+      USAGE = 'scoreboard [today|yesterday|tomorrow|Date]'
+
+      command(COMMAND, description: DESCRIPTION, usage: USAGE) do |event, *args|
+        ScoreboardCommand.run(event, *args)
       end
 
       class ScoreboardCommand < Command
@@ -26,14 +26,14 @@ module BaseballDiscord
           'Final', 'Game Over', 'Postponed', 'Completed Early'
         ].freeze
 
-        def run(event, date_input)
-          date = BaseballDiscord::Bot.parse_date(date_input)
+        def run
+          date = BaseballDiscord::Bot.parse_date(@args.join(' '))
 
-          return react_to_event(event, '❓') unless date
+          return react_to_message('❓') unless date
 
           data = load_data_from_stats_api(SCHEDULE, date: date)
 
-          return react_to_event(event, '👎') if data['totalGames'].zero?
+          return react_to_message('👎') if data['totalGames'].zero?
 
           scores_table(data, date)
         end
