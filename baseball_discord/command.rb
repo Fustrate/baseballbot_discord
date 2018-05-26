@@ -4,9 +4,7 @@ module BaseballDiscord
   class Command
     LOG_LEVELS = %i[debug info warn error fatal unknown].freeze
 
-    def self.run(event, *args)
-      new(event, *args).run
-    end
+    attr_reader :event, :args
 
     def initialize(event, *args)
       @event = event
@@ -32,31 +30,51 @@ module BaseballDiscord
       JSON.parse(URI.parse(filename).open.read)
     end
 
-    def log(message, level: :info)
-      @log_tags ||= "[#{@event.message.id}] [#{@event.user.distinct}]"
+    def log(str, level: :info)
+      @log_tags ||= "[#{message.id}] [#{user.distinct}]"
 
-      @event.bot.logger.add LOG_LEVELS.index(level), "#{@log_tags} #{message}"
+      bot.logger.add LOG_LEVELS.index(level), "#{@log_tags} #{str}"
     end
 
     def names_from_context
       search_for = []
 
-      channel_name = @event.channel.name.gsub(/[^a-z]/, ' ')
+      channel_name = channel.name.gsub(/[^a-z]/, ' ')
 
       unless BaseballDiscord::Bot::NON_TEAM_CHANNELS.include?(channel_name)
         search_for << channel_name
       end
 
-      role_names = @event.user.roles.map(&:name).map(&:downcase) -
+      role_names = user.roles.map(&:name).map(&:downcase) -
                    BaseballDiscord::Bot::NON_TEAM_ROLES
 
       search_for + role_names
     end
 
     def react_to_message(reaction)
-      @event.message.react reaction
+      message.react reaction
 
       nil
+    end
+
+    def bot
+      event.bot
+    end
+
+    def channel
+      event.channel
+    end
+
+    def message
+      event.message
+    end
+
+    def server
+      event.server
+    end
+
+    def user
+      event.user
     end
   end
 end

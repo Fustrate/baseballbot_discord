@@ -7,18 +7,19 @@ module BaseballDiscord
       extend Discordrb::Commands::CommandContainer
 
       command(:debug, help_available: false) do |event|
-        # return unless event.server&.id == BaseballDiscord::Bot::SERVER_ID
+        DebugCommand.new(event).run
+      end
 
-        prefix = "[#{event.message.id}] [#{event.user.distinct}]"
+      # Prints some basic info to the log file
+      class DebugCommand < Command
+        def run
+          # return unless server&.id == BaseballDiscord::Bot::SERVER_ID
 
-        event.bot.logger.debug "#{prefix} Debug Info:"
-        event.bot.logger.debug "#{prefix} Server: #{event.server.inspect}"
-        event.bot.logger.debug "#{prefix} Message: #{event.message.inspect}"
-        event.bot.logger.debug "#{prefix} User: #{event.user.distinct}"
+          log "Server: #{server.inspect}", :debug
+          log "Message: #{message.inspect}", :debug
 
-        event.message.react '✅'
-
-        nil
+          react_to_message '✅'
+        end
       end
     end
   end

@@ -25,7 +25,7 @@ module BaseballDiscord
         ].freeze
 
         def run
-          input = @args.join(' ').strip
+          input = args.join(' ').strip
 
           $stdout << "[Command] !next #{input}"
 

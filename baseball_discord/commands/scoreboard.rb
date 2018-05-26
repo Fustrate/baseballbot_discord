@@ -27,7 +27,7 @@ module BaseballDiscord
         ].freeze
 
         def run
-          date = BaseballDiscord::Bot.parse_date(@args.join(' '))
+          date = BaseballDiscord::Bot.parse_date(args.join(' '))
 
           return react_to_message('❓') unless date
 

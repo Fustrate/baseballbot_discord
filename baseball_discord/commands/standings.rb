@@ -51,7 +51,7 @@ module BaseballDiscord
 
         # This should be expanded upon to allow for more date formats
         def parse_standings_args
-          input = @args.join('').downcase
+          input = args.join('').downcase
 
           if input =~ /\A([a-z]+)(\d{4})\z/
             division_id = find_division(Regexp.last_match[1])
