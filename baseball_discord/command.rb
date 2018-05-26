@@ -2,6 +2,8 @@
 
 module BaseballDiscord
   class Command
+    LOG_LEVELS = %i[debug info warn error fatal unknown].freeze
+
     def self.run(event, *args)
       new(event, *args).run
     end
@@ -33,7 +35,7 @@ module BaseballDiscord
     def log(message, level: :info)
       @log_tags ||= "[#{@event.message.id}] [#{@event.user.distinct}]"
 
-      @event.bot.logger.add level, "#{@log_tags} #{message}"
+      @event.bot.logger.add LOG_LEVELS.index(level), "#{@log_tags} #{message}"
     end
 
     def names_from_context
