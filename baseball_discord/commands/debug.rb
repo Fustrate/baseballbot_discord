@@ -9,14 +9,14 @@ module BaseballDiscord
       command(:debug, help_available: false) do |event|
         # return unless event.server&.id == BaseballDiscord::Bot::SERVER_ID
 
-        event.message.react '✅'
-
         prefix = "[#{event.message.id}] [#{event.user.distinct}]"
 
         event.bot.logger.debug "#{prefix} Debug Info:"
         event.bot.logger.debug "#{prefix} Server: #{event.server.inspect}"
         event.bot.logger.debug "#{prefix} Message: #{event.message.inspect}"
         event.bot.logger.debug "#{prefix} User: #{event.user.distinct}"
+
+        event.message.react '✅'
 
         nil
       end
