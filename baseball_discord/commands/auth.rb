@@ -3,7 +3,7 @@
 module BaseballDiscord
   module Commands
     # Basic debug commands that should log to the output file
-    module Debug
+    module Auth
       extend Discordrb::Commands::CommandContainer
 
       command(:auth) do |event|
@@ -13,14 +13,6 @@ module BaseballDiscord
           event.user.pm 'Click the following link to verify your reddit account:'
           event.user.pm reddit_auth_url(event.user)
         end
-      end
-
-      command(:debug, help_available: false) do |event|
-        if event.server.id == BaseballDiscord::Bot::SERVER_ID
-          $stdout << event.server.inspect
-        end
-
-        nil
       end
 
       def reddit_auth_url(event)

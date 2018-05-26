@@ -6,14 +6,6 @@ module BaseballDiscord
     module Debug
       extend Discordrb::Commands::CommandContainer
 
-      command(:auth) do |event|
-        if event.user.roles.map(&:name).include?('Verified')
-          event.user.pm 'You have already been verified.'
-        else
-          baseballbot.send_reddit_auth_url(event)
-        end
-      end
-
       command(:debug, help_available: false) do |event|
         if event.server.id == BaseballDiscord::Bot::SERVER_ID
           $stdout << event.server.inspect
