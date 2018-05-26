@@ -83,26 +83,50 @@ module BaseballDiscord
         end
 
         def upcoming_games_table_rows(games)
-          last_series = nil
           rows = []
 
-          games.map do |game|
-            series = "#{game[:home] ? 'vs' : '@'} #{game[:opponent][:name]}"
-            versus_or_at = game[:home] ? 'vs' : '@'
+          separate_games_into_series(games).each do |series|
+            first_game = true
 
-            rows << :separator if last_series && series != last_series
+            series.each do |game|
+              rows << game_row(game, first_game)
 
-            rows << [
-              game[:date].strftime('%-m/%-d'),
-              series != last_series ? versus_or_at : '',
-              game[:opponent][:name],
-              game[:date].strftime('%-I:%M %p')
-            ]
+              first_game = false
+            end
 
-            last_series = series
+            rows << :separator
           end
 
-          rows
+          # The last row is a separator
+          rows[0...-1]
+        end
+
+        def game_row(game, first_game)
+          versus_or_at = game[:home] ? 'vs' : '@'
+
+          [
+            game[:date].strftime('%-m/%-d'),
+            first_game ? versus_or_at : '',
+            game[:opponent],
+            game[:date].strftime('%-I:%M %p')
+          ]
+        end
+
+        def separate_games_into_series(games)
+          series = []
+          last_series = nil
+
+          games.map do |game|
+            key = "#{game[:home] ? 'vs' : '@'} #{game[:opponent]}"
+
+            series << [] unless key == last_series
+
+            series.last << game
+
+            last_series = key
+          end
+
+          series
         end
 
         def extract_next_ten_games(data, team_id, number)
@@ -129,19 +153,13 @@ module BaseballDiscord
           team = game.dig('teams', (home_team ? 'home' : 'away'))
           opponent = game.dig('teams', (home_team ? 'away' : 'home'))
 
-          time_zone = team.dig('team', 'venue', 'timeZone')
-
           {
             home: home_team,
-            opponent: {
-              name: opponent.dig('team', 'teamName'),
-              wins: opponent.dig('leagueRecord', 'wins'),
-              losses: opponent.dig('leagueRecord', 'losses')
-            },
+            opponent: opponent.dig('team', 'teamName'),
             team: team.dig('team', 'name'),
             date: BaseballDiscord::Bot.parse_time(
               game['gameDate'],
-              time_zone: time_zone['id']
+              time_zone: team.dig('team', 'venue', 'timeZone', 'id')
             )
           }
         end
