@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
-class BaseballDiscordBot
+class BaseballDiscord
   module Commands
     module NextTen
+      extend Discordrb::Commands::CommandContainer
+
       SCHEDULE = \
         'http://statsapi.mlb.com/api/v1/schedule?teamId=%<team_id>d&' \
         'startDate=%<start_date>s&endDate=%<end_date>s&sportId=1&' \
@@ -13,16 +15,14 @@ class BaseballDiscordBot
         'Preview', 'Warmup', 'Pre-Game', 'Delayed Start', 'Scheduled'
       ].freeze
 
-      def self.add_to(discord_bot, baseballbot)
-        discord_bot.command(
-          :next,
-          description: 'Display the next N games for a team',
-          usage: 'next [N=10] [team]'
-        ) do |event, *args|
-          $stdout << "[Command] !next #{args.join(' ').strip}"
+      command(
+        :next,
+        description: 'Display the next N games for a team',
+        usage: 'next [N=10] [team]'
+      ) do |event, *args|
+        $stdout << "[Command] !next #{args.join(' ').strip}"
 
-          baseballbot.upcoming_games event, args.join(' ').strip
-        end
+        baseballbot.upcoming_games event, args.join(' ').strip
       end
 
       def upcoming_games(event, input)
@@ -85,12 +85,13 @@ class BaseballDiscordBot
 
         games.map do |game|
           series = "#{game[:home] ? 'vs' : '@'} #{game[:opponent][:name]}"
+          versus_or_at = game[:home] ? 'vs' : '@'
 
           rows << :separator if last_series && series != last_series
 
           rows << [
             game[:date].strftime('%-m/%-d'),
-            series != last_series ? (game[:home] ? 'vs' : '@') : '',
+            series != last_series ? versus_or_at : '',
             game[:opponent][:name],
             game[:date].strftime('%-I:%M %p')
           ]
@@ -135,7 +136,7 @@ class BaseballDiscordBot
             losses: opponent.dig('leagueRecord', 'losses')
           },
           team: team.dig('team', 'name'),
-          date: BaseballDiscordBot.parse_time(
+          date: BaseballDiscord::Bot.parse_time(
             game['gameDate'],
             time_zone: time_zone['id']
           )

@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
-class BaseballDiscordBot
+class BaseballDiscord
   module Commands
     module Standings
+      extend Discordrb::Commands::CommandContainer
+
       STATS_STANDINGS = \
         'https://statsapi.mlb.com/api/v1/standings/regularSeason?' \
         'leagueId=103,104&season=%<year>d&t=%<t>d&date=%<date>s'
@@ -16,15 +18,13 @@ class BaseballDiscordBot
         205 => %w[nlc nlcentral]
       }.freeze
 
-      def self.add_to(discord_bot, baseballbot)
-        discord_bot.command(
-          :standings,
-          min_args: 1,
-          description: 'Displays the standings for a division',
-          usage: 'standings [division]'
-        ) do |event, *args|
-          baseballbot.standings(event, *args)
-        end
+      command(
+        :standings,
+        min_args: 1,
+        description: 'Displays the standings for a division',
+        usage: 'standings [division]'
+      ) do |event, *args|
+        standings(event, *args)
       end
 
       def standings(_event, *args)

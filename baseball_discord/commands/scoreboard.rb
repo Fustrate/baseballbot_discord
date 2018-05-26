@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
-class BaseballDiscordBot
+class BaseballDiscord
   module Commands
     module Scoreboard
+      extend Discordrb::Commands::CommandContainer
+
       SCHEDULE = \
         'https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=%<date>s&' \
         'hydrate=game(content(summary)),linescore,flags,team&t=%<t>d'
@@ -15,18 +17,16 @@ class BaseballDiscordBot
         'Final', 'Game Over', 'Postponed', 'Completed Early'
       ].freeze
 
-      def self.add_to(discord_bot, baseballbot)
-        discord_bot.command(
-          :scoreboard,
-          description: 'Shows scores and stuff',
-          usage: 'scoreboard [today|yesterday|tomorrow|Date]'
-        ) do |event, *date|
-          baseballbot.scores event, date.join(' ')
-        end
+      discord_bot.command(
+        :scoreboard,
+        description: 'Shows scores and stuff',
+        usage: 'scoreboard [today|yesterday|tomorrow|Date]'
+      ) do |event, *date|
+        scoreboard event, date.join(' ')
       end
 
-      def scores(event, date_input)
-        date = BaseballDiscordBot.parse_date(date_input)
+      def scoreboard(event, date_input)
+        date = BaseballDiscord::Bot.parse_date(date_input)
 
         return react_to_event(event, '❓') unless date
 
@@ -144,7 +144,7 @@ class BaseballDiscordBot
           return innings == 9 ? 'F' : "F/#{innings}"
         end
 
-        BaseballDiscordBot.parse_time(game['gameDate']).strftime('%-I:%M')
+        BaseballDiscord::Bot.parse_time(game['gameDate']).strftime('%-I:%M')
       end
     end
   end
