@@ -13,7 +13,7 @@ module BaseballDiscord
 
         event.bot.logger.debug 'Debug Info:'
         event.bot.logger.debug "\tServer: #{event.server.inspect}"
-        event.bot.logger.debug "\tUser: #{event.user.inspect}"
+        event.bot.logger.debug "\tUser: #{event.user.distinct}"
 
         nil
       end
