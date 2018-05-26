@@ -8,13 +8,13 @@ class BaseballDiscordBot
         'leagueId=103,104&season=%<year>d&t=%<t>d&date=%<date>s'
 
       DIVISIONS = {
-        200 => ['alw', 'alwest'],
-        201 => ['ale', 'aleast'],
-        202 => ['alc', 'alcentral'],
-        203 => ['nlw', 'nlwest'],
-        204 => ['nle', 'nleast'],
-        205 => ['nlc', 'nlcentral']
-      }
+        200 => %w[alw alwest],
+        201 => %w[ale aleast],
+        202 => %w[alc alcentral],
+        203 => %w[nlw nlwest],
+        204 => %w[nle nleast],
+        205 => %w[nlc nlcentral]
+      }.freeze
 
       def self.add_to(discord_bot, baseballbot)
         discord_bot.command(
@@ -30,11 +30,11 @@ class BaseballDiscordBot
       def standings(_event, *args)
         division_id, date = parse_standings_args(args)
 
-        return react_to_event(event, "\u274c") unless division_id
+        return react_to_event(event, '❓') unless division_id
 
         rows = load_data_from_stats_api(STATS_STANDINGS, date: date)
           .dig('records')
-          .find { |record| record.dig('division' ,'id') == division_id }
+          .find { |record| record.dig('division', 'id') == division_id }
           .dig('teamRecords')
           .sort_by { |team| team['divisionRank'] }
           .map { |team| team_standings_data(team) }
@@ -60,7 +60,7 @@ class BaseballDiscordBot
       end
 
       def team_standings_data(team)
-        rDiffSign = team['runDifferential'].negative? ? '' : '+'
+        r_diff_sign = team['runDifferential'].negative? ? '' : '+'
 
         [
           team.dig('team', 'name'),
@@ -68,7 +68,7 @@ class BaseballDiscordBot
           team['losses'],
           team['gamesBack'],
           team.dig('leagueRecord', 'pct'),
-          "#{rDiffSign}#{team['runDifferential']}",
+          "#{r_diff_sign}#{team['runDifferential']}",
           team.dig('streak', 'streakCode')
         ]
       end
@@ -88,7 +88,7 @@ class BaseballDiscordBot
       end
 
       def find_division(input)
-        DIVISIONS.find { |key, value| value.include?(input) }&.first
+        DIVISIONS.find { |_, value| value.include?(input) }&.first
       end
     end
   end
