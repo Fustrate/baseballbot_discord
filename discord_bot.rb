@@ -1,15 +1,5 @@
 # frozen_string_literal: true
 
-require 'chronic'
-require 'date'
-require 'discordrb'
-require 'mlb_stats_api'
-require 'open-uri'
-require 'redd'
-require 'securerandom'
-require 'terminal-table'
-require 'tzinfo'
-
 require_relative 'baseball_discord/bot'
 require_relative 'baseball_discord/command'
 require_relative 'baseball_discord/commands/auth'

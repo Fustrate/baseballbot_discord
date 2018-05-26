@@ -1,5 +1,16 @@
 # frozen_string_literal: true
 
+require 'chronic'
+require 'date'
+require 'discordrb'
+require 'mlb_stats_api'
+require 'open-uri'
+require 'pg'
+require 'redd'
+require 'securerandom'
+require 'terminal-table'
+require 'tzinfo'
+
 module BaseballDiscord
   class Bot < Discordrb::Commands::CommandBot
     attr_reader :db, :mlb, :redis, :logger
