@@ -2,12 +2,23 @@
 
 module BaseballDiscord
   class Bot < Discordrb::Commands::CommandBot
+    attr_reader :db, :mlb, :redis, :logger
+
     NON_TEAM_CHANNELS = %w[
       general bot welcome verification discord-options
     ].freeze
 
     # Discord ID of the rBaseball server
     SERVER_ID = 400_516_567_735_074_817
+
+    def initialize(attributes = {})
+      @db = PG::Connection.new attributes.delete(:db)
+
+      super attributes
+
+      @redis = Redis.new
+      @logger = Logger.new($stdout)
+    end
 
     def self.parse_date(date)
       return Time.now if date.strip == ''

@@ -20,19 +20,24 @@ require_relative 'baseball_discord/commands/scoreboard'
 require_relative 'baseball_discord/commands/standings'
 require_relative 'baseball_discord/events/member_join'
 
-discord_bot = BaseballDiscord::Bot.new(
+@discord_bot = BaseballDiscord::Bot.new(
   client_id: ENV['DISCORD_CLIENT_ID'],
   token: ENV['DISCORD_TOKEN'],
-  prefix: '!'
+  prefix: '!',
+  db: {
+    user: ENV['PG_USERNAME'],
+    dbname: ENV['PG_DATABASE'],
+    password: ENV['PG_PASSWORD']
+  }
 )
 
-discord_bot.include! BaseballDiscord::Commands::Auth
-discord_bot.include! BaseballDiscord::Commands::Debug
-discord_bot.include! BaseballDiscord::Commands::LastTen
-discord_bot.include! BaseballDiscord::Commands::NextTen
-discord_bot.include! BaseballDiscord::Commands::Scoreboard
-discord_bot.include! BaseballDiscord::Commands::Standings
+@discord_bot.include! BaseballDiscord::Commands::Auth
+@discord_bot.include! BaseballDiscord::Commands::Debug
+@discord_bot.include! BaseballDiscord::Commands::LastTen
+@discord_bot.include! BaseballDiscord::Commands::NextTen
+@discord_bot.include! BaseballDiscord::Commands::Scoreboard
+@discord_bot.include! BaseballDiscord::Commands::Standings
 
-discord_bot.include! BaseballDiscord::Events::MemberJoin
+@discord_bot.include! BaseballDiscord::Events::MemberJoin
 
-discord_bot.run
+@discord_bot.run
