@@ -7,7 +7,7 @@ module BaseballDiscord
       extend Discordrb::Commands::CommandContainer
 
       command(:debug, help_available: false) do |event|
-        # event.server&.id == BaseballDiscord::Bot::SERVER_ID
+        # return unless event.server&.id == BaseballDiscord::Bot::SERVER_ID
 
         event.message.react '✅'
 
@@ -15,6 +15,7 @@ module BaseballDiscord
 
         event.bot.logger.debug "#{prefix} Debug Info:"
         event.bot.logger.debug "#{prefix} Server: #{event.server.inspect}"
+        event.bot.logger.debug "#{prefix} Message: #{event.message.inspect}"
         event.bot.logger.debug "#{prefix} User: #{event.user.distinct}"
 
         nil

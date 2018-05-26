@@ -9,6 +9,8 @@ module BaseballDiscord
     def initialize(event, *args)
       @event = event
       @args = args
+
+      log event.message.content
     end
 
     protected
@@ -26,6 +28,12 @@ module BaseballDiscord
       )
 
       JSON.parse(URI.parse(filename).open.read)
+    end
+
+    def log(message, level: :info)
+      @log_tags ||= "[#{@event.message.id}] [#{@event.user.distinct}]"
+
+      @event.bot.logger.add level, "#{@log_tags} #{message}"
     end
 
     def names_from_context
