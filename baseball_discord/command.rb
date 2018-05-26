@@ -45,7 +45,8 @@ module BaseballDiscord
         search_for << channel_name
       end
 
-      role_names = @event.user.roles.map(&:name).map(&:downcase) - %w[mods]
+      role_names = @event.user.roles.map(&:name).map(&:downcase) -
+                   BaseballDiscord::Bot::NON_TEAM_ROLES
 
       search_for + role_names
     end

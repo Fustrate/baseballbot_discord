@@ -20,6 +20,10 @@ module BaseballDiscord
       general bot welcome verification discord-options
     ].freeze
 
+    NON_TEAM_ROLES = [
+      'mods', 'bot', 'verified', 'discord mods', 'team sub mods'
+    ].freeze
+
     # Discord ID of the rBaseball server
     SERVER_ID = 400_516_567_735_074_817
 
