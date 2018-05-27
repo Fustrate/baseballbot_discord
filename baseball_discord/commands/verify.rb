@@ -42,9 +42,8 @@ module BaseballDiscord
           state_token = SecureRandom.urlsafe_base64
 
           state_data = {
-            id: user.id,
-            username: user.username,
-            distinct: user.distinct
+            server_id: server.id,
+            user_id: user.id
           }
 
           # Store the data for one week. After that, they'll have to get a new

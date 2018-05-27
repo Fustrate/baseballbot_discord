@@ -27,6 +27,10 @@ module BaseballDiscord
     # Discord ID of the rBaseball server
     SERVER_ID = 400_516_567_735_074_817
 
+    VERIFIED_ROLES = {
+      400_516_567_735_074_817 => 449_686_034_507_366_440
+    }.freeze
+
     def initialize(attributes = {})
       @db = PG::Connection.new attributes.delete(:db)
 
@@ -34,7 +38,22 @@ module BaseballDiscord
 
       @redis = Redis.new
       @logger = Logger.new($stdout)
+
       @mlb = MLBStatsAPI::Client.new(logger: @logger, cache: @redis)
+    end
+
+    def user_verified(verification_token, reddit_username)
+      data = @redis.hgetall(verification_token)
+
+      guild = server data['server_id'].to_i
+      member = guild.member data['user_id'].to_i
+
+      verified_role = VERIFIED_ROLES[guild.id]
+
+      member.add_role verified_role, 'User verified their reddit account'
+      member.set_nick reddit_username, 'Syncing reddit username'
+
+      member.pm 'Thanks for verifying your account!'
     end
   end
 end
