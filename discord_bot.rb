@@ -33,10 +33,12 @@ require_relative 'baseball_discord/events/member_join'
 
 @discord_bot.include! BaseballDiscord::Events::MemberJoin
 
-@discord_bot.run
-
-trap(:TERM) do
-  @discord_bot.stop
+# Trap before running
+trap('TERM') do
+  # No sync because we're in a trap context
+  @discord_bot.stop(true)
 
   exit
 end
+
+@discord_bot.run
