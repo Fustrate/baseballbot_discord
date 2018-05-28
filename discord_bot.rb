@@ -34,3 +34,9 @@ require_relative 'baseball_discord/events/member_join'
 @discord_bot.include! BaseballDiscord::Events::MemberJoin
 
 @discord_bot.run
+
+trap(:TERM) do
+  @discord_bot.stop
+
+  exit
+end
