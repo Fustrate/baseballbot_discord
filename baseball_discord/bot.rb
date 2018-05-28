@@ -15,18 +15,17 @@ require 'tzinfo'
 require_relative 'command'
 require_relative 'utilities'
 
-require_relative 'commands/debug'
-require_relative 'commands/last_ten'
-require_relative 'commands/next_ten'
-require_relative 'commands/scoreboard'
-require_relative 'commands/standings'
-require_relative 'commands/verify'
-
-require_relative 'events/member_join'
+# Require all commands and events
+Dir.glob('{commands,events}/*').sort.each do |path|
+  require_relative path
+end
 
 module BaseballDiscord
   class Bot < Discordrb::Commands::CommandBot
     attr_reader :db, :mlb, :redis, :logger
+
+    # ID of the user allowed to administrate the bot
+    ADMIN_ID = 429_364_871_121_993_728
 
     NON_TEAM_CHANNELS = %w[
       general bot welcome verification discord-options
@@ -58,6 +57,7 @@ module BaseballDiscord
 
     def load_commands
       include! BaseballDiscord::Commands::Debug
+      include! BaseballDiscord::Commands::Invite
       include! BaseballDiscord::Commands::LastTen
       include! BaseballDiscord::Commands::NextTen
       include! BaseballDiscord::Commands::Scoreboard
