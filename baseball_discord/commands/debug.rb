@@ -6,17 +6,17 @@ module BaseballDiscord
     module Debug
       extend Discordrb::Commands::CommandContainer
 
-      command(:debug, help_available: false) do |event|
-        DebugCommand.new(event).run
+      command(:debug, help_available: false) do |event, *args|
+        DebugCommand.new(event, *args).debug
       end
 
       # Prints some basic info to the log file
       class DebugCommand < Command
-        def run
+        def debug
           # return unless server&.id == BaseballDiscord::Bot::SERVER_ID
 
-          log "Server: #{server.inspect}", :debug
-          log "Message: #{message.inspect}", :debug
+          log "Server: #{server.inspect}", level: :debug
+          log "Message: #{message.inspect}", level: :debug
 
           react_to_message '✅'
         end
