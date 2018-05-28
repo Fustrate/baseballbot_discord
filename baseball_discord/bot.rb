@@ -12,6 +12,18 @@ require 'securerandom'
 require 'terminal-table'
 require 'tzinfo'
 
+require_relative 'command'
+require_relative 'utilities'
+
+require_relative 'commands/debug'
+require_relative 'commands/last_ten'
+require_relative 'commands/next_ten'
+require_relative 'commands/scoreboard'
+require_relative 'commands/standings'
+require_relative 'commands/verify'
+
+require_relative 'events/member_join'
+
 module BaseballDiscord
   class Bot < Discordrb::Commands::CommandBot
     attr_reader :db, :mlb, :redis, :logger
@@ -40,14 +52,23 @@ module BaseballDiscord
       @logger = Logger.new($stdout)
 
       @mlb = MLBStatsAPI::Client.new(logger: @logger, cache: @redis)
+
+      load_commands
+    end
+
+    def load_commands
+      include! BaseballDiscord::Commands::Debug
+      include! BaseballDiscord::Commands::LastTen
+      include! BaseballDiscord::Commands::NextTen
+      include! BaseballDiscord::Commands::Scoreboard
+      include! BaseballDiscord::Commands::Standings
+      include! BaseballDiscord::Commands::Verify
+
+      include! BaseballDiscord::Events::MemberJoin
     end
 
     def run(async = false)
       super(async)
-    end
-
-    def stop(no_sync = false)
-      super(no_sync)
     end
 
     def user_verified(verification_token, reddit_username)
