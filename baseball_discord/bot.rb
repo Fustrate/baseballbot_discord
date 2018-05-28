@@ -42,6 +42,14 @@ module BaseballDiscord
       @mlb = MLBStatsAPI::Client.new(logger: @logger, cache: @redis)
     end
 
+    def run(async = false)
+      super(async)
+    end
+
+    def stop(no_sync = false)
+      super(no_sync)
+    end
+
     def user_verified(verification_token, reddit_username)
       data = @redis.hgetall(verification_token)
 
