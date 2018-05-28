@@ -2,29 +2,21 @@
 
 module BaseballDiscord
   module Commands
-    # Basic debug commands that should log to the output file
     module Invite
       extend Discordrb::Commands::CommandContainer
 
-      command(
-        :invite,
-        help_available: false,
-        min_args: 1,
-        max_args: 1
-      ) do |event, *args|
-        InviteCommand.new(event, *args).accept_invite
+      command(:invite_url, help_available: false) do |event, *args|
+        InviteCommand.new(event, *args).send_invite_url
       end
 
-      # Prints some basic info to the log file
+      # Allows the administrator to invite this bot to a server
       class InviteCommand < Command
-        def accept_invite
+        def send_invite_url
           unless user.id == BaseballDiscord::Bot::ADMIN_ID
             return react_to_message '🔒'
           end
 
-          bot.join args.join('')
-
-          react_to_message '✅'
+          bot.invite_url
         end
       end
     end
