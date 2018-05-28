@@ -16,7 +16,7 @@ require_relative 'command'
 require_relative 'utilities'
 
 # Require all commands and events
-Dir.glob('{commands,events}/*').sort.each do |path|
+Dir.glob(__dir__ + '/{commands,events}/*').sort.each do |path|
   require_relative path
 end
 
