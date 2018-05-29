@@ -31,9 +31,9 @@ module BaseballDiscord
           verified_role = bot.class::VERIFIED_ROLES[server.id]
 
           member.add_role verified_role # , 'User verified their reddit account'
-          member.set_nick "#{user.name} $$$" # , 'Syncing reddit username'
+          member.nickname = "#{user.name} bloop" # , 'Syncing reddit username'
 
-          member.pm 'k done'
+          react_to_message '✅'
         end
       end
     end
