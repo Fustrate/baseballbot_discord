@@ -133,7 +133,13 @@ module BaseballDiscord
 
       update_member_name(reddit_username)
 
-      member.pm VERIFIED_MESSAGE
+      send_verified_message(member)
+    end
+
+    def send_verified_message(member)
+      custom_message = @bot.config.server(member.server.id)['verified_message']
+
+      member.pm(custom_message || VERIFIED_MESSAGE)
     end
 
     def update_member_name(reddit_username)
