@@ -44,7 +44,7 @@ module BaseballDiscord
 
           member = guild.member(user.id)
 
-          return send_pm ALREADY_VERIFIED if member_verified_on_server?(member)
+          return send_pm ALREADY_VERIFIED if member_verified?(member)
 
           send_pm format(
             WELCOME_MESSAGE,
@@ -62,7 +62,7 @@ module BaseballDiscord
           bot.server bot.class::SERVERS[normal]
         end
 
-        def member_verified_on_server?(member)
+        def member_verified?(member)
           member.roles.map(&:id).include?(
             bot.class::VERIFIED_ROLES[member.server.id]
           )
@@ -83,9 +83,9 @@ module BaseballDiscord
           state_token = SecureRandom.urlsafe_base64
 
           data = {
-            user_id: user.id,
-            server_id: guild.id,
-            role_id: bot.class::VERIFIED_ROLES[guild.id]
+            user: user.id,
+            server: guild.id,
+            role: bot.class::VERIFIED_ROLES[guild.id]
           }
 
           bot.redis.set "discord.verification.#{state_token}", data.to_json

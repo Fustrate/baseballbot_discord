@@ -13,14 +13,11 @@ module BaseballDiscord
     def connect
       ensure_redis
 
-      EM.next_tick do
-        subscribe('discord.debug') do |message|
-          puts message.inspect
-        end
+      # Make sure we eventually clear the queue
+      EM.add_periodic_timer(30) { check_verification_queue }
 
-        subscribe('discord.verified') do |_message|
-          check_verification_queue
-        end
+      EM.next_tick do
+        subscribe('discord.verified') { check_verification_queue }
       end
     end
 
@@ -77,18 +74,6 @@ module BaseballDiscord
       end
     end
 
-    def check_verification_queue
-      ensure_redis
-
-      @redis.lpop('discord.verification_queue') do |value|
-        if value
-          value.to_i
-
-          check_queue
-        end
-      end
-    end
-
     def subscribe(channel, &block)
       ensure_redis
 
@@ -109,8 +94,32 @@ module BaseballDiscord
 
     protected
 
-    def parse_message(data)
-      JSON.parse(data)
+    def check_verification_queue
+      ensure_redis
+
+      @redis.lpop('discord.verification_queue') do |message|
+        if value
+          data = JSON.parse(message)
+
+          user_verified_on_reddit! data['state_token'], data['reddit_username']
+
+          check_queue
+        end
+      end
+    end
+
+    def user_verified_on_reddit!(state_token, reddit_username)
+      data = JSON.parse @redis.get(state_token)
+
+      member = @bot.server(data['server'].to_i).member(data['user'].to_i)
+
+      # Guess this member doesn't exist anymore?
+      return unless member
+
+      member.add_role data['role'].to_i
+      member.username = reddit_username
+
+      member.pm VERIFIED_MESSAGE
     end
   end
 end
