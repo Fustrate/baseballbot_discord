@@ -41,7 +41,7 @@ module BaseballDiscord
           return user.pm ALREADY_VERIFIED if member_verified_on_server?(member)
 
           send_pm format(
-            VERIFY_MESSAGE,
+            WELCOME_MESSAGE,
             auth_url: auth_url(guild),
             guild: server_name
           )
