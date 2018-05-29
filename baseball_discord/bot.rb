@@ -67,10 +67,10 @@ module BaseballDiscord
     def load_commands
       include! BaseballDiscord::Commands::Debug
       include! BaseballDiscord::Commands::Invite
-      include! BaseballDiscord::Commands::LastTen
-      include! BaseballDiscord::Commands::NextTen
+      include! BaseballDiscord::Commands::PreviousGames
       include! BaseballDiscord::Commands::Scoreboard
       include! BaseballDiscord::Commands::Standings
+      include! BaseballDiscord::Commands::UpcomingGames
       include! BaseballDiscord::Commands::Verify
 
       include! BaseballDiscord::Events::MemberJoin

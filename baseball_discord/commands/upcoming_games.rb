@@ -2,7 +2,7 @@
 
 module BaseballDiscord
   module Commands
-    module NextTen
+    module UpcomingGames
       extend Discordrb::Commands::CommandContainer
 
       COMMAND = :next
