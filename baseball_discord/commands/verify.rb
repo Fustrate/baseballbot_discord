@@ -12,7 +12,19 @@ module BaseballDiscord
 
       class RedditAuthCommand < Command
         WELCOME_MESSAGE = <<~PM
-          Click the following link to verify your reddit account:
+          Welcome to the %<server_name>s Discord server!
+
+          In order to join, please click the following link to verify your reddit account:
+
+          %<auth_url>s
+
+          This link is active for 7 days, after which you can message me with `!verify %<guild>s` to receive a new link.
+
+          We look forward to getting to know you!
+        PM
+
+        VERIFY_MESSAGE = <<~PM
+          Please click the following link to verify your reddit account:
 
           %<auth_url>s
 
@@ -34,22 +46,28 @@ module BaseballDiscord
         end
 
         def send_welcome_pm
-          start_verification_for_server server
+          start_verification_for_server server, welcome: true
         end
 
         protected
 
-        def start_verification_for_server(guild)
+        def start_verification_for_server(guild, welcome: false)
           return unless guild
 
           member = guild.member(user.id)
 
-          return send_pm NOT_A_MEMBER unless member
+          raise UserError, NOT_A_MEMBER unless member
+          raise UserError, ALREADY_VERIFIED if member_verified?(member)
 
-          return send_pm ALREADY_VERIFIED if member_verified?(member)
+          send_verification_pm(guild, welcome)
+        rescue UserError => error
+          send_pm error.message
+        end
 
+        def send_verification_pm(guild, welcome)
           send_pm format(
-            WELCOME_MESSAGE,
+            (welcome ? WELCOME_MESSAGE : VERIFY_MESSAGE),
+            server_name: guild.name,
             auth_url: auth_url(guild),
             guild: bot.class::SERVERS.key(guild.id)
           )
@@ -58,8 +76,8 @@ module BaseballDiscord
         def find_server_by_name(name)
           normal = name.strip.downcase.gsub(/[^a-z]/, '')
 
-          return send_pm MISSING_SERVER_NAME if normal.empty?
-          return send_pm INVALID_SERVER_NAME unless bot.class::SERVERS[normal]
+          raise UserError, MISSING_SERVER_NAME if normal.empty?
+          raise UserError, INVALID_SERVER_NAME unless bot.class::SERVERS[normal]
 
           bot.server bot.class::SERVERS[normal]
         end

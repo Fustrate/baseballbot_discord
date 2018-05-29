@@ -76,4 +76,7 @@ module BaseballDiscord
       include! BaseballDiscord::Events::MemberJoin
     end
   end
+
+  class UserError < RuntimeError
+  end
 end
