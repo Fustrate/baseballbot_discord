@@ -13,7 +13,7 @@ gem 'em-hiredis'
 gem 'pg'
 
 # Outside services
-gem 'discordrb'
+gem 'discordrb', git: 'https://github.com/meew0/discordrb.git'
 gem 'mlb_stats_api'
 gem 'redd'
 
