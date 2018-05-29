@@ -4,6 +4,10 @@ module BaseballDiscord
   class RedisConnection
     attr_reader :redis
 
+    VERIFIED_MESSAGE = <<~PM
+      Thanks for verifying your account! You should now have access to the server.
+    PM
+
     def initialize(bot)
       @bot = bot
 

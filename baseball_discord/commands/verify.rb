@@ -23,10 +23,6 @@ module BaseballDiscord
 
         INVALID_SERVER_NAME = 'I couldn\'t find a server with that name.'
 
-        VERIFIED_MESSAGE = <<~PM
-          Thanks for verifying your account! You should now have access to the server.
-        PM
-
         ALREADY_VERIFIED = 'You have already been verified on this server.'
 
         def run
