@@ -98,10 +98,10 @@ module BaseballDiscord
           # Go two hours back because of late games
           now = Time.now - 7200
 
-          days = (@number + 5) * 24 * 3600
-          days *= -1 if past?
+          # Account for up to 5 off days
+          days = (past? ? -1 : 1) * (@number + 5)
 
-          [now, now + days]
+          [now, now + days * 24 * 3600].sort
         end
 
         def games_table(games)
