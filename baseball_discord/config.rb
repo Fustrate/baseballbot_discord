@@ -4,7 +4,7 @@ module BaseballDiscord
   # Servers can be added
   class Config
     def short_name_to_server_id(short_name)
-      servers.find { |server| server['short_name'] == short_name }&.first
+      servers.find { |_, server| server['short_name'] == short_name }&.first
     end
 
     def verified_role_id(server_id)
