@@ -18,6 +18,14 @@ module BaseballDiscord
       end
     end
 
+    def expire(key, ttl)
+      ensure_redis
+
+      EM.next_tick do
+        @redis.expire key, ttl
+      end
+    end
+
     def ensure_redis
       unless EM.reactor_running? && EM.reactor_thread.alive?
         Thread.new { EM.run }
