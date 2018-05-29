@@ -120,7 +120,6 @@ module BaseballDiscord
         member = @bot.server(data['server'].to_i).member(data['user'].to_i)
 
         process_member_verification(member, data, reddit_username)
-        end
       end
     end
 
