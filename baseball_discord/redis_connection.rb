@@ -10,6 +10,14 @@ module BaseballDiscord
       connect
     end
 
+    def mapped_hmset(key, values = {})
+      ensure_redis
+
+      EM.next_tick do
+        @redis.mapped_hmset key, values
+      end
+    end
+
     def ensure_redis
       unless EM.reactor_running? && EM.reactor_thread.alive?
         Thread.new { EM.run }
