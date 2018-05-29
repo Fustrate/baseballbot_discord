@@ -62,7 +62,7 @@ module BaseballDiscord
           number, name = parse_input(args.join(' ').strip)
 
           @team_id = BaseballDiscord::Utilities.find_team_by_name(
-            name ? [name.downcase] : names_from_context
+            name ? [name] : names_from_context
           )
 
           @number = number.clamp(1, 15)

@@ -23,13 +23,13 @@ module BaseballDiscord
       135 => ['padres', 'san diego', 'sd', 'sd padres', 'sdp', 'san diego padres'],
       136 => ['mariners', 'seattle', 'sea', 'seattle mariners'],
       137 => ['giants', 'san francisco', 'san fran', 'gigantes', 'sf', 'sfg', 'sf giants', 'san francisco giants'],
-      138 => ['cardinals', 'stl', 'st louis', 'salad eaters', 'st louis cardinals'],
+      138 => ['cardinals', 'stl', 'st louis', 'salad eaters', 'st louis cardinals', 'cards'],
       139 => ['rays', 'tampa bay', 'tb', 'tbr', 'devil rays', 'tampa bay rays'],
       140 => ['rangers', 'texas', 'tex', 'texas rangers'],
       141 => ['blue jays', 'toronto', 'tor', 'bluejays', 'jays', 'canada', 'toronto blue jays'],
       142 => ['twins', 'minnesota', 'min', 'minnesota twins'],
-      143 => ['phillies', 'philadelphia', 'philly', 'phi', 'philadelphia phillies'],
-      144 => ['braves', 'atlanta', 'atl', 'atlanta braves'],
+      143 => ['phillies', 'philadelphia', 'philly', 'phi', 'philadelphia phillies', 'phils'],
+      144 => ['braves', 'atlanta', 'atl', 'atlanta braves', 'barves'],
       145 => ['white sox', 'chicago white sox', 'cws', 'chw', 'chisox', 'chi sox'],
       146 => ['marlins', 'miami', 'mia', 'florida', 'fla', 'miami marlins'],
       147 => ['yankees', 'new york yankees', 'nyy', 'bronx bombers'],
@@ -55,7 +55,7 @@ module BaseballDiscord
     end
 
     def self.find_team_by_name(names)
-      names.each do |name|
+      names.map { |name| name.downcase.gsub(/[^a-z ]/, '') }.each do |name|
         TEAMS_BY_NAME.each do |id, potential_names|
           return id.to_i if potential_names.include?(name)
         end
