@@ -50,7 +50,8 @@ module BaseballDiscord
       role_names = user.roles.map(&:name).map(&:downcase) -
                    bot.config.non_team_roles(server.id)
 
-      search_for + role_names
+      (search_for + role_names + [bot.config.dig(server.id, 'default_team')])
+        .compact
     end
 
     def react_to_message(reaction)

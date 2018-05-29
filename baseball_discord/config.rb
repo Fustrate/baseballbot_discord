@@ -27,6 +27,10 @@ module BaseballDiscord
       servers.dig(server_id, 'non_team_roles') || []
     end
 
+    def dig(*keys)
+      servers.dig(*keys)
+    end
+
     protected
 
     def servers

@@ -11,7 +11,6 @@ module BaseballDiscord
 
       command(
         COMMAND,
-        min_args: 1,
         description: DESCRIPTION,
         usage: USAGE
       ) do |event, *args|
@@ -52,6 +51,8 @@ module BaseballDiscord
         # This should be expanded upon to allow for more date formats
         def parse_standings_args
           input = args.join('').downcase
+
+          input = bot.config.dig(server.id, 'default_division') if input.blank?
 
           if input =~ /\A([a-z]+)(\d{4})\z/
             division_id = find_division(Regexp.last_match[1])
