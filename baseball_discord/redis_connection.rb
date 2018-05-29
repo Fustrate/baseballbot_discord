@@ -131,7 +131,7 @@ module BaseballDiscord
 
       member.add_role data['role'].to_i
 
-      update_member_name(reddit_username)
+      update_member_name(member, reddit_username)
 
       send_verified_message(member)
     end
@@ -142,7 +142,7 @@ module BaseballDiscord
       member.pm(custom_message || VERIFIED_MESSAGE)
     end
 
-    def update_member_name(reddit_username)
+    def update_member_name(member, reddit_username)
       return if member.nick == reddit_username
 
       member.nick = reddit_username
