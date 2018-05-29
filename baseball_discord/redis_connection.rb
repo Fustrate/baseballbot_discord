@@ -114,7 +114,7 @@ module BaseballDiscord
     end
 
     def user_verified_on_reddit!(state_token, reddit_username)
-      @redis.get(state_token) do |state_data|
+      @redis.get("discord.verification.#{state_token}") do |state_data|
         data = JSON.parse state_data
 
         member = @bot.server(data['server'].to_i).member(data['user'].to_i)
