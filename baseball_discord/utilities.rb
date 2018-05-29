@@ -12,7 +12,7 @@ module BaseballDiscord
       113 => ['reds', 'cincinatti', 'cin', 'cincinatti reds'],
       114 => ['indians', 'cleveland', 'cle', 'cleveland indians'],
       115 => ['rockies', 'colorado', 'col', 'co', 'colorado rockies'],
-      116 => ['tigers', 'detroit', 'det', 'detroit tigers'],
+      116 => ['tigers', 'detroit', 'det', 'detroit tigers', 'beisbolcats'],
       117 => ['astros', 'houston', 'hou', 'houston astros'],
       118 => ['royals', 'kansas city', 'kc', 'kcr', 'kansas', 'kansas city royals'],
       119 => ['dodgers', 'los angeles', 'la', 'lad', 'la dodgers', 'los angeles dodgers'],

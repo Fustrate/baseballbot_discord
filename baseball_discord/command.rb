@@ -41,7 +41,7 @@ module BaseballDiscord
     def names_from_context
       search_for = []
 
-      channel_name = channel.name.downcase
+      channel_name = channel.name.downcase.tr('-', ' ')
 
       unless bot.config.non_team_channels(server.id).include?(channel_name)
         search_for << channel_name
