@@ -13,7 +13,9 @@ module BaseballDiscord
       class RedditAuthCommand < Command
         WELCOME_MESSAGE = <<~PM
           Click the following link to verify your reddit account:
+
           %<auth_url>s
+
           This link is active for 7 days, after which you can message me with `!verify %<guild>s` to receive a new link.
         PM
 
