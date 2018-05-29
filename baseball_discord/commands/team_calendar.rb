@@ -118,7 +118,7 @@ module BaseballDiscord
         end
 
         def table_headings
-          return ['Date', '', 'Team', 'Score'] if past?
+          return ['Date', '', 'Team', 'Result'] if past?
 
           ['Date', '', 'Team', 'Time']
         end
@@ -207,32 +207,26 @@ module BaseballDiscord
 
           data = basic_data(game, home_team)
 
-          # mark_winning_team(game, data, home_team) if past?
+          if past?
+            if game.dig('status', 'detailedState') == 'Postponed'
+              data[:outcome] = 'PPD'
+            else
+              mark_winning_team(game, data, home_team)
+            end
+          end
 
           data
         end
 
-        # def mark_winning_team(game, data, home_team)
-        #   our_score = game.dig('teams', (home_team ? 'home' : 'away'), 'score')
-        #   opp_score = game.dig('teams', (home_team ? 'away' : 'home'), 'score')
-        #
-        #   if home_team
-        #     if game.dig('teams', 'home', 'isWinner')
-        #       # We won!
-        #       data[:outcome] = "W #{our_score}-#{opp_score}"
-        #     elsif game.dig('teams', 'away', 'isWinner')
-        #       # We lost...
-        #     else
-        #
-        #     end
-        #   else
-        #     if game.dig('teams', 'home', 'isWinner')
-        #       # We lost...
-        #     elsif game.dig('teams', 'away', 'isWinner')
-        #       # We won!
-        #     end
-        #   end
-        # end
+        def mark_winning_team(game, data, home_team)
+          our_score = game.dig('teams', (home_team ? 'home' : 'away'), 'score')
+          opp_score = game.dig('teams', (home_team ? 'away' : 'home'), 'score')
+
+          # This is stupid and I love it.
+          indicator = 'TWL'[our_score <=> opp_score]
+
+          data[:outcome] = "#{indicator} #{our_score}-#{opp_score}"
+        end
 
         def basic_data(game, home_team)
           team_key, opp_key = home_team ? %w[home away] : %w[away home]
