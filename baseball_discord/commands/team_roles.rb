@@ -85,7 +85,7 @@ module BaseballDiscord
         end
 
         def all_team_roles_on_server
-          @baseball.roles.find { |role| TEAM_ROLES.key(role.id) }
+          @baseball.roles.select { |role| TEAM_ROLES.key(role.id) }
         end
 
         def member_verified?
