@@ -39,7 +39,7 @@ module BaseballDiscord
 
         protected
 
-        def verify_on_server(guild)
+        def start_verification_for_server(guild)
           return unless guild
 
           member = guild.member(user.id)
