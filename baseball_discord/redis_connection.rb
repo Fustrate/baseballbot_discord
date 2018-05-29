@@ -131,14 +131,18 @@ module BaseballDiscord
 
       member.add_role data['role'].to_i
 
-      begin
-        member.nick = reddit_username
-      rescue Discordrb::Errors::NoPermission
-        @bot.logger.info "Couldn't update name for #{member.distinct} " \
-                         "to #{reddit_username}"
-      end
+      update_member_name(reddit_username)
 
       member.pm VERIFIED_MESSAGE
+    end
+
+    def update_member_name(reddit_username)
+      return if member.nick == reddit_username
+
+      member.nick = reddit_username
+    rescue Discordrb::Errors::NoPermission
+      @bot.logger.info "Couldn't update name for #{member.distinct} " \
+                       "to #{reddit_username}"
     end
   end
 end
