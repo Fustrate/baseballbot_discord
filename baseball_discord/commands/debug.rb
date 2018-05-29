@@ -30,8 +30,8 @@ module BaseballDiscord
 
           verified_role = bot.class::VERIFIED_ROLES[server.id]
 
-          member.add_role verified_role, 'User verified their reddit account'
-          member.set_nick "#{user.name} $$$", 'Syncing reddit username'
+          member.add_role verified_role # , 'User verified their reddit account'
+          member.set_nick "#{user.name} $$$" # , 'Syncing reddit username'
 
           member.pm 'k done'
         end
