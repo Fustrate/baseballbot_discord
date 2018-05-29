@@ -103,11 +103,9 @@ module BaseballDiscord
       ensure_redis
 
       @redis.lpop('discord.verification_queue') do |message|
-        @bot.logger.debug "[Redis] #{message.class}"
-        @bot.logger.debug "[Redis] #{message.public_methods(false).sort.inspect}"
-
         if message
           @bot.logger.debug "[Redis] Queue has content: #{message}"
+
           data = JSON.parse(message)
 
           user_verified_on_reddit! data['state_token'], data['reddit_username']
