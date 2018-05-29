@@ -41,9 +41,11 @@ module BaseballDiscord
         def list_games(past_or_future)
           @past_or_future = past_or_future
 
-          number, team_id = determine_team_and_number
+          determine_team_and_number
 
-          glorious_table_of_games team_id, number
+          return react_to_message('❓') unless @team_id
+
+          glorious_table_of_games
         end
 
         protected
@@ -59,13 +61,11 @@ module BaseballDiscord
         def determine_team_and_number
           number, name = parse_input(args.join(' ').strip)
 
-          team_id = BaseballDiscord::Utilities.find_team_by_name(
+          @team_id = BaseballDiscord::Utilities.find_team_by_name(
             name ? [name.downcase] : names_from_context
           )
 
-          return react_to_message('❓') unless team_id
-
-          [number.clamp(1, 15), team_id]
+          @number = number.clamp(1, 15)
         end
 
         def parse_input(input)
@@ -81,26 +81,24 @@ module BaseballDiscord
           end
         end
 
-        def glorious_table_of_games(team_id, number)
+        def glorious_table_of_games
           start_date, end_date = calendar_dates
 
           data = load_data_from_stats_api(
             SCHEDULE,
-            team_id: team_id,
+            team_id: @team_id,
             start_date: start_date.strftime('%m/%d/%Y'),
             end_date: end_date.strftime('%m/%d/%Y')
           )
 
-          games = process_games(data, team_id, number)
-
-          games_table(games)
+          games_table process_games(data)
         end
 
         def calendar_dates
           # Go two hours back because of late games
           now = Time.now - 7200
 
-          days = (number + 5) * 24 * 3600
+          days = (@number + 5) * 24 * 3600
           days *= -1 if past?
 
           [now, now + days]
@@ -172,7 +170,7 @@ module BaseballDiscord
           series
         end
 
-        def process_games(data, team_id, number)
+        def process_games(data)
           games = []
 
           properly_ordered_dates(data).each do |date|
@@ -181,13 +179,13 @@ module BaseballDiscord
             properly_ordered_dates(date).each do |game|
               next unless include_game?(game)
 
-              games << game_data(game, team_id)
+              games << game_data(game)
             end
 
-            break if games.length >= number
+            break if games.length >= @number
           end
 
-          games.first(number)
+          games.first @number
         end
 
         def properly_ordered_dates(data)
@@ -204,11 +202,37 @@ module BaseballDiscord
           (past? ? POSTGAME_STATUSES : PREGAME_STATUSES).include?(status)
         end
 
-        def game_data(game, team_id)
-          home_team = game.dig('teams', 'home', 'team', 'id') == team_id
+        def game_data(game)
+          home_team = game.dig('teams', 'home', 'team', 'id') == @team_id
 
-          basic_data(home_team)
+          data = basic_data(home_team)
+
+          # mark_winning_team(game, data, home_team) if past?
+
+          data
         end
+
+        # def mark_winning_team(game, data, home_team)
+        #   our_score = game.dig('teams', (home_team ? 'home' : 'away'), 'score')
+        #   opp_score = game.dig('teams', (home_team ? 'away' : 'home'), 'score')
+        #
+        #   if home_team
+        #     if game.dig('teams', 'home', 'isWinner')
+        #       # We won!
+        #       data[:outcome] = "W #{our_score}-#{opp_score}"
+        #     elsif game.dig('teams', 'away', 'isWinner')
+        #       # We lost...
+        #     else
+        #
+        #     end
+        #   else
+        #     if game.dig('teams', 'home', 'isWinner')
+        #       # We lost...
+        #     elsif game.dig('teams', 'away', 'isWinner')
+        #       # We won!
+        #     end
+        #   end
+        # end
 
         def basic_data(home_team)
           team_key, opp_key = home_team ? %w[home away] : %w[away home]
