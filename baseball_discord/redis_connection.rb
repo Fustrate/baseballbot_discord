@@ -18,7 +18,7 @@ module BaseballDiscord
       ensure_redis
 
       # Make sure we eventually clear the queue
-      EM.add_periodic_timer(30) { check_verification_queue }
+      EM.add_periodic_timer(300) { check_verification_queue }
 
       EM.next_tick do
         subscribe('discord.verified') { check_verification_queue }
@@ -100,6 +100,7 @@ module BaseballDiscord
 
     def check_verification_queue
       @bot.logger.debug '[Redis] Checking queue...'
+
       ensure_redis
 
       @redis.lpop('discord.verification_queue') do |message|
@@ -133,7 +134,8 @@ module BaseballDiscord
       begin
         member.nick = reddit_username
       rescue Discordrb::Errors::NoPermission
-        @bot.logger.info "Couldn't update name for #{member.distinct} to #{reddit_username}"
+        @bot.logger.info "Couldn't update name for #{member.distinct} " \
+                         "to #{reddit_username}"
       end
 
       member.pm VERIFIED_MESSAGE

@@ -10,10 +10,10 @@ module BaseballDiscord
       USAGE = 'next [N=10] [team]'
 
       command(COMMAND, description: DESCRIPTION, usage: USAGE) do |event, *args|
-        NextTenCommand.new(event, *args).run
+        UpcomingGamesCommand.new(event, *args).run
       end
 
-      class NextTenCommand < Command
+      class UpcomingGamesCommand < Command
         SCHEDULE = \
           'http://statsapi.mlb.com/api/v1/schedule?teamId=%<team_id>d&' \
           'startDate=%<start_date>s&endDate=%<end_date>s&sportId=1&' \
@@ -33,7 +33,7 @@ module BaseballDiscord
 
           return react_to_message('❓') unless team_id
 
-          next_ten_data team_id, number.clamp(1, 15)
+          upcoming_games_data team_id, number.clamp(1, 15)
         end
 
         def parse_upcoming_games_input(input)
@@ -49,7 +49,7 @@ module BaseballDiscord
           end
         end
 
-        def next_ten_data(team_id, number)
+        def upcoming_games_data(team_id, number)
           start_date = Time.now - 7200
           end_date = start_date + (number + 5) * 24 * 3600
 
@@ -60,7 +60,7 @@ module BaseballDiscord
             end_date: end_date.strftime('%m/%d/%Y')
           )
 
-          upcoming_games_table extract_next_ten_games(data, team_id, number)
+          upcoming_games_table extract_upcoming_games(data, team_id, number)
         end
 
         def upcoming_games_table(games)
@@ -123,7 +123,7 @@ module BaseballDiscord
           series
         end
 
-        def extract_next_ten_games(data, team_id, number)
+        def extract_upcoming_games(data, team_id, number)
           games = []
 
           data['dates'].each do |date|

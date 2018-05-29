@@ -55,7 +55,7 @@ module BaseballDiscord
 
           if input =~ /\A([a-z]+)(\d{4})\z/
             division_id = find_division(Regexp.last_match[1])
-            date = DateTime.civil(Regexp.last_match[2].to_i, 12, 1)
+            date = Date.civil(Regexp.last_match[2].to_i, 12, 1)
           else
             division_id = find_division(input)
             date = Time.now

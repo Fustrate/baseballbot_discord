@@ -25,6 +25,8 @@ module BaseballDiscord
 
         ALREADY_VERIFIED = 'You have already been verified on this server.'
 
+        NOT_A_MEMBER = 'It doesn\'t look like you\'re a member of this server.'
+
         def run
           start_verification_for_server find_server_by_name(args.join(' '))
         end
@@ -39,6 +41,8 @@ module BaseballDiscord
           return unless guild
 
           member = guild.member(user.id)
+
+          return send_pm NOT_A_MEMBER unless member
 
           return send_pm ALREADY_VERIFIED if member_verified?(member)
 
@@ -78,17 +82,19 @@ module BaseballDiscord
         def generate_state_data(guild)
           state_token = SecureRandom.urlsafe_base64
 
-          data = {
-            user: user.id,
-            server: guild.id,
-            role: bot.class::VERIFIED_ROLES[guild.id]
-          }
-
-          bot.redis.set "discord.verification.#{state_token}", data.to_json
+          bot.redis.set "discord.verification.#{state_token}", state_data(guild)
 
           bot.redis.expire "discord.verification.#{state_token}", 604_800
 
           state_token
+        end
+
+        def state_data(guild)
+          {
+            user: user.id,
+            server: guild.id,
+            role: bot.class::VERIFIED_ROLES[guild.id]
+          }.to_json
         end
       end
     end
