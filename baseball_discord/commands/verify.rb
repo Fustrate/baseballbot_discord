@@ -72,24 +72,24 @@ module BaseballDiscord
           )
         end
 
-        def auth_url
+        def auth_url(guild = nil)
           Redd.url(
             client_id: ENV['DISCORD_REDDIT_CLIENT_ID'],
             redirect_uri: 'https://baseballbot.io/discord/reddit-callback',
             response_type: 'code',
-            state: generate_state_data,
+            state: generate_state_data(guild || server),
             scope: ['identity'],
             duration: 'temporary'
           )
         end
 
-        def generate_state_data
+        def generate_state_data(guild)
           state_token = SecureRandom.urlsafe_base64
 
           bot.redis.mapped_hmset(
             "discord.verification.#{state_token}",
             user_id: user.id,
-            server_id: server.id,
+            server_id: guild.id,
             role_id: bot.class::VERIFIED_ROLES[server.id]
           )
 
