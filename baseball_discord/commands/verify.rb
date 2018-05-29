@@ -90,7 +90,7 @@ module BaseballDiscord
             "discord.verification.#{state_token}",
             user_id: user.id,
             server_id: guild.id,
-            role_id: bot.class::VERIFIED_ROLES[server.id]
+            role_id: bot.class::VERIFIED_ROLES[guild.id]
           )
 
           bot.redis.expire "discord.verification.#{state_token}", 604_800
