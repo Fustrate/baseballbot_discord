@@ -14,6 +14,14 @@ module BaseballDiscord
         DebugCommand.new(event, *args).debug_verify
       end
 
+      command(:debug_welcome, help_available: false) do |event, *_args|
+        # Must be run on an actual server
+        return unless event.server
+
+        BaseballDiscord::Commands::Verify::RedditAuthCommand.new(event)
+          .send_welcome_pm
+      end
+
       # Prints some basic info to the log file
       class DebugCommand < Command
         def debug
