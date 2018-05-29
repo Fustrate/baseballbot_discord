@@ -47,7 +47,7 @@ module BaseballDiscord
 
     # The 'Verified' role on each of the above servers.
     VERIFIED_ROLES = {
-      400_516_567_735_074_817 => 449_686_034_507_366_440, # baseball
+      400_516_567_735_074_817 => 451_065_609_556_590_602, # baseball
       450_792_745_553_100_801 => 450_811_043_997_024_258 # test
     }.freeze
 
