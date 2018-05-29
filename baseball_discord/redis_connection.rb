@@ -108,7 +108,7 @@ module BaseballDiscord
 
           user_verified_on_reddit! data['state_token'], data['reddit_username']
 
-          check_queue
+          check_verification_queue
         end
       end
     end
