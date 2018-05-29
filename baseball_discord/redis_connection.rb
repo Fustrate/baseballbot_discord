@@ -99,7 +99,7 @@ module BaseballDiscord
       ensure_redis
 
       @redis.lpop('discord.verification_queue') do |message|
-        if value
+        if message
           @bot.logger.debug "[Redis] Queue has content: #{message}"
           data = JSON.parse(message)
 
