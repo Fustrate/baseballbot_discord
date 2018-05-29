@@ -129,7 +129,7 @@ module BaseballDiscord
       member.add_role data['role'].to_i
 
       begin
-        member.username = reddit_username
+        member.nick = reddit_username
       rescue Discordrb::Errors::NoPermission
         log "Couldn't update name for #{member.distinct} to #{reddit_username}"
       end
