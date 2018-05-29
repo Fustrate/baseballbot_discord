@@ -131,7 +131,7 @@ module BaseballDiscord
       begin
         member.nick = reddit_username
       rescue Discordrb::Errors::NoPermission
-        @bot.log "Couldn't update name for #{member.distinct} to #{reddit_username}"
+        @bot.logger.info "Couldn't update name for #{member.distinct} to #{reddit_username}"
       end
 
       member.pm VERIFIED_MESSAGE
