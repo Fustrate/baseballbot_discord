@@ -30,40 +30,36 @@ module BaseballDiscord
         ALREADY_VERIFIED = 'You have already been verified on this server.'
 
         def run
-          server_name = args.join(' ').strip.downcase.gsub(/[^a-z]/, '')
-
-          guild = find_server_by_name(server_name)
-
-          return unless guild
-
-          member = guild.member(user.id)
-
-          return user.pm ALREADY_VERIFIED if member_verified_on_server?(member)
-
-          send_pm format(
-            WELCOME_MESSAGE,
-            auth_url: auth_url(guild),
-            guild: server_name
-          )
+          start_verification_for_server find_server_by_name(args.join(' '))
         end
 
         def send_welcome_pm
-          server_name = bot.class::SERVERS.key(server.id)
-
-          user.pm format(
-            WELCOME_MESSAGE,
-            auth_url: auth_url,
-            guild: server_name
-          )
+          start_verification_for_server server
         end
 
         protected
 
-        def find_server_by_name(name)
-          return send_pm MISSING_SERVER_NAME if name.empty?
-          return send_pm INVALID_SERVER_NAME unless bot.class::SERVERS[name]
+        def verify_on_server(guild)
+          return unless guild
 
-          bot.server bot.class::SERVERS[name]
+          member = guild.member(user.id)
+
+          return send_pm ALREADY_VERIFIED if member_verified_on_server?(member)
+
+          send_pm format(
+            WELCOME_MESSAGE,
+            auth_url: auth_url(guild),
+            guild: bot.class::SERVERS.key(guild.id)
+          )
+        end
+
+        def find_server_by_name(name)
+          normal = name.strip.downcase.gsub(/[^a-z]/, '')
+
+          return send_pm MISSING_SERVER_NAME if normal.empty?
+          return send_pm INVALID_SERVER_NAME unless bot.class::SERVERS[normal]
+
+          bot.server bot.class::SERVERS[normal]
         end
 
         def member_verified_on_server?(member)

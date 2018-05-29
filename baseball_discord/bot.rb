@@ -5,6 +5,7 @@ require 'date'
 require 'discordrb'
 require 'em-hiredis'
 require 'eventmachine'
+require 'json'
 require 'mlb_stats_api'
 require 'open-uri'
 require 'pg'
@@ -41,7 +42,6 @@ module BaseballDiscord
     # Discord IDs of different servers. Duplicates are allowed.
     SERVERS = {
       'baseball' => 400_516_567_735_074_817,
-      'rbaseball' => 400_516_567_735_074_817,
       'test' => 450_792_745_553_100_801
     }.freeze
 
