@@ -205,7 +205,7 @@ module BaseballDiscord
         def game_data(game)
           home_team = game.dig('teams', 'home', 'team', 'id') == @team_id
 
-          data = basic_data(home_team)
+          data = basic_data(game, home_team)
 
           # mark_winning_team(game, data, home_team) if past?
 
@@ -234,7 +234,7 @@ module BaseballDiscord
         #   end
         # end
 
-        def basic_data(home_team)
+        def basic_data(game, home_team)
           team_key, opp_key = home_team ? %w[home away] : %w[away home]
 
           {
