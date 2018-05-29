@@ -176,7 +176,7 @@ module BaseballDiscord
           properly_ordered_dates(data).each do |date|
             next unless date['totalGames'].positive?
 
-            properly_ordered_dates(date).each do |game|
+            properly_ordered_games(date).each do |game|
               next unless include_game?(game)
 
               games << game_data(game)
