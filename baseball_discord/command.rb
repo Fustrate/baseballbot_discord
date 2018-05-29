@@ -57,6 +57,12 @@ module BaseballDiscord
       nil
     end
 
+    def send_pm(message)
+      user.pm message
+
+      nil
+    end
+
     def bot
       event.bot
     end

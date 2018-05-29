@@ -75,23 +75,5 @@ module BaseballDiscord
 
       include! BaseballDiscord::Events::MemberJoin
     end
-
-    def run(async = false)
-      super(async)
-    end
-
-    def user_verified(verification_token, reddit_username)
-      data = @redis.hgetall(verification_token)
-
-      guild = server data['server_id'].to_i
-      member = guild.member data['user_id'].to_i
-
-      verified_role = VERIFIED_ROLES[guild.id]
-
-      member.add_role verified_role, 'User verified their reddit account'
-      member.set_nick reddit_username, 'Syncing reddit username'
-
-      member.pm 'Thanks for verifying your account!'
-    end
   end
 end
