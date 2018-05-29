@@ -27,6 +27,8 @@ module BaseballDiscord
         )
       )
 
+      log "[URL Load] #{filename}", level: :debug
+
       JSON.parse(URI.parse(filename).open.read)
     end
 
