@@ -74,7 +74,7 @@ module BaseballDiscord
 
           team_id = BaseballDiscord::Utilities.find_team_by_name [input]
 
-          raise UserError, TEAM_NOT_FOUND unless team_id
+          return react_to_message('❓') unless team_id
 
           add = @baseball.roles.find { |role| role.id == TEAM_ROLES[team_id] }
 
