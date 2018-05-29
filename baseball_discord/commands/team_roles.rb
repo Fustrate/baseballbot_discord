@@ -62,7 +62,7 @@ module BaseballDiscord
           @member = @baseball.member(user.id)
 
           raise UserError, NOT_A_MEMBER unless @member
-          raise UserError, NOT_VERIFIED unless member_verified?(@member)
+          raise UserError, NOT_VERIFIED unless member_verified?
 
           find_and_assign_role
         rescue UserError => error
@@ -79,7 +79,7 @@ module BaseballDiscord
           add = @baseball.roles.find { |role| role.id == TEAM_ROLES[team_id] }
 
           # Add the proper team role, remove all others
-          member.modify_roles add, all_team_roles_on_server
+          @member.modify_roles add, all_team_roles_on_server
 
           react_to_message '✅'
         end
@@ -88,22 +88,12 @@ module BaseballDiscord
           @baseball.roles.find { |role| TEAM_ROLES.key(role.id) }
         end
 
-        def member_verified?(member)
-          return true unless bot.config.verification_enabled?(member.server.id)
+        def member_verified?
+          return true unless bot.config.verification_enabled?(@member.server.id)
 
-          member.roles.map(&:id).include?(
-            bot.config.verified_role_id(member.server.id)
+          @member.roles.map(&:id).include?(
+            bot.config.verified_role_id(@member.server.id)
           )
-        end
-
-        # A dummy class since Member#modify_roles wants something with a
-        # resolve_id method.
-        class DummyRole
-          attr_reader :resolve_id
-
-          def initialize(id)
-            @resolve_id = id
-          end
         end
       end
     end
