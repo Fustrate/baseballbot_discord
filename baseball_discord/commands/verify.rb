@@ -86,12 +86,13 @@ module BaseballDiscord
         def generate_state_data(guild)
           state_token = SecureRandom.urlsafe_base64
 
-          bot.redis.mapped_hmset(
-            "discord.verification.#{state_token}",
+          data = {
             user_id: user.id,
             server_id: guild.id,
             role_id: bot.class::VERIFIED_ROLES[guild.id]
-          )
+          }
+
+          bot.redis.set "discord.verification.#{state_token}", data.to_json
 
           bot.redis.expire "discord.verification.#{state_token}", 604_800
 
