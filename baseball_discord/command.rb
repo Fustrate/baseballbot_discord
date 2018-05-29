@@ -41,14 +41,14 @@ module BaseballDiscord
     def names_from_context
       search_for = []
 
-      channel_name = channel.name.gsub(/[^a-z]/, ' ')
+      channel_name = channel.name.downcase
 
-      unless BaseballDiscord::Bot::NON_TEAM_CHANNELS.include?(channel_name)
+      unless bot.config.non_team_channels(server.id).include?(channel_name)
         search_for << channel_name
       end
 
       role_names = user.roles.map(&:name).map(&:downcase) -
-                   BaseballDiscord::Bot::NON_TEAM_ROLES
+                   bot.config.non_team_roles(server.id)
 
       search_for + role_names
     end

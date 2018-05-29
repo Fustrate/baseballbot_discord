@@ -41,11 +41,15 @@ module BaseballDiscord
 
         NOT_A_MEMBER = 'It doesn\'t look like you\'re a member of this server.'
 
+        VERIFICATION_NOT_ENABLED = 'This server does not require verification.'
+
         def run
           start_verification_for_server find_server_by_name(args.join(' '))
         end
 
         def send_welcome_pm
+          return unless bot.config.verification_enabled?(server.id)
+
           start_verification_for_server server, welcome: true
         end
 
@@ -53,6 +57,10 @@ module BaseballDiscord
 
         def start_verification_for_server(guild, welcome: false)
           return unless guild
+
+          unless bot.config.verification_enabled?(guild.id)
+            raise UserError, VERIFICATION_NOT_ENABLED
+          end
 
           member = guild.member(user.id)
 
@@ -69,7 +77,7 @@ module BaseballDiscord
             (welcome ? WELCOME_MESSAGE : VERIFY_MESSAGE),
             server_name: guild.name,
             auth_url: auth_url(guild),
-            guild: bot.class::SERVERS.key(guild.id)
+            guild: bot.config.server(guild.id)['short_name']
           )
         end
 
@@ -77,14 +85,19 @@ module BaseballDiscord
           normal = name.strip.downcase.gsub(/[^a-z]/, '')
 
           raise UserError, MISSING_SERVER_NAME if normal.empty?
-          raise UserError, INVALID_SERVER_NAME unless bot.class::SERVERS[normal]
 
-          bot.server bot.class::SERVERS[normal]
+          server_id = bot.config.short_name_to_server_id(normal)
+
+          raise UserError, INVALID_SERVER_NAME unless server_id
+
+          bot.server server_id
         end
 
         def member_verified?(member)
+          return true unless bot.config.verification_enabled?(member.server.id)
+
           member.roles.map(&:id).include?(
-            bot.class::VERIFIED_ROLES[member.server.id]
+            bot.config.verified_role_id(member.server.id)
           )
         end
 
@@ -113,7 +126,7 @@ module BaseballDiscord
           {
             user: user.id,
             server: guild.id,
-            role: bot.class::VERIFIED_ROLES[guild.id]
+            role: bot.config.verified_role_id(guild.id)
           }.to_json
         end
       end

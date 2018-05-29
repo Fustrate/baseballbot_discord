@@ -1,2 +1,3 @@
 *.output
 *.pid
+config/servers.yml

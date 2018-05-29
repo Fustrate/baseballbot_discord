@@ -1,0 +1,38 @@
+# frozen_string_literal: true
+
+module BaseballDiscord
+  # Servers can be added
+  class Config
+    def short_name_to_server_id(short_name)
+      servers.find { |server| server['short_name'] == short_name }&.first
+    end
+
+    def verified_role_id(server_id)
+      servers.dig(server_id, 'verified_role')
+    end
+
+    def verification_enabled?(server_id)
+      servers.dig(server_id, 'verification')
+    end
+
+    def server(server_id)
+      servers[server_id]
+    end
+
+    def non_team_channels(server_id)
+      servers.dig(server_id, 'non_team_channels') || []
+    end
+
+    def non_team_roles(server_id)
+      servers.dig(server_id, 'non_team_roles') || []
+    end
+
+    protected
+
+    def servers
+      @servers ||= YAML.safe_load(
+        File.open(File.expand_path('../config/servers.yml')).read
+      ).dig('servers')
+    end
+  end
+end
