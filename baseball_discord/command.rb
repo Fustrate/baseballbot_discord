@@ -10,7 +10,7 @@ module BaseballDiscord
       @event = event
       @args = args
 
-      log event.message.content
+      log event.message.content if event.respond_to?(:message)
     end
 
     protected
