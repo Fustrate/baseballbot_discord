@@ -99,6 +99,9 @@ module BaseballDiscord
       ensure_redis
 
       @redis.lpop('discord.verification_queue') do |message|
+        @bot.logger.debug "[Redis] #{message.class}"
+        @bot.logger.debug "[Redis] #{message.public_methods(false).sort.inspect}"
+
         if message
           @bot.logger.debug "[Redis] Queue has content: #{message}"
           data = JSON.parse(message)
@@ -111,11 +114,17 @@ module BaseballDiscord
     end
 
     def user_verified_on_reddit!(state_token, reddit_username)
-      data = JSON.parse @redis.get(state_token)
+      @redis.get(state_token) do |state_data|
+        data = JSON.parse state_data
 
-      member = @bot.server(data['server'].to_i).member(data['user'].to_i)
+        member = @bot.server(data['server'].to_i).member(data['user'].to_i)
 
-      # Guess this member doesn't exist anymore?
+        process_member_verification(member, data, reddit_username)
+        end
+      end
+    end
+
+    def process_member_verification(member, data, reddit_username)
       return unless member
 
       member.add_role data['role'].to_i
