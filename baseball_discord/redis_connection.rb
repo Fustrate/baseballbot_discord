@@ -117,7 +117,12 @@ module BaseballDiscord
       return unless member
 
       member.add_role data['role'].to_i
-      member.username = reddit_username
+
+      begin
+        member.username = reddit_username
+      rescue Discordrb::Errors::NoPermission
+        log "Couldn't update name for #{member.distinct} to #{reddit_username}"
+      end
 
       member.pm VERIFIED_MESSAGE
     end
