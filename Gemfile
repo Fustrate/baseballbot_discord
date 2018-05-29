@@ -9,8 +9,8 @@ gem 'daemons'
 gem 'rake'
 
 # Local services
+gem 'em-hiredis'
 gem 'pg'
-gem 'redis'
 
 # Outside services
 gem 'discordrb'

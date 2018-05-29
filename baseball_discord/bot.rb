@@ -3,6 +3,8 @@
 require 'chronic'
 require 'date'
 require 'discordrb'
+require 'em-hiredis'
+require 'eventmachine'
 require 'mlb_stats_api'
 require 'open-uri'
 require 'pg'
@@ -13,6 +15,7 @@ require 'terminal-table'
 require 'tzinfo'
 
 require_relative 'command'
+require_relative 'redis_connection'
 require_relative 'utilities'
 
 # Require all commands and events
@@ -35,11 +38,17 @@ module BaseballDiscord
       'mods', 'bot', 'verified', 'discord mods', 'team sub mods'
     ].freeze
 
-    # Discord ID of the rBaseball server
-    SERVER_ID = 400_516_567_735_074_817
+    # Discord IDs of different servers. Duplicates are allowed.
+    SERVERS = {
+      'baseball' => 400_516_567_735_074_817,
+      'rbaseball' => 400_516_567_735_074_817,
+      'test' => 450_792_745_553_100_801
+    }.freeze
 
+    # The 'Verified' role on each of the above servers.
     VERIFIED_ROLES = {
-      400_516_567_735_074_817 => 449_686_034_507_366_440
+      400_516_567_735_074_817 => 449_686_034_507_366_440, # baseball
+      450_792_745_553_100_801 => 450_811_043_997_024_258 # test
     }.freeze
 
     def initialize(attributes = {})
@@ -47,10 +56,10 @@ module BaseballDiscord
 
       super attributes
 
-      @redis = Redis.new
       @logger = Logger.new($stdout)
+      @redis = RedisConnection.new(self)
 
-      @mlb = MLBStatsAPI::Client.new(logger: @logger, cache: @redis)
+      @mlb = MLBStatsAPI::Client.new(logger: @logger, cache: Redis.new)
 
       load_commands
     end
