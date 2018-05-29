@@ -21,7 +21,11 @@ module BaseballDiscord
       EM.add_periodic_timer(300) { check_verification_queue }
 
       EM.next_tick do
-        subscribe('discord.verified') { check_verification_queue }
+        subscribe('discord.verified') do
+          @bot.logger.debug '[Redis] Received discord.verified event'
+
+          check_verification_queue
+        end
       end
     end
 
