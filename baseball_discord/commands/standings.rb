@@ -52,7 +52,9 @@ module BaseballDiscord
         def parse_standings_args
           input = args.join('').downcase
 
-          input = bot.config.dig(server.id, 'default_division') if input.blank?
+          if input.empty?
+            input = bot.config.dig(server.id, 'default_division') || ''
+          end
 
           if input =~ /\A([a-z]+)(\d{4})\z/
             division_id = find_division(Regexp.last_match[1])
