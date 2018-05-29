@@ -10,19 +10,17 @@ module BaseballDiscord
       connect
     end
 
-    def mapped_hmset(key, values = {})
+    def connect
       ensure_redis
 
       EM.next_tick do
-        @redis.mapped_hmset key, values
-      end
-    end
+        subscribe('discord.debug') do |message|
+          puts message.inspect
+        end
 
-    def expire(key, ttl)
-      ensure_redis
-
-      EM.next_tick do
-        @redis.expire key, ttl
+        subscribe('discord.verified') do |_message|
+          check_verification_queue
+        end
       end
     end
 
@@ -39,25 +37,23 @@ module BaseballDiscord
       sleep 0.25
     end
 
-    def connect
+    def mapped_hmset(key, values = {})
       ensure_redis
 
       EM.next_tick do
-        subscribe('discord.debug') do |message|
-          puts message.inspect
-        end
+        @bot.logger.debug "[Redis] Mapped HM Set #{key}: #{values.inspect}"
 
-        subscribe('discord.verified') do |_message|
-          check_verification_queue
-        end
+        @redis.mapped_hmset key, values
       end
     end
 
-    def publish(channel, message)
+    def expire(key, ttl)
       ensure_redis
 
       EM.next_tick do
-        @redis.publish channel.to_s, message.to_json
+        @bot.logger.debug "[Redis] Expire #{key}: #{ttl}"
+
+        @redis.expire key, ttl
       end
     end
 
@@ -65,6 +61,8 @@ module BaseballDiscord
       ensure_redis
 
       EM.next_tick do
+        @bot.logger.debug "[Redis] Set #{key}: #{value.inspect}"
+
         @redis.set key, value
       end
     end
@@ -73,15 +71,9 @@ module BaseballDiscord
       ensure_redis
 
       @redis.get(key) do |value|
+        @bot.logger.debug "[Redis] Get #{key}: #{value.inspect}"
+
         yield value
-      end
-    end
-
-    def getset(key, value)
-      ensure_redis
-
-      @redis.getset(key, value) do |old_value|
-        yield old_value
       end
     end
 
