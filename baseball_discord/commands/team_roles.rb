@@ -99,9 +99,15 @@ module BaseballDiscord
 
           return react_to_message('❓') unless team_ids.any?
 
-          role_ids = team_ids.map { |team_id| TEAM_ROLES.dig(team_id, 1) }
+          update_member(team_ids)
+        end
 
-          add = @baseball.roles.select { |role| role_ids.include?(role.id) }
+        # IDs passed to this message are known to be good
+        def update_member(team_ids)
+          # Only one role is actually assigned
+          role_id = TEAM_ROLES.dig(team_ids.first, 1)
+
+          add = @baseball.roles.select { |role| role_id == role.id }
 
           # Add the proper team role(s), remove all others
           @member.modify_roles add, all_team_roles_on_server
@@ -113,7 +119,6 @@ module BaseballDiscord
 
         def update_nickname(team_ids)
           abbrs = team_ids.map { |team_id| TEAM_ROLES.dig(team_id, 0) }
-            .compact
             .map { |abbr| "[#{abbr}]" }
 
           base_name = @member.display_name.gsub(/ \[.*\]\z/, '')
