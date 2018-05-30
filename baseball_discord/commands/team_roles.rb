@@ -107,9 +107,9 @@ module BaseballDiscord
           # Add the proper team role(s), remove all others
           @member.modify_roles add, all_team_roles_on_server
 
-          react_to_message '✅'
-
           update_nickname(team_ids)
+
+          react_to_message '✅'
         end
 
         def update_nickname(team_ids)
@@ -122,8 +122,6 @@ module BaseballDiscord
           return unless abbrs.count > 1
 
           @member.nick = "#{base_name} #{abbrs.join('')}"
-
-          nil
         rescue Discordrb::Errors::NoPermission
           @bot.logger.info "Couldn't update name for #{@member.distinct}"
         end
