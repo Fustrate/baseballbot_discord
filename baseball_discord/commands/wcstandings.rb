@@ -30,7 +30,7 @@ module BaseballDiscord
           return react_to_message('❓') unless league_id
 
           rows = standings_data(date, league_id)
-            .sort_by { |team| team['wildCardRank'] }
+            .sort_by { |team| team['wildCardRank'].to_i }
             .map { |team| team_standings_data(team) }
 
           standings_table(rows)
