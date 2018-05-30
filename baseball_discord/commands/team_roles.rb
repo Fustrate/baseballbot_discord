@@ -14,6 +14,10 @@ module BaseballDiscord
         TeamRolesCommand.new(event, *args).update_member_role
       end
 
+      command(:team2, help_available: false) do |event, *args|
+        TeamRolesCommand.new(event, *args).update_member_roles
+      end
+
       class TeamRolesCommand < Command
         NOT_A_MEMBER = <<~PM
           You must be a member of the baseball server to use this command.
@@ -57,28 +61,50 @@ module BaseballDiscord
         }.freeze
 
         def update_member_role
+          check_member_of_baseball
+
+          find_and_assign_role [args.join(' ')]
+        rescue UserError => error
+          send_pm error.message
+        end
+
+        def update_member_roles
+          check_member_of_baseball
+
+          find_and_assign_role multiple_inputs
+        end
+
+        protected
+
+        def check_member_of_baseball
           @baseball = bot.server 400_516_567_735_074_817
 
           @member = @baseball.member(user.id)
 
           raise UserError, NOT_A_MEMBER unless @member
           raise UserError, NOT_VERIFIED unless member_verified?
-
-          find_and_assign_role
-        rescue UserError => error
-          send_pm error.message
         end
 
-        def find_and_assign_role
-          input = args.join(' ')
+        def multiple_inputs
+          args.join(' ')
+            .split(%r{(?:[&+\|/]|\s+and\s+)})
+            .map(&:strip)
+            .reject(&:empty?)
+            .first(2)
+        end
 
-          team_id = BaseballDiscord::Utilities.find_team_by_name [input]
+        def find_and_assign_role(inputs)
+          team_ids = inputs.map do |input|
+            BaseballDiscord::Utilities.find_team_by_name [input]
+          end
 
-          return react_to_message('❓') unless team_id
+          return react_to_message('❓') unless team_ids.any?
 
-          add = @baseball.roles.find { |role| role.id == TEAM_ROLES[team_id] }
+          role_ids = team_ids.map { |team_id| TEAM_ROLES[team_id] }
 
-          # Add the proper team role, remove all others
+          add = @baseball.roles.select { |role| role_ids.include?(role.id) }
+
+          # Add the proper team role(s), remove all others
           @member.modify_roles add, all_team_roles_on_server
 
           react_to_message '✅'
