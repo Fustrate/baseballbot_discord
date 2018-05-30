@@ -42,6 +42,7 @@ module BaseballDiscord
       bot.logger.add LOG_LEVELS.index(level), "#{@log_tags} #{str}"
     end
 
+    # Try the channel first, then roles, then the server
     def names_from_context
       search = [team_name_from_channel_name] + team_names_from_roles
 
@@ -49,16 +50,11 @@ module BaseballDiscord
     end
 
     def team_name_from_channel_name
-      channel_name = channel.name.downcase.tr('-', ' ')
-
-      return if bot.config.non_team_channels(server.id).include?(channel_name)
-
-      channel_name
+      channel.name.downcase.tr('-', ' ')
     end
 
     def team_names_from_roles
-      user.roles.map(&:name).map(&:downcase) -
-        bot.config.non_team_roles(server.id)
+      user.roles.map(&:name).map(&:downcase)
     end
 
     def react_to_message(reaction)
