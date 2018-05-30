@@ -119,7 +119,9 @@ module BaseballDiscord
 
           base_name = @member.nick.gsub(/ \[.*\]\z/, '')
 
-          @member.nick = "#{base_name} #{abbrs}"
+          return unless abbrs.count > 1
+
+          @member.nick = "#{base_name} #{abbrs.join('')}"
         rescue Discordrb::Errors::NoPermission
           @bot.logger.info "Couldn't update name for #{@member.distinct}"
         end
