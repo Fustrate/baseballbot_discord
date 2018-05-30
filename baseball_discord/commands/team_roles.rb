@@ -90,13 +90,12 @@ module BaseballDiscord
             .split(%r{(?:[,&+\|/]|\s+and\s+)})
             .map(&:strip)
             .reject(&:empty?)
-            .first(2)
         end
 
         def find_and_assign_role(inputs)
           team_ids = inputs.map do |input|
             BaseballDiscord::Utilities.find_team_by_name [input]
-          end
+          end.compact.first(2)
 
           return react_to_message('❓') unless team_ids.any?
 
