@@ -25,14 +25,11 @@ module BaseballDiscord
         def run
           team_name, date = parse_team_and_date
 
-          load_team_and_division(team_name)
+          division_id = find_division_id(team_name)
 
-          return react_to_message('❓') unless @division_id
+          return react_to_message('❓') unless division_id
 
-          rows = load_data_from_stats_api(STATS_STANDINGS, date: date)
-            .dig('records')
-            .find { |record| record.dig('division', 'id') == @division_id }
-            .dig('teamRecords')
+          rows = standings_data(date, division_id)
             .sort_by { |team| team['divisionRank'] }
             .map { |team| team_standings_data(team) }
 
@@ -41,14 +38,21 @@ module BaseballDiscord
 
         protected
 
-        def load_team_and_division(team_name)
-          @team_id = BaseballDiscord::Utilities.find_team_by_name(
+        def standings_data(date, division_id)
+          load_data_from_stats_api(STATS_STANDINGS, date: date)
+            .dig('records')
+            .find { |record| record.dig('division', 'id') == division_id }
+            .dig('teamRecords')
+        end
+
+        def find_division_id(team_name)
+          team_id = BaseballDiscord::Utilities.find_team_by_name(
             team_name.empty? ? names_from_context : [team_name]
           )
 
-          return unless @team_id
+          return unless team_id
 
-          @division_id = BaseballDiscord::Utilities.division_for_team(@team_id)
+          BaseballDiscord::Utilities.division_for_team(team_id)
         end
 
         # This should be expanded upon to allow for more date formats
