@@ -117,7 +117,7 @@ module BaseballDiscord
             .compact
             .map { |abbr| "[#{abbr}]" }
 
-          base_name = @member.nick.gsub(/ \[.*\]\z/, '')
+          base_name = @member.display_name.gsub(/ \[.*\]\z/, '')
 
           return unless abbrs.count > 1
 

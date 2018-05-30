@@ -147,7 +147,7 @@ module BaseballDiscord
     end
 
     def update_member_name(member, reddit_username)
-      return if member.nick == reddit_username
+      return if member.display_name == reddit_username
 
       member.nick = reddit_username
     rescue Discordrb::Errors::NoPermission
