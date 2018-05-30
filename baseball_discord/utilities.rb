@@ -37,6 +37,15 @@ module BaseballDiscord
     }.freeze
     # rubocop:enable Metrics/LineLength
 
+    DIVISION_TEAMS = {
+      200 => [108, 136, 117, 140, 133], # AL West
+      201 => [110, 111, 139, 141, 147], # AL East
+      202 => [114, 116, 118, 142, 145], # AL Central
+      203 => [109, 115, 119, 135, 137], # NL West
+      204 => [120, 121, 143, 144, 146], # NL East
+      205 => [112, 113, 134, 138, 158]  # NL Central
+    }.freeze
+
     def self.parse_date(date)
       return Time.now if date.strip == ''
 
@@ -57,11 +66,15 @@ module BaseballDiscord
     def self.find_team_by_name(names)
       names.map { |name| name.downcase.gsub(/[^a-z ]/, '') }.each do |name|
         TEAMS_BY_NAME.each do |id, potential_names|
-          return id.to_i if potential_names.include?(name)
+          return id if potential_names.include?(name)
         end
       end
 
       nil
+    end
+
+    def self.division_for_team(team_id)
+      DIVISION_TEAMS.find { |_, teams| teams.include?(team_id) }&.first
     end
   end
 end

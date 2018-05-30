@@ -22,23 +22,16 @@ module BaseballDiscord
           'https://statsapi.mlb.com/api/v1/standings/regularSeason?' \
           'leagueId=103,104&season=%<year>d&t=%<t>d&date=%<date>s'
 
-        DIVISIONS = {
-          200 => %w[alw alwest],
-          201 => %w[ale aleast],
-          202 => %w[alc alcentral],
-          203 => %w[nlw nlwest],
-          204 => %w[nle nleast],
-          205 => %w[nlc nlcentral]
-        }.freeze
-
         def run
-          division_id, date = parse_standings_args
+          team_name, date = parse_team_and_date
 
-          return react_to_message('❓') unless division_id
+          load_team_and_division(team_name)
+
+          return react_to_message('❓') unless @division_id
 
           rows = load_data_from_stats_api(STATS_STANDINGS, date: date)
             .dig('records')
-            .find { |record| record.dig('division', 'id') == division_id }
+            .find { |record| record.dig('division', 'id') == @division_id }
             .dig('teamRecords')
             .sort_by { |team| team['divisionRank'] }
             .map { |team| team_standings_data(team) }
@@ -48,23 +41,37 @@ module BaseballDiscord
 
         protected
 
+        def load_team_and_division(team_name)
+          @team_id = BaseballDiscord::Utilities.find_team_by_name(
+            team_name.empty? ? names_from_context : [team_name]
+          )
+
+          return unless @team_id
+
+          @division_id = BaseballDiscord::Utilities.division_for_team(@team_id)
+        end
+
         # This should be expanded upon to allow for more date formats
-        def parse_standings_args
-          input = args.join('').downcase
+        def parse_team_and_date
+          input = args.join(' ').downcase
 
           if input.empty?
-            input = bot.config.dig(server.id, 'default_division') || ''
+            input = bot.config.dig(server.id, 'default_team') || ''
           end
 
-          if input =~ /\A([a-z]+)(\d{4})\z/
-            division_id = find_division(Regexp.last_match[1])
+          case input
+          when /\A(.*)\s*(\d{4})\z/
+            team_name = Regexp.last_match[1].strip
             date = Date.civil(Regexp.last_match[2].to_i, 12, 1)
+          when /\A\d{4}\z/
+            team_name = nil
+            date = Date.civil(input.to_i, 12, 1)
           else
-            division_id = find_division(input)
+            team_name = input
             date = Time.now
           end
 
-          [division_id, date]
+          [team_name, date]
         end
 
         def team_standings_data(team)
@@ -93,10 +100,6 @@ module BaseballDiscord
           table.align_column(5, :right)
 
           "```\n#{table}\n```"
-        end
-
-        def find_division(input)
-          DIVISIONS.find { |_, value| value.include?(input) }&.first
         end
       end
     end
