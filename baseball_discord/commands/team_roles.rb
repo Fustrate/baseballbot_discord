@@ -129,7 +129,9 @@ module BaseballDiscord
         end
 
         def all_team_roles_on_server
-          @baseball.roles.select { |role| TEAM_ROLES.key(role.id) }
+          all_snowflakes = TEAM_ROLES.map { |_, data| data[1] }
+
+          @baseball.roles.select { |role| all_snowflakes.include?(role.id) }
         end
 
         def member_verified?
