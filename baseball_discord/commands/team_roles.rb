@@ -14,7 +14,7 @@ module BaseballDiscord
         TeamRolesCommand.new(event, *args).update_member_role
       end
 
-      command(:team2, help_available: false) do |event, *args|
+      command(:teams, help_available: false) do |event, *args|
         TeamRolesCommand.new(event, *args).update_member_roles
       end
 
@@ -87,7 +87,7 @@ module BaseballDiscord
 
         def multiple_inputs
           args.join(' ')
-            .split(%r{(?:[&+\|/]|\s+and\s+)})
+            .split(%r{(?:[,&+\|/]|\s+and\s+)})
             .map(&:strip)
             .reject(&:empty?)
             .first(2)
@@ -122,6 +122,8 @@ module BaseballDiscord
           return unless abbrs.count > 1
 
           @member.nick = "#{base_name} #{abbrs.join('')}"
+
+          nil
         rescue Discordrb::Errors::NoPermission
           @bot.logger.info "Couldn't update name for #{@member.distinct}"
         end
