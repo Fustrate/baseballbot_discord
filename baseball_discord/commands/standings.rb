@@ -29,11 +29,11 @@ module BaseballDiscord
 
           return react_to_message('❓') unless division_id
 
-          leaders, others = standings_data(date, division_id)
+          rows = standings_data(date, division_id)
             .sort_by { |team| team['divisionRank'] }
             .map { |team| team_standings_data(team) }
 
-          standings_table(leaders, others)
+          standings_table(rows)
         end
 
         protected
@@ -43,7 +43,6 @@ module BaseballDiscord
             .dig('records')
             .find { |record| record.dig('division', 'id') == division_id }
             .dig('teamRecords')
-            .partition { |team| team['divisionRank'] == '1' }
         end
 
         def find_division_id(team_name)
@@ -93,9 +92,9 @@ module BaseballDiscord
           ]
         end
 
-        def standings_table(leaders, others)
+        def standings_table(rows)
           table = Terminal::Table.new(
-            rows: (leaders + [:separator] + others),
+            rows: rows,
             headings: %w[Team W L GB % rDiff STRK]
           )
 

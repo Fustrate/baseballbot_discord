@@ -29,11 +29,11 @@ module BaseballDiscord
 
           return react_to_message('❓') unless league_id
 
-          rows = standings_data(date, league_id)
+          leaders, others = standings_data(date, league_id)
             .sort_by { |team| team['wildCardRank'].to_i }
-            .map { |team| team_standings_data(team) }
+            .partition { |team| team['divisionRank'] == '1' }
 
-          standings_table(rows)
+          standings_table(leaders, others)
         end
 
         protected
@@ -92,9 +92,12 @@ module BaseballDiscord
           ]
         end
 
-        def standings_table(rows)
+        def standings_table(leaders, others)
+          leader_rows = leaders.map { |team| team_standings_data(team) }
+          other_rows = others.map { |team| team_standings_data(team) }
+
           table = Terminal::Table.new(
-            rows: rows,
+            rows: (leader_rows + [:separator] + other_rows),
             headings: %w[Team W L GB % rDiff STRK]
           )
 
