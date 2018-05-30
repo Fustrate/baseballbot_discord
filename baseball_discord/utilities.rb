@@ -46,6 +46,13 @@ module BaseballDiscord
       205 => [112, 113, 134, 138, 158]  # NL Central
     }.freeze
 
+    LEAGUE_TEAMS = {
+      # AL
+      103 => DIVISION_TEAMS[200] + DIVISION_TEAMS[201] + DIVISION_TEAMS[202],
+      # NL
+      104 => DIVISION_TEAMS[203] + DIVISION_TEAMS[204] + DIVISION_TEAMS[205]
+    }.freeze
+
     def self.parse_date(date)
       return Time.now if date.strip == ''
 
@@ -74,7 +81,11 @@ module BaseballDiscord
     end
 
     def self.division_for_team(team_id)
-      DIVISION_TEAMS.find { |_, teams| teams.include?(team_id) }&.first
+      DIVISION_TEAMS.find { |_, team_ids| team_ids.include?(team_id) }&.first
+    end
+
+    def self.league_for_team(team_id)
+      LEAGUE_TEAMS.find { |_, team_ids| team_ids.include?(team_id) }&.first
     end
   end
 end
