@@ -16,9 +16,17 @@ module BaseballDiscord
     protected
 
     def load_data_from_stats_api(url, interpolations = {})
+      filename = interpolate_url(url, interpolations)
+
+      log "[URL Load] #{filename}", level: :debug
+
+      JSON.parse(URI.parse(filename).open.read)
+    end
+
+    def interpolate_url(url, interpolations)
       date = interpolations[:date] || (Time.now - 7200)
 
-      filename = format(
+      format(
         url,
         interpolations.merge(
           year: date.year,
@@ -26,10 +34,6 @@ module BaseballDiscord
           date: date.strftime('%m/%d/%Y')
         )
       )
-
-      log "[URL Load] #{filename}", level: :debug
-
-      JSON.parse(URI.parse(filename).open.read)
     end
 
     def log(str, level: :info)
@@ -39,19 +43,22 @@ module BaseballDiscord
     end
 
     def names_from_context
-      search_for = []
+      search = [team_name_from_channel_name] + team_names_from_roles
 
+      (search + [bot.config.dig(server.id, 'default_team')]).compact
+    end
+
+    def team_name_from_channel_name
       channel_name = channel.name.downcase.tr('-', ' ')
 
-      unless bot.config.non_team_channels(server.id).include?(channel_name)
-        search_for << channel_name
-      end
+      return if bot.config.non_team_channels(server.id).include?(channel_name)
 
-      role_names = user.roles.map(&:name).map(&:downcase) -
-                   bot.config.non_team_roles(server.id)
+      channel_name
+    end
 
-      (search_for + role_names + [bot.config.dig(server.id, 'default_team')])
-        .compact
+    def team_names_from_roles
+      user.roles.map(&:name).map(&:downcase) -
+        bot.config.non_team_roles(server.id)
     end
 
     def react_to_message(reaction)
