@@ -2,22 +2,22 @@
 
 module BaseballDiscord
   module Commands
-    module Standings
+    module WCStandings
       extend Discordrb::Commands::CommandContainer
 
-      COMMAND = :standings
-      DESCRIPTION = 'Displays the division standings for a team'
-      USAGE = 'standings [team]'
+      COMMAND = :wcstandings
+      DESCRIPTION = 'Displays the wildcard standings for a team'
+      USAGE = 'wcstandings [team]'
 
       command(
         COMMAND,
         description: DESCRIPTION,
         usage: USAGE
       ) do |event, *args|
-        StandingsCommand.new(event, *args).run
+        WCStandingsCommand.new(event, *args).run
       end
 
-      class StandingsCommand < Command
+      class WCStandingsCommand < Command
         STATS_STANDINGS = \
           'https://statsapi.mlb.com/api/v1/standings/regularSeason?' \
           'leagueId=103,104&season=%<year>d&t=%<t>d&date=%<date>s'
@@ -25,12 +25,12 @@ module BaseballDiscord
         def run
           team_name, date = parse_team_and_date
 
-          division_id = find_division_id(team_name)
+          league_id = find_league_id(team_name)
 
-          return react_to_message('❓') unless division_id
+          return react_to_message('❓') unless league_id
 
-          rows = standings_data(date, division_id)
-            .sort_by { |team| team['divisionRank'] }
+          rows = standings_data(date, league_id)
+            .sort_by { |team| team['wildCardRank'] }
             .map { |team| team_standings_data(team) }
 
           standings_table(rows)
@@ -38,21 +38,21 @@ module BaseballDiscord
 
         protected
 
-        def standings_data(date, division_id)
+        def standings_data(date, league_id)
           load_data_from_stats_api(STATS_STANDINGS, date: date)
             .dig('records')
-            .find { |record| record.dig('division', 'id') == division_id }
-            .dig('teamRecords')
+            .select { |division| division.dig('league', 'id') == league_id }
+            .flat_map { |division| division['teamRecords'] }
         end
 
-        def find_division_id(team_name)
+        def find_league_id(team_name)
           team_id = BaseballDiscord::Utilities.find_team_by_name(
             team_name.empty? ? names_from_context : [team_name]
           )
 
           return unless team_id
 
-          BaseballDiscord::Utilities.division_for_team(team_id)
+          BaseballDiscord::Utilities.league_for_team(team_id)
         end
 
         # This should be expanded upon to allow for more date formats
@@ -85,7 +85,7 @@ module BaseballDiscord
             team.dig('team', 'name'),
             team['wins'],
             team['losses'],
-            team['gamesBack'],
+            team['wildCardGamesBack'],
             team.dig('leagueRecord', 'pct'),
             "#{r_diff_sign}#{team['runDifferential']}",
             team.dig('streak', 'streakCode')
