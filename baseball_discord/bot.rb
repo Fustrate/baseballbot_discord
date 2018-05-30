@@ -56,6 +56,7 @@ module BaseballDiscord
       include! BaseballDiscord::Commands::TeamCalendar
       include! BaseballDiscord::Commands::TeamRoles
       include! BaseballDiscord::Commands::Verify
+      include! BaseballDiscord::Commands::WCStandings
 
       include! BaseballDiscord::Events::MemberJoin
     end
