@@ -23,3 +23,7 @@ gem 'tzinfo'
 
 # Utilities
 gem 'terminal-table'
+
+group :development do
+  gem 'minitest'
+end

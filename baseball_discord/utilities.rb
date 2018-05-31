@@ -4,36 +4,37 @@ module BaseballDiscord
   module Utilities
     # rubocop:disable Metrics/LineLength
     TEAMS_BY_NAME = {
-      108 => ['angels', 'anaheim', 'ana', 'laa', 'laaa', 'la angels', 'los angeles angels', 'los angeles angels of anaheim', 'los angeles angels'],
-      109 => ['diamondbacks', 'arizona', 'ari', 'az', 'dbacks', 'd-backs', 'arizona diamondbacks'],
-      110 => ['orioles', 'baltimore', 'bal', 'baltimore orioles'],
-      111 => ['red sox', 'boston', 'bos', 'bosox', 'bo sox', 'boston red sox'],
-      112 => ['cubs', 'chicago cubs', 'chc'],
-      113 => ['reds', 'cincinatti', 'cin', 'cincinatti reds'],
-      114 => ['indians', 'cleveland', 'cle', 'cleveland indians'],
-      115 => ['rockies', 'colorado', 'col', 'co', 'colorado rockies'],
-      116 => ['tigers', 'detroit', 'det', 'detroit tigers', 'beisbolcats'],
-      117 => ['astros', 'houston', 'hou', 'houston astros'],
-      118 => ['royals', 'kansas city', 'kc', 'kcr', 'kansas', 'kansas city royals'],
-      119 => ['dodgers', 'los angeles', 'la', 'lad', 'la dodgers', 'los angeles dodgers'],
-      120 => ['nationals', 'washington', 'wsh', 'was', 'dc', 'natinals', 'nats', 'washington nationals'],
-      121 => ['mets', 'new york mets', 'nym'],
-      133 => ['athletics', 'oakland', 'oak', 'as', 'oakland athletics', 'oakland as'],
-      134 => ['pirates', 'pittsburgh', 'pittsburg', 'buccos', 'pit', 'pittsburgh pirates'],
-      135 => ['padres', 'san diego', 'sd', 'sd padres', 'sdp', 'san diego padres'],
-      136 => ['mariners', 'seattle', 'sea', 'seattle mariners'],
-      137 => ['giants', 'san francisco', 'san fran', 'gigantes', 'sf', 'sfg', 'sf giants', 'san francisco giants'],
-      138 => ['cardinals', 'stl', 'st louis', 'salad eaters', 'st louis cardinals', 'cards'],
-      139 => ['rays', 'tampa bay', 'tb', 'tbr', 'devil rays', 'tampa bay rays'],
-      140 => ['rangers', 'texas', 'tex', 'texas rangers'],
-      141 => ['blue jays', 'toronto', 'tor', 'bluejays', 'jays', 'canada', 'toronto blue jays'],
-      142 => ['twins', 'minnesota', 'min', 'minnesota twins'],
-      143 => ['phillies', 'philadelphia', 'philly', 'phi', 'philadelphia phillies', 'phils'],
-      144 => ['braves', 'atlanta', 'atl', 'atlanta braves', 'barves'],
-      145 => ['white sox', 'chicago white sox', 'cws', 'chw', 'chisox', 'chi sox'],
-      146 => ['marlins', 'miami', 'mia', 'florida', 'fla', 'miami marlins'],
-      147 => ['yankees', 'new york yankees', 'nyy', 'bronx bombers'],
-      158 => ['brewers', 'milwaukee', 'mil', 'milwaukee brewers']
+      # These must be in largest-to-smallest match order for the regexp to work
+      108 => ['los angeles angels of anaheim', 'los angeles angels', 'la angels', 'angels', 'anaheim', 'ana', 'laaa', 'laa'],
+      109 => ['arizona diamondbacks', 'diamondbacks', 'arizona', 'ari', 'az', 'dbacks'],
+      110 => ['baltimore orioles', 'orioles', 'baltimore', 'bal'],
+      111 => ['boston red sox', 'red sox', 'boston', 'bos', 'bosox', 'bo sox'],
+      112 => ['chicago cubs', 'cubs', 'chc'],
+      113 => ['cincinatti reds', 'cincinatti', 'reds', 'cin'],
+      114 => ['cleveland indians', 'indians', 'cleveland', 'cle'],
+      115 => ['colorado rockies', 'rockies', 'colorado', 'col', 'co'],
+      116 => ['detroit tigers', 'tigers', 'detroit', 'det', 'beisbolcats'],
+      117 => ['houston astros', 'astros', 'houston', 'hou'],
+      118 => ['kansas city royals', 'kc royals', 'royals', 'kansas city', 'kc', 'kcr', 'kansas'],
+      119 => ['los angeles dodgers', 'los angeles', 'la dodgers', 'dodgers', 'lad', 'la'],
+      120 => ['washington nationals', 'nationals', 'washington', 'wsh', 'was', 'dc', 'natinals', 'nats'],
+      121 => ['new york mets', 'mets', 'nym'],
+      133 => ['oakland athletics', 'athletics', 'oakland', 'oak', 'as', 'oakland as'],
+      134 => ['pittsburgh pirates', 'pirates', 'pittsburgh', 'pittsburg', 'buccos', 'pit'],
+      135 => ['san diego padres', 'sd padres', 'padres', 'san diego', 'sd', 'sdp'],
+      136 => ['seattle mariners', 'mariners', 'seattle', 'sea'],
+      137 => ['san francisco giants', 'sf giants', 'giants', 'san francisco', 'san fran', 'gigantes', 'sfg', 'sf'],
+      138 => ['st louis cardinals', 'cardinals', 'stl', 'st louis', 'salad eaters', 'cards'],
+      139 => ['tampa bay rays', 'devil rays', 'rays', 'tampa bay', 'tbr', 'tb'],
+      140 => ['texas rangers', 'rangers', 'texas', 'tex'],
+      141 => ['toronto blue jays', 'blue jays', 'toronto', 'tor', 'bluejays', 'jays', 'canada'],
+      142 => ['minnesota twins', 'twins', 'minnesota', 'min'],
+      143 => ['philadelphia phillies', 'phillies', 'philadelphia', 'philly', 'phils', 'phi'],
+      144 => ['atlanta braves', 'braves', 'atlanta', 'atl', 'barves'],
+      145 => ['chicago white sox', 'white sox', 'cws', 'chw', 'chisox', 'chi sox'],
+      146 => ['miami marlins', 'marlins', 'miami', 'mia', 'florida', 'fla'],
+      147 => ['new york yankees', 'yankees', 'nyy', 'bronx bombers'],
+      158 => ['milwaukee brewers', 'brewers', 'milwaukee', 'mil']
     }.freeze
     # rubocop:enable Metrics/LineLength
 
@@ -71,11 +72,12 @@ module BaseballDiscord
     end
 
     def self.find_team_by_name(names)
-      names.map { |name| name.downcase.gsub(/[^a-z ]/, '') }.each do |name|
-        TEAMS_BY_NAME.each do |id, potential_names|
-          return id if potential_names.include?(name)
+      Array(names).map { |name| name.downcase.gsub(/[^a-z ]/, '') }
+        .each do |name|
+          TEAMS_BY_NAME.each do |id, potential_names|
+            return id if potential_names.include?(name)
+          end
         end
-      end
 
       nil
     end
@@ -86,6 +88,31 @@ module BaseballDiscord
 
     def self.league_for_team(team_id)
       LEAGUE_TEAMS.find { |_, team_ids| team_ids.include?(team_id) }&.first
+    end
+
+    # @param [String] The user-provided input that may have a date at the end
+    # @return [Array<String, DateTime>] The remaining input and a date
+    def self.extract_date(input)
+      match = Regexp.new("#{team_names_regexp}(?<date>.*)")
+        .match(input.downcase)
+
+      if match && match[:team]
+        # yay we got a team
+        if match[:date] && !match[:date].strip.empty?
+          [match[:team], Chronic.parse(match[:date], context: :past).to_date]
+        else
+          [match[:team], Time.now]
+        end
+      else
+        # no team :(
+        [nil, Chronic.parse(input, context: :past).to_date]
+      end
+    end
+
+    def self.team_names_regexp
+      @team_names_regexp ||= Regexp.new(
+        '\\A(?<team>' + TEAMS_BY_NAME.values.flatten.join('|') + ')'
+      )
     end
   end
 end
