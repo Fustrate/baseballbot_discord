@@ -42,9 +42,9 @@ module BaseballDiscord
         end
 
         def fields_for_term(definition)
-          return unless definition['see_also']
+          return [] unless definition['see_also']
 
-          { name: 'See Also:', value: definition['see_also'].join(', ') }
+          [{ name: 'See Also:', value: definition['see_also'].join(', ') }]
         end
 
         def terms
