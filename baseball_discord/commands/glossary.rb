@@ -12,26 +12,30 @@ module BaseballDiscord
 
       # Prints some basic info to the log file
       class GlossaryCommand < Command
-        def define_term
-          unless user.id == BaseballDiscord::Bot::ADMIN_ID
-            return react_to_message '🔒'
-          end
+        FANGRAPHS = {
+          name: 'FanGraphs',
+          url: 'https://www.fangraphs.com/',
+          icon_url: 'https://cdn.fangraphs.com/blogs/wp-content/uploads/2016/04/flat_fg_green.png'
+        }.freeze
 
+        def define_term
           definition = terms[args.join(' ').downcase]
 
           return react_to_message '❓' unless definition
 
-          embed = {
+          bot.send_message(channel, nil, false, embed_for_term(definition))
+
+          nil
+        end
+
+        def embed_for_term(definition)
+          {
             title: definition['title'],
             description: definition['description'],
             url: definition['link'],
-            author: { name: 'FanGraphs', url: 'https://www.fangraphs.com/' },
+            author: FANGRAPHS,
             color: 5_287_462 # FanGraphs Green
           }
-
-          bot.send_message(channel, nil, false, embed)
-
-          nil
         end
 
         protected
