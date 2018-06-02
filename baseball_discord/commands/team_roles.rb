@@ -11,9 +11,10 @@ module BaseballDiscord
         min_args: 1,
         usage: 'team [name]'
       ) do |event, *args|
-        TeamRolesCommand.new(event, *args).update_member_role
+        TeamRolesCommand.new(event, *args).update_member_roles
       end
 
+      # Alias
       command(:teams, help_available: false) do |event, *args|
         TeamRolesCommand.new(event, *args).update_member_roles
       end
@@ -60,18 +61,12 @@ module BaseballDiscord
           158 => ['MIL', 448_515_267_384_049_674]  # Milwaukee Brewers
         }.freeze
 
-        def update_member_role
-          check_member_of_baseball
-
-          find_and_assign_role [args.join(' ')]
-        rescue UserError => error
-          send_pm error.message
-        end
-
         def update_member_roles
           check_member_of_baseball
 
           find_and_assign_role multiple_inputs
+        rescue UserError => error
+          send_pm error.message
         end
 
         protected
