@@ -1,62 +1,192 @@
 glossary:
-  g:
-    title: Games Played
-    definition: Number of games in which the player has appeared.
-  pa:
-    title: Plate Appearances
-    definition: Number of times the player has come to the plate.
-  hr:
-    title: Home Runs
-    definition: Number of home runs.
-  r:
-    title: Runs Scored
-    definition: Number of runs scored.
-  rbi:
-    title: Runs Batted In
-    definition: >
-      Number of times a run scores as a result of a batter’s plate
-      appearance, not counting situations in which an error caused the run to
-      score or the batter hit into a double play.
-  sb:
-    title: Stolen Bases
-    definition: Number of stolen bases.
+  1b:
+    title: Singles
+    description: Number of singles.
+
+  2b:
+    title: Doubles
+    description: Number of doubles.
+
+  3b:
+    title: Triples
+    description: Number of triples.
+
+  ab:
+    title: At Bats
+    description: >
+      Number of trips to the plate in which the batter does not walk, get hit by
+      a pitch, sacrifice (fly or bunt), or reach on interference.
+
+  avg:
+    title: Batting Average
+    description: Rate of hits per at bat, calculated as H/AB.
+
+  babip:
+    title: Batting Average on Balls in Play
+    description: >
+      The rate at which the batter gets a hit when he puts the ball in play,
+      calculated as (H-HR)/(AB-K-HR+SF).
+    link: http://www.fangraphs.com/library/offense/babip/
+
+  bb:
+    title: Walks
+    description: Total number of walks (includes IBB).
+
   bb%:
     title: Walk Percentage
-    definition: >
+    description: >
       Frequency with which the batter has walked, calculated as walks divided by
       plate appearances.
     link: http://www.fangraphs.com/library/offense/rate-stats/
-  k%:
-    title: Strikeout Percentage
-    definition: >
-      Frequency with which the batter has struck out, calculated as strikeouts
-      divided by plate appearances.
-    link: http://www.fangraphs.com/library/offense/rate-stats/
+
+  bb/k:
+    title: Walk to Strikeout Rate
+    description: Ratio of walks to strikeouts, calculated as Walks/Strikeouts.
+
+  bsr:
+    title: Base Running Runs Above Average
+    description: >
+      Number of runs above or below average a player has been worth on the
+      bases, based on stolen bases, caught stealing, extra bases taken, outs on
+      the bases, and avoiding double plays. It is the combination of wSB, UBR,
+      and wGDP.
+    link: http://www.fangraphs.com/library/offense/bsr/
+
+  cs:
+    title: Caught Stealing
+    description: Number of times caught stealing.
+
+  def:
+    title: Defensive Runs Above Average
+    description: >
+      Number of runs above or below average a player has been worth on defense,
+      combining Fielding Runs (Total Zone before 2002, UZR after) and the
+      positional adjustment.
+    link: http://www.fangraphs.com/library/defense/def/
+
+  g:
+    title: Games Played
+    description: Number of games in which the player has appeared.
+
+  gdp:
+    title: Grounded into Double Play
+    description: Number of times the batter hit into a double play.
+
+  h:
+    title: Hits
+    description: Number of hits.
+
+  hbp:
+    title: Hit By Pitches
+    description: Number of times the batter reached after being hit by a pitch.
+
+  hr:
+    title: Home Runs
+    description: Number of home runs.
+
+  ibb:
+    title: Intentional Walks
+    description: Number of times the batter was intentionally walked.
+
   iso:
     title: Isolated Power
     description: >
       Average number of extra bases per at bat, calculated several ways such as
       SLG minus AVG.
     link: http://www.fangraphs.com/library/offense/iso/
-  babip:
-    title: Batting Average on Balls in Play
+
+  k%:
+    title: Strikeout Percentage
     description: >
-      The rate at which the batter gets a hit when he puts the ball
-      in play, calculated as (H-HR)/(AB-K-HR+SF).
-    link: http://www.fangraphs.com/library/offense/babip/
-  avg:
-    title: Batting Average
-    description: Rate of hits per at bat, calculated as H/AB.
+      Frequency with which the batter has struck out, calculated as strikeouts
+      divided by plate appearances.
+    link: http://www.fangraphs.com/library/offense/rate-stats/
+
   obp:
     title: On Base Percentage
     description: >
       Rate at which the batter reaches base, calculated as
       (H+BB+HBP)/(AB+BB+HBP+SF).
     link: http://www.fangraphs.com/library/offense/obp/
+
+  off:
+    title: Offensive Runs Above Average
+    description: >
+      Number of runs above or below average a player has been worth offensively,
+      combining Batting Runs and BsR.
+    link: http://www.fangraphs.com/library/offense/off/
+
+  ops:
+    title: On Base Plus Slugging
+    description: Combination of OBP and SLG, calculated as OBP+SLG.
+
+  pa:
+    title: Plate Appearances
+    description: Number of times the player has come to the plate.
+
+  r:
+    title: Runs Scored
+    description: Number of runs scored.
+
+  rbi:
+    title: Runs Batted In
+    description: >
+      Number of times a run scores as a result of a batter’s plate appearance,
+      not counting situations in which an error caused the run to score or the
+      batter hit into a double play.
+
+  sb:
+    title: Stolen Bases
+    description: Number of stolen bases.
+
+  sf:
+    title: Sacrifice Flies
+    description: >
+      Number of times a batter’s fly out allowed a runner to tag up and score.
+
+  sh:
+    title: Sacrifice Bunts
+    description: >
+      Any bunt in which there was a runner on base and less than two outs in
+      which the batter was put out and at least one runner advanced.
+
   slg:
     title: Slugging Percentage
     description: >
       Average number of total bases per at bat, calculated as Total Bases/AB.
+
+  so:
+    title: Strikeouts
+    description: Number of strikeouts.
+
+  spd:
+    title: Speed Score
+    description: >
+      A slightly outdated statistic that attempts to measure a player’s running
+      ability.
+
+  ubr:
+    title: Ultimate Base Running
+    description: >
+      The number of runs above or below average added by a player on all
+      non-SB/CS base running players.
+
+  war:
+    title: Wins Above Replacement
+    description: >
+      A comprehensive statistic that estimates the number of wins a player has
+      been worth to his team compared to a freely available player such as a
+      minor league free agent.
+    link: http://www.fangraphs.com/library/misc/war/
+
+  wgdp:
+    title: Weighted Grounded Into Double Play Runs
+    description: >
+      The number of runs above or below average added by a player by staying out
+      of double plays.
+    see_also:
+      - gdp
+
   woba:
     title: Weighted On Base Average
     description: >
@@ -66,6 +196,21 @@ glossary:
       accuracy and scope, wOBA measures and captures offensive value more
       accurately and comprehensively.
     link: http://www.fangraphs.com/library/offense/woba/
+
+  wraa:
+    title: Weighted Runs Above Average
+    description: >
+      Number of runs above or below average a player has added as a hitter.
+
+  wrc:
+    title: Weighted Runs Created
+    description: >
+      Number of runs a player has generated for his team as a result of his wOBA
+      and playing time.
+    link: http://www.fangraphs.com/library/offense/wrc/
+    see_also:
+      - wrc+
+
   wrc+:
     title: Weighted Runs Created Plus
     description: >
@@ -74,31 +219,9 @@ glossary:
       (like wOBA) and then adjusts them for the park and league context in which
       they took place.
     link: http://www.fangraphs.com/library/offense/wrc/
-  bsr:
-    title: Base Running Runs Above Average
+
+  wsb:
+    title: Weighted Stolen Base Runs Above Average
     description: >
-      Number of runs above or below average a player has been worth on the
-      bases, based on stolen bases, caught stealing, extra bases taken, outs on
-      the bases, and avoiding double plays. It is the combination of wSB, UBR,
-      and wGDP.
-    link: http://www.fangraphs.com/library/offense/bsr/
-  off:
-    title: Offensive Runs Above Average
-    description: >
-      Number of runs above or below average a player has been worth offensively,
-      combining Batting Runs and BsR.
-    link: http://www.fangraphs.com/library/offense/off/
-  def:
-    title: Defensive Runs Above Average
-    description: >
-      Number of runs above or below average a player has been worth on defense,
-      combining Fielding Runs (Total Zone before 2002, UZR after) and the
-      positional adjustment.
-    link: http://www.fangraphs.com/library/defense/def/
-  war:
-    title: Wins Above Replacement
-    description: >
-      A comprehensive statistic that estimates the number of wins a player has
-      been worth to his team compared to a freely available player such as a
-      minor league free agent.
-    link: http://www.fangraphs.com/library/misc/war/
+      Number of runs above or below average added by a player on stolen base
+      attempts.

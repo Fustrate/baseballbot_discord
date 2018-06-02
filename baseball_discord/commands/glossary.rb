@@ -28,17 +28,24 @@ module BaseballDiscord
           nil
         end
 
+        protected
+
         def embed_for_term(definition)
           {
             title: definition['title'],
             description: definition['description'],
             url: definition['link'],
+            fields: fields_for_term(definition),
             author: FANGRAPHS,
             color: 5_287_462 # FanGraphs Green
           }
         end
 
-        protected
+        def fields_for_term(definition)
+          return unless definition['see_also']
+
+          { name: 'See Also:', value: definition['see_also'].join(', ') }
+        end
 
         def terms
           @terms ||= YAML.safe_load(
