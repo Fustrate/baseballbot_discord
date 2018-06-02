@@ -2,53 +2,51 @@ glossary:
   g:
     title: Games Played
     definition: Number of games in which the player has appeared.
-    link:
   pa:
     title: Plate Appearances
     definition: Number of times the player has come to the plate.
-    link:
   hr:
     title: Home Runs
     definition: Number of home runs.
-    link:
   r:
     title: Runs Scored
     definition: Number of runs scored.
-    link:
   rbi:
     title: Runs Batted In
-    definition: Number of times a run scores as a result of a batter’s plate
-    appearance, not counting situations in which an error caused the run to
-    score or the batter hit into a double play.
-    link:
+    definition: >
+      Number of times a run scores as a result of a batter’s plate
+      appearance, not counting situations in which an error caused the run to
+      score or the batter hit into a double play.
   sb:
     title: Stolen Bases
     definition: Number of stolen bases.
-    link:
   bb%:
     title: Walk Percentage
-    definition: Frequency with which the batter has walked, calculated as walks
-    divided by plate appearances.
+    definition: >
+      Frequency with which the batter has walked, calculated as walks divided by
+      plate appearances.
     link: http://www.fangraphs.com/library/offense/rate-stats/
   k%:
     title: Strikeout Percentage
-    definition: Frequency with which the batter has struck out, calculated as
-    strikeouts divided by plate appearances.
+    definition: >
+      Frequency with which the batter has struck out, calculated as strikeouts
+      divided by plate appearances.
     link: http://www.fangraphs.com/library/offense/rate-stats/
   iso:
     title: Isolated Power
-    description: Average number of extra bases per at bat, calculated several
-    ways such as SLG minus AVG.
+    description: >
+      Average number of extra bases per at bat, calculated several ways such as
+      SLG minus AVG.
     link: http://www.fangraphs.com/library/offense/iso/
   babip:
     title: Batting Average on Balls in Play
-    description: The rate at which the batter gets a hit when he puts the ball
-    in play, calculated as (H-HR)/(AB-K-HR+SF).
+    description: >
+      The rate at which the batter gets a hit when he puts the ball
+      in play, calculated as (H-HR)/(AB-K-HR+SF).
     link: http://www.fangraphs.com/library/offense/babip/
   avg:
     title: Batting Average
     description: Rate of hits per at bat, calculated as H/AB.
-    link:
   obp:
     title: On Base Percentage
     description: >
@@ -59,7 +57,6 @@ glossary:
     title: Slugging Percentage
     description: >
       Average number of total bases per at bat, calculated as Total Bases/AB.
-    link:
   woba:
     title: Weighted On Base Average
     description: >
