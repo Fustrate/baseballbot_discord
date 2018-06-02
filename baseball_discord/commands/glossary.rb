@@ -17,16 +17,31 @@ module BaseballDiscord
             return react_to_message '🔒'
           end
 
+          definition = terms[args.join(' ').downcase]
+
+          return react_to_message '❓' unless definition
+
           embed = {
-            title: 'Test Embed',
-            description: 'Description of the term',
-            url: 'https://baseballbot.io/',
-            color: 16_777_215
+            title: definition['title'],
+            description: definition['description'],
+            url: definition['link'],
+            author: { name: 'FanGraphs', url: 'https://www.fangraphs.com/' },
+            color: 5_287_462 # FanGraphs Green
           }
 
-          bot.send_message(channel, 'content!', false, embed)
+          bot.send_message(channel, nil, false, embed)
 
           nil
+        end
+
+        protected
+
+        def terms
+          @terms ||= YAML.safe_load(
+            File.open(
+              File.expand_path(__dir__ + '/../../config/glossary.yml')
+            ).read
+          ).dig('glossary')
         end
       end
     end

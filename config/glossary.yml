@@ -1,0 +1,107 @@
+glossary:
+  g:
+    title: Games Played
+    definition: Number of games in which the player has appeared.
+    link:
+  pa:
+    title: Plate Appearances
+    definition: Number of times the player has come to the plate.
+    link:
+  hr:
+    title: Home Runs
+    definition: Number of home runs.
+    link:
+  r:
+    title: Runs Scored
+    definition: Number of runs scored.
+    link:
+  rbi:
+    title: Runs Batted In
+    definition: Number of times a run scores as a result of a batter’s plate
+    appearance, not counting situations in which an error caused the run to
+    score or the batter hit into a double play.
+    link:
+  sb:
+    title: Stolen Bases
+    definition: Number of stolen bases.
+    link:
+  bb%:
+    title: Walk Percentage
+    definition: Frequency with which the batter has walked, calculated as walks
+    divided by plate appearances.
+    link: http://www.fangraphs.com/library/offense/rate-stats/
+  k%:
+    title: Strikeout Percentage
+    definition: Frequency with which the batter has struck out, calculated as
+    strikeouts divided by plate appearances.
+    link: http://www.fangraphs.com/library/offense/rate-stats/
+  iso:
+    title: Isolated Power
+    description: Average number of extra bases per at bat, calculated several
+    ways such as SLG minus AVG.
+    link: http://www.fangraphs.com/library/offense/iso/
+  babip:
+    title: Batting Average on Balls in Play
+    description: The rate at which the batter gets a hit when he puts the ball
+    in play, calculated as (H-HR)/(AB-K-HR+SF).
+    link: http://www.fangraphs.com/library/offense/babip/
+  avg:
+    title: Batting Average
+    description: Rate of hits per at bat, calculated as H/AB.
+    link:
+  obp:
+    title: On Base Percentage
+    description: >
+      Rate at which the batter reaches base, calculated as
+      (H+BB+HBP)/(AB+BB+HBP+SF).
+    link: http://www.fangraphs.com/library/offense/obp/
+  slg:
+    title: Slugging Percentage
+    description: >
+      Average number of total bases per at bat, calculated as Total Bases/AB.
+    link:
+  woba:
+    title: Weighted On Base Average
+    description: >
+      Combines all the different aspects of hitting into one metric, weighting
+      each of them in proportion to their actual run value. While batting
+      average, on-base percentage, and slugging percentage fall short in
+      accuracy and scope, wOBA measures and captures offensive value more
+      accurately and comprehensively.
+    link: http://www.fangraphs.com/library/offense/woba/
+  wrc+:
+    title: Weighted Runs Created Plus
+    description: >
+      The most comprehensive rate statistic used to measure hitting performance
+      because it takes into account the varying weights of each offensive action
+      (like wOBA) and then adjusts them for the park and league context in which
+      they took place.
+    link: http://www.fangraphs.com/library/offense/wrc/
+  bsr:
+    title: Base Running Runs Above Average
+    description: >
+      Number of runs above or below average a player has been worth on the
+      bases, based on stolen bases, caught stealing, extra bases taken, outs on
+      the bases, and avoiding double plays. It is the combination of wSB, UBR,
+      and wGDP.
+    link: http://www.fangraphs.com/library/offense/bsr/
+  off:
+    title: Offensive Runs Above Average
+    description: >
+      Number of runs above or below average a player has been worth offensively,
+      combining Batting Runs and BsR.
+    link: http://www.fangraphs.com/library/offense/off/
+  def:
+    title: Defensive Runs Above Average
+    description: >
+      Number of runs above or below average a player has been worth on defense,
+      combining Fielding Runs (Total Zone before 2002, UZR after) and the
+      positional adjustment.
+    link: http://www.fangraphs.com/library/defense/def/
+  war:
+    title: Wins Above Replacement
+    description: >
+      A comprehensive statistic that estimates the number of wins a player has
+      been worth to his team compared to a freely available player such as a
+      minor league free agent.
+    link: http://www.fangraphs.com/library/misc/war/
