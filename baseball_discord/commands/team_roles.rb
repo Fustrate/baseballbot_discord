@@ -121,9 +121,9 @@ module BaseballDiscord
           abbrs = team_ids.map { |team_id| TEAM_ROLES.dig(team_id, 0) }
             .map { |abbr| "[#{abbr}]" }
 
-          base_name = @member.display_name.gsub(/ \[.*\]\z/, '')
+          # return unless abbrs.count > 1
 
-          return unless abbrs.count > 1
+          base_name = @member.display_name.gsub(/ \[.*\]\z/, '')
 
           @member.nick = "#{base_name} #{abbrs.join('')}"
         rescue Discordrb::Errors::NoPermission
