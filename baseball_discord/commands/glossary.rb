@@ -24,7 +24,7 @@ module BaseballDiscord
             color: 16_777_215
           }
 
-          send_message(channel, 'content!', false, embed)
+          bot.send_message(channel, 'content!', false, embed)
 
           nil
         end
