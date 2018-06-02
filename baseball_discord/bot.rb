@@ -50,6 +50,7 @@ module BaseballDiscord
 
     def load_commands
       include! BaseballDiscord::Commands::Debug
+      include! BaseballDiscord::Commands::Glossary
       include! BaseballDiscord::Commands::Invite
       include! BaseballDiscord::Commands::Scoreboard
       include! BaseballDiscord::Commands::Standings
