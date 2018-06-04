@@ -20,6 +20,9 @@ glossary:
   AVG:
     title: Batting Average
     description: Rate of hits per at bat, calculated as H/AB.
+    see_also:
+      - H
+      - AB
 
   BABIP:
     title: Batting Average on Balls in Play
@@ -27,6 +30,12 @@ glossary:
       The rate at which the batter gets a hit when he puts the ball in play,
       calculated as (H-HR)/(AB-K-HR+SF).
     link: http://www.fangraphs.com/library/offense/babip/
+    see_also:
+      - H
+      - HR
+      - AB
+      - K
+      - SF
 
   BB:
     title: Walks
@@ -51,6 +60,10 @@ glossary:
       the bases, and avoiding double plays. It is the combination of wSB, UBR,
       and wGDP.
     link: http://www.fangraphs.com/library/offense/bsr/
+    see_also:
+      - wSB
+      - UBR
+      - wGDP
 
   BUH:
     title: Bunt Hits
@@ -95,6 +108,8 @@ glossary:
       combining Fielding Runs (Total Zone before 2002, UZR after) and the
       positional adjustment.
     link: http://www.fangraphs.com/library/defense/def/
+    see_also:
+      - "Off"
 
   FB%:
     title: Fly Ball Percentage
@@ -153,6 +168,9 @@ glossary:
     description: >
       Percentage of a batter's fly balls that go for home runs, calculated as
       HB/FB (even though some HR are line drives).
+    see_also:
+      - HR
+      - FB
 
   IBB:
     title: Intentional Walks
@@ -163,6 +181,9 @@ glossary:
     description: >
       Percentage of a batter's fly balls that were infield fly balls, calculated
       as IFFB/FB.
+    see_also:
+      - IFFB
+      - FB
 
   IFH:
     title: Infield Hits
@@ -172,6 +193,9 @@ glossary:
     title: Infield Hit Percentage
     description: >
       Percentage of ground balls that are infield hits, calculated as IFH/GB.
+    see_also:
+      - IFH
+      - GB
 
   ISO:
     title: Isolated Power
@@ -186,6 +210,9 @@ glossary:
       Frequency with which the batter has struck out, calculated as strikeouts
       divided by plate appearances.
     link: http://www.fangraphs.com/library/offense/rate-stats/
+  see_also:
+    - K
+    - PA
 
   LD%:
     title: Line Drive Percentage
@@ -193,6 +220,9 @@ glossary:
       The percentage of a batter's balls in play that are line drives,
       calculated as LD/BIP.
     link: http://www.fangraphs.com/library/offense/batted-ball/
+  see_also:
+    - LD
+    - BIP
 
   Med%:
     title: Medium Contact Percentage
@@ -208,6 +238,12 @@ glossary:
       Rate at which the batter reaches base, calculated as
       (H+BB+HBP)/(AB+BB+HBP+SF).
     link: http://www.fangraphs.com/library/offense/obp/
+    see_also:
+      - H
+      - BB
+      - HBP
+      - AB
+      - SF
 
   O-Contact%:
     title: Outside the Zone Contact Percentage
@@ -221,6 +257,8 @@ glossary:
       Number of runs above or below average a player has been worth offensively,
       combining Batting Runs and BsR.
     link: http://www.fangraphs.com/library/offense/off/
+    see_also:
+      - Def
 
   Oppo%:
     title: Opposite Field Percentage

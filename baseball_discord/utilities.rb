@@ -54,6 +54,10 @@ module BaseballDiscord
       104 => DIVISION_TEAMS[203] + DIVISION_TEAMS[204] + DIVISION_TEAMS[205]
     }.freeze
 
+    PLAYER_LOOKUP = 'http://lookup-service-prod.mlb.com/json/named.' \
+                    'search_player_all.bam?sport_code=%27mlb%27&' \
+                    'name_part=%27%<name>s%25%27'
+
     def self.parse_date(date)
       return Time.now if date.strip == ''
 
@@ -80,6 +84,19 @@ module BaseballDiscord
         end
 
       nil
+    end
+
+    def self.look_up_player(name)
+      path = format(PLAYER_LOOKUP, name: CGI.escape(name.upcase))
+
+      log "[URL Load] #{path}", level: :debug
+
+      players = JSON.parse(URI.parse(path).open.read)
+        .dig('search_player_all', 'queryResults', 'row')
+
+      Array(players).sort_by do |player|
+        [player['active_sw'] == 'N', player['pro_debut_date']]
+      end.reverse.first
     end
 
     def self.division_for_team(team_id)
