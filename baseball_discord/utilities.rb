@@ -89,8 +89,6 @@ module BaseballDiscord
     def self.look_up_player(name)
       path = format(PLAYER_LOOKUP, name: CGI.escape(name.upcase))
 
-      log "[URL Load] #{path}", level: :debug
-
       players = JSON.parse(URI.parse(path).open.read)
         .dig('search_player_all', 'queryResults', 'row')
 
