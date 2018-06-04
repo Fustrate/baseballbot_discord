@@ -6,7 +6,16 @@ module BaseballDiscord
     module Glossary
       extend Discordrb::Commands::CommandContainer
 
-      command(:glossary, help_available: false) do |event, *args|
+      command(
+        :glossary,
+        description: 'Look up a term from FanGraphs',
+        usage: 'glossary [term]',
+        min_args: 1
+      ) do |event, *args|
+        GlossaryCommand.new(event, *args).define_term
+      end
+
+      command(:define, help_available: false, min_args: 1) do |event, *args|
         GlossaryCommand.new(event, *args).define_term
       end
 
