@@ -55,8 +55,8 @@ module BaseballDiscord
     }.freeze
 
     PLAYER_LOOKUP = 'http://lookup-service-prod.mlb.com/json/named.' \
-                    'search_player_all.bam?sport_code=%27mlb%27&' \
-                    'name_part=%27%<name>s%25%27'
+                    'search_player_all.bam?sport_code=%%27mlb%%27&' \
+                    'name_part=%%27%<name>s%%25%%27'
 
     def self.parse_date(date)
       return Time.now if date.strip == ''
