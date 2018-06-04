@@ -88,7 +88,9 @@ module BaseballDiscord
 
     def self.look_up_player(name)
       players = JSON.parse(
-        File.open(format(PLAYER_LOOKUP, name: CGI.escape(name.upcase))).read
+        URI.parse(
+          format(PLAYER_LOOKUP, name: CGI.escape(name.upcase))
+        ).open.read
       ).dig('search_player_all', 'queryResults', 'row')
 
       players = [players] if players.is_a? Hash
