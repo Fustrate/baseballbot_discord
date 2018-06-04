@@ -32,7 +32,7 @@ module BaseballDiscord
 
         def embed_for_term(definition)
           {
-            title: definition['title'],
+            title: "#{definition['title']} (#{definition['abbr']})",
             description: definition['description'],
             url: definition['link'],
             fields: fields_for_term(definition),
@@ -52,7 +52,9 @@ module BaseballDiscord
             File.open(
               File.expand_path(__dir__ + '/../../config/glossary.yml')
             ).read
-          ).dig('glossary')
+          ).dig('glossary').map do |abbr, data|
+            [abbr.downcase, data.merge('abbr' => abbr)]
+          end.to_h
         end
       end
     end
