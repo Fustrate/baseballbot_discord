@@ -95,7 +95,7 @@ module BaseballDiscord
 
       players = [players] if players.is_a? Hash
 
-      players.sort_by do |player|
+      players.sort_by! do |player|
         [player['active_sw'] == 'N', player['pro_debut_date']]
       end.reverse.first
     end
