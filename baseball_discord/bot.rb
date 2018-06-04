@@ -52,6 +52,7 @@ module BaseballDiscord
       include! BaseballDiscord::Commands::Debug
       include! BaseballDiscord::Commands::Glossary
       include! BaseballDiscord::Commands::Invite
+      include! BaseballDiscord::Commands::Links
       include! BaseballDiscord::Commands::Players
       include! BaseballDiscord::Commands::Scoreboard
       include! BaseballDiscord::Commands::Standings
