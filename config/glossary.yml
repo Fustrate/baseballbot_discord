@@ -65,12 +65,19 @@ glossary:
     title: Center Percentage
     description: Percentage of batted balls hit to the middle of the field.
     link: http://www.fangraphs.com/library/offense/batted-ball-direction/
+    see_also:
+      - Pull%
+      - Oppo%
 
   Clutch:
     title: Clutch Score
     description: >
       The difference between a player's total WPA/pLI and their WPA/LI.
     link: http://www.fangraphs.com/library/misc/clutch/
+    see_also:
+      - WPA/pLI
+      - WPA
+      - LI
 
   Contact%:
     title: Contact Percentage
@@ -219,6 +226,9 @@ glossary:
     title: Opposite Field Percentage
     description: Percentage of batted balls hit to the opposite field.
     link: http://www.fangraphs.com/library/offense/batted-ball-direction/
+    see_also:
+      - Pull%
+      - Cent%
 
   OPS:
     title: On Base Plus Slugging
@@ -254,6 +264,9 @@ glossary:
     title: Pull Percentage
     description: Percentage of batted balls hit to the pull field.
     link: http://www.fangraphs.com/library/offense/batted-ball-direction/
+    see_also:
+      - Cent%
+      - Oppo%
 
   R:
     title: Runs Scored
@@ -272,11 +285,15 @@ glossary:
       The total impact a batter's plate appearances (or SB/CS) have on his
       team's run expectancy relative to league average.
     link: http://www.fangraphs.com/library/misc/re24/
+    see_also:
+      - REW
 
   REW:
     title: Run Expectancy Wins
     description: RE24 converted from runs to wins.
     link: http://www.fangraphs.com/library/misc/re24/
+    see_also:
+      - RE24
 
   SB:
     title: Stolen Bases
@@ -369,7 +386,6 @@ glossary:
       team's win expectancy relative to league average.
     link: http://www.fangraphs.com/library/misc/wpa/
     see_also:
-      - WPA
       - -WPA
       - +WPA
       - WPA/LI
@@ -379,11 +395,19 @@ glossary:
     title: Negative Win Probability Added
     description: The sum of a batter's negative WPA events.
     link: http://www.fangraphs.com/library/misc/wpa/
+    see_also:
+      - WPA
+      - +WPA
+      - WPA/LI
 
   +WPA:
     title: Positive Win Probability Added
     description: The sum of a batter's positive WPA events.
     link: http://www.fangraphs.com/library/misc/wpa/
+    see_also:
+      - WPA
+      - -WPA
+      - WPA/LI
 
   WPA/LI:
     title: Situational Wins
@@ -391,6 +415,10 @@ glossary:
       A player's WPA controlling for leverage index, calculated as the sum of
       each event's WPA/LI, not total WPA/LI.
     link: http://www.fangraphs.com/library/misc/wpa-li/
+    see_also:
+      - WPA
+      - -WPA
+      - +WPA
 
   wRAA:
     title: Weighted Runs Above Average
