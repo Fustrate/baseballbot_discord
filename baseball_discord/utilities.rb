@@ -87,12 +87,13 @@ module BaseballDiscord
     end
 
     def self.look_up_player(name)
-      path = format(PLAYER_LOOKUP, name: CGI.escape(name.upcase))
+      players = JSON.parse(
+        File.open(format(PLAYER_LOOKUP, name: CGI.escape(name.upcase))).read
+      ).dig('search_player_all', 'queryResults', 'row')
 
-      players = JSON.parse(URI.parse(path).open.read)
-        .dig('search_player_all', 'queryResults', 'row')
+      players = [players] if players.is_a? Hash
 
-      Array(players).sort_by do |player|
+      players.sort_by do |player|
         [player['active_sw'] == 'N', player['pro_debut_date']]
       end.reverse.first
     end
