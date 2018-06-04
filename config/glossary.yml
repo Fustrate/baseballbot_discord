@@ -129,6 +129,9 @@ glossary:
     title: Hard Contact Percentage
     description: Percentage of hard-hit batted balls.
     link: http://www.fangraphs.com/library/offense/quality-of-contact-stats/
+    see_also:
+      - Soft%
+      - Med%
 
   HBP:
     title: Hit By Pitches
@@ -188,6 +191,9 @@ glossary:
     title: Medium Contact Percentage
     description: Percentage of medium-hit batted balls.
     link: http://www.fangraphs.com/library/offense/quality-of-contact-stats/
+    see_also:
+      - Hard%
+      - Soft%
 
   OBP:
     title: On Base Percentage
@@ -300,6 +306,9 @@ glossary:
     title: Soft Contact Percentage
     description: Percentage of soft-hit batted balls.
     link: http://www.fangraphs.com/library/offense/quality-of-contact-stats/
+    see_also:
+      - Hard%
+      - Med%
 
   Spd:
     title: Speed Score
@@ -311,11 +320,15 @@ glossary:
     title: Swing Percentage
     description: Swings divided by total pitches.
     link: http://www.fangraphs.com/library/offense/plate-discipline/
+    see_also:
+      - SwStr%
 
   SwStr%:
     title: Swinging Strike Percentage
     description: Swinging strikes divided by total pitches.
     link: http://www.fangraphs.com/library/offense/plate-discipline/
+    see_also:
+      - Swing%
 
   UBR:
     title: Ultimate Base Running
@@ -355,6 +368,12 @@ glossary:
       The total impact a batter's plate appearances (or SB/CS) have on his
       team's win expectancy relative to league average.
     link: http://www.fangraphs.com/library/misc/wpa/
+    see_also:
+      - WPA
+      - -WPA
+      - +WPA
+      - WPA/LI
+
 
   "-WPA":
     title: Negative Win Probability Added
@@ -385,7 +404,7 @@ glossary:
       and playing time.
     link: http://www.fangraphs.com/library/offense/wrc/
     see_also:
-      - wrc+
+      - wRC+
 
   wRC+:
     title: Weighted Runs Created Plus
@@ -395,6 +414,7 @@ glossary:
       (like wOBA) and then adjusts them for the park and league context in which
       they took place.
     link: http://www.fangraphs.com/library/offense/wrc/
+    see_also: wRC
 
   wSB:
     title: Weighted Stolen Base Runs Above Average
