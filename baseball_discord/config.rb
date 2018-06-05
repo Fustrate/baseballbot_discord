@@ -31,6 +31,13 @@ module BaseballDiscord
       servers.dig(*keys)
     end
 
+    def server_prefixes
+      servers
+        .select { |_, server| server['prefixes'] }
+        .map { |server_id, conf| [server_id, Array(conf['prefixes'])] }
+        .to_h
+    end
+
     protected
 
     def servers

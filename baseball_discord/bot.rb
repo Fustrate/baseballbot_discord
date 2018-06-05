@@ -36,9 +36,9 @@ module BaseballDiscord
     def initialize(attributes = {})
       @db = PG::Connection.new attributes.delete(:db)
 
-      super attributes
-
       @config = Config.new
+
+      super attributes.merge(prefix: prefix_proc(@config.server_prefixes))
 
       @logger = Logger.new($stdout)
       @redis = RedisConnection.new(self)
@@ -48,6 +48,7 @@ module BaseballDiscord
       load_commands
     end
 
+    # rubocop:disable Metrics/MethodLength
     def load_commands
       include! BaseballDiscord::Commands::Debug
       include! BaseballDiscord::Commands::Glossary
@@ -62,6 +63,21 @@ module BaseballDiscord
       include! BaseballDiscord::Commands::WCStandings
 
       include! BaseballDiscord::Events::MemberJoin
+    end
+    # rubocop:enable Metrics/MethodLength
+
+    def prefix_proc(prefixes)
+      lambda do |message|
+        prefixes = (message.server ? prefixes[message.server.id] : nil) || ['!']
+
+        prefixes.each do |prefix|
+          next unless message.content.start_with?(prefix)
+
+          return message.content[prefix.size..-1]
+        end
+
+        nil
+      end
     end
   end
 
