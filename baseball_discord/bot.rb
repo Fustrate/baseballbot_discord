@@ -38,7 +38,7 @@ module BaseballDiscord
 
       @config = Config.new
 
-      super attributes.merge(prefix: '!')
+      super attributes.merge(prefix: prefix_proc(@config.server_prefixes))
 
       @logger = Logger.new($stdout)
       @redis = RedisConnection.new(self)
@@ -68,7 +68,7 @@ module BaseballDiscord
 
     def prefix_proc(prefixes)
       lambda do |message|
-        list = (message.server ? prefixes[message.server.id] : nil) || ['!']
+        list = prefixes[message.channel.server&.id] || ['!']
 
         list.each do |prefix|
           next unless message.content.start_with?(prefix)
