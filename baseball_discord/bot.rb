@@ -38,7 +38,7 @@ module BaseballDiscord
 
       @config = Config.new
 
-      super attributes.merge(prefix: prefix_proc(@config.server_prefixes))
+      super attributes.merge(prefix: '!')
 
       @logger = Logger.new($stdout)
       @redis = RedisConnection.new(self)
