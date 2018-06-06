@@ -1,3 +1,4 @@
 *.output
 *.pid
 config/servers.yml
+log/*
