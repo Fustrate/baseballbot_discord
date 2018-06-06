@@ -15,6 +15,8 @@ class SeriesChannelsBot
   LIVE_GAMES_ID = 453783826095669248
   # rubocop:enable Style/NumericLiterals
 
+  LIVE_GAME_STATUSES = %w[Live Preview].freeze
+
   SCHEDULE = \
     'https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=%<date>s&' \
     'hydrate=game(content(summary)),linescore,flags,team&t=%<t>d'
@@ -54,10 +56,23 @@ class SeriesChannelsBot
         game.dig('teams', 'home', 'team', 'teamName')
       ].join(' at ').downcase.gsub(/[^a-z]/, '-').gsub(/\-{2,}/, '-')
 
-      channels[name] ||= game.dig('status', 'abstractGameState') == 'Live'
+      # In case of a double header, || the status
+      channels[name] ||= game_is_live?(game)
     end
 
     channels
+  end
+
+  def game_is_live?(game)
+    abstract = game.dig('status', 'abstractGameState')
+
+    return true if abstract == 'Live'
+
+    detailed = game.dig('status', 'detailedState')
+
+    return true if ['Pre-Game', 'Warmup'].include?(detailed)
+
+    false
   end
 
   def all_channels
@@ -80,16 +95,28 @@ class SeriesChannelsBot
     JSON.parse(URI.parse(url).open.read).dig('dates', 0, 'games')
   end
 
+  def update_channel_list
+    existing = existing_channels
+    goal = series_channels.keys
+
+    to_create = goal - existing.map { |_, channel| channel['name'] }
+    to_remove = existing.reject { |_, channel| goal.include?(channel['name']) }
+
+    to_create.each { |name| create_channel(name) }
+    to_remove.each { |channel_id, _channel| remove_channel(channel_id) }
+  end
+
   def move_channels_around
     @all_channels = nil
 
-    all_channels.each do |channel_id, channel|
+    existing_channels.each do |channel_id, channel|
       game_is_live = series_channels[channel['name']]
 
-      next if game_is_live && channel['parent_id'].to_i == LIVE_GAMES_ID
-      next unless game_is_live && channel['parent_id'].to_i == GAME_CHATS_ID
+      new_category = game_is_live ? LIVE_GAMES_ID : GAME_CHATS_ID
 
-      move_channel(channel_id, game_is_live ? LIVE_GAMES_ID : GAME_CHATS_ID)
+      next if channel['parent_id'].to_i == new_category
+
+      move_channel(channel_id, new_category)
     end
   end
 
@@ -111,21 +138,13 @@ class SeriesChannelsBot
       'X-Audit-Log-Reason': nil
     )
   end
+
+  def remove_channel(channel_id)
+    puts "Remove #{channel_id}"
+  end
 end
 
 bot = SeriesChannelsBot.new(token: ENV['DISCORD_TOKEN'])
 
-existing = bot.existing_channels
-goal = bot.series_channels.keys
-
-to_create = goal - existing.map { |_, channel| channel['name'] }
-to_remove = existing.reject { |_, channel| goal.include?(channel['name']) }
-
-puts "Create: #{to_create.join(', ')}"
-puts "Remove: #{to_remove.map { |_, channel| channel['name'] }.join(', ')}"
-
-to_create.each do |name|
-  bot.create_channel(name)
-end
-
+bot.update_channel_list
 bot.move_channels_around
