@@ -224,6 +224,15 @@ glossary:
       - LD
       - BIP
 
+  LOOGY:
+    title: Lefty One Out Guy
+    description: A left-handed reliever brought in to face one batter.
+
+  Maddux:
+    title: Maddux
+    description: >
+      When a pitcher throws a complete-game shutout in less than 100 pitches.
+
   Med%:
     title: Medium Contact Percentage
     description: Percentage of medium-hit batted balls.
@@ -384,6 +393,10 @@ glossary:
     link: http://www.fangraphs.com/library/offense/plate-discipline/
     see_also:
       - Swing%
+
+  TOOTBLAN:
+    title: Thrown Out On The Basepath Like A Nincompoop
+    description: When a baserunner makes like a nincompoop and gets himself out.
 
   UBR:
     title: Ultimate Base Running
