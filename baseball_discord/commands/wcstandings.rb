@@ -16,7 +16,7 @@ module BaseballDiscord
       class WCStandingsCommand < Command
         STATS_STANDINGS = \
           'https://statsapi.mlb.com/api/v1/standings/regularSeason?' \
-          'leagueId=103,104&season=%<year>d&t=%<t>d&date=%<date>s'
+          'leagueId=103,104&season=%<year>d&t=%<t>d&date=%<date>s&hydrate=team'
 
         def run
           team_name, date = parse_team_and_date
@@ -78,7 +78,7 @@ module BaseballDiscord
           r_diff_sign = team['runDifferential'].negative? ? '' : '+'
 
           [
-            team.dig('team', 'name'),
+            team.dig('team', 'teamName'),
             team['wins'],
             team['losses'],
             team['wildCardGamesBack'],
