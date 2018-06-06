@@ -9,9 +9,13 @@ require 'discordrb/api/channel'
 require 'discordrb/api/server'
 
 class SeriesChannelsBot
+  # rubocop:disable Style/NumericLiterals
   SERVER_ID = 450792745553100801
   GAME_CHATS_ID = 453783775302909952
   LIVE_GAMES_ID = 453783826095669248
+  # rubocop:enable Style/NumericLiterals
+
+  LIVE_GAME_STATUSES = [].freeze
 
   SCHEDULE = \
     'https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=%<date>s&' \
@@ -43,13 +47,21 @@ class SeriesChannelsBot
     JSON.parse(response)
   end
 
-  def series_channel_names
+  def series_channels
+    channels = {}
+
     todays_games.map do |game|
-      [
+      name = [
         game.dig('teams', 'away', 'team', 'teamName'),
         game.dig('teams', 'home', 'team', 'teamName')
       ].join(' at ').downcase.gsub(/[^a-z]/, '-').gsub(/\-{2,}/, '-')
-    end.uniq.sort
+
+      status = game.dig('status', 'abstractGameState')
+
+      channels[name] ||= LIVE_GAME_STATUSES.include?(status)
+    end
+
+    channels
   end
 
   def all_channels
@@ -72,16 +84,23 @@ class SeriesChannelsBot
     JSON.parse(URI.parse(url).open.read).dig('dates', 0, 'games')
   end
 
-  def move_channel(channel_id, to_parent_id:)
-    data = { parent: to_parent_id }
+  def move_channels_around
+    @all_channels = nil
 
-    request(:channels_cid, channel_id, :patch, "channels/#{channel_id}", data)
+    all_channels.each do |channel_id, channel|
+      game_is_live = series_channels[channel['name']]
+
+      next if game_is_live && channel['parent_id'].to_i == LIVE_GAMES_ID
+      next unless game_is_live && channel['parent_id'].to_i == GAME_CHATS_ID
+
+      move_channel(channel_id, game_is_live ? LIVE_GAMES_ID : GAME_CHATS_ID)
+    end
   end
 
-  def update_channels
-    all_channel_names.each do |name|
-      create_channel(name, parent_id: CATEGORY_ID)
-    end
+  def move_channel(channel_id, parent_id)
+    data = { parent: parent_id }
+
+    request(:channels_cid, channel_id, :patch, "channels/#{channel_id}", data)
   end
 
   def request(key, major_parameter, method, endpoint, data = {})
@@ -98,10 +117,10 @@ class SeriesChannelsBot
   end
 end
 
-thingy = SeriesChannelsBot.new(token: ENV['DISCORD_TOKEN'])
+bot = SeriesChannelsBot.new(token: ENV['DISCORD_TOKEN'])
 
-existing = thingy.existing_channels
-goal = thingy.series_channel_names
+existing = bot.existing_channels
+goal = bot.series_channels.keys
 
 to_create = goal - existing.map { |_, channel| channel['name'] }
 to_remove = existing.reject { |_, channel| goal.include?(channel['name']) }
@@ -110,9 +129,7 @@ puts "Create: #{to_create.join(', ')}"
 puts "Remove: #{to_remove.map { |_, channel| channel['name'] }.join(', ')}"
 
 to_create.each do |name|
-  thingy.create_channel(name)
+  bot.create_channel(name)
 end
 
-# thingy.all_channels
-#   .select { |_, channel| channel['parent_id'].to_i == 451_099_095_189_291_018 }
-#   .each { |id, channel| puts "#{id}: #{channel['name']}" }
+bot.move_channels_around
