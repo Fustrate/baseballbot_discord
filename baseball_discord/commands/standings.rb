@@ -5,14 +5,10 @@ module BaseballDiscord
     module Standings
       extend Discordrb::Commands::CommandContainer
 
-      COMMAND = :standings
-      DESCRIPTION = 'Displays the division standings for a team'
-      USAGE = 'standings [team]'
-
       command(
-        COMMAND,
-        description: DESCRIPTION,
-        usage: USAGE
+        :standings,
+        description: 'Displays the division standings for a team',
+        usage: 'standings [team]'
       ) do |event, *args|
         StandingsCommand.new(event, *args).run
       end

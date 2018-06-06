@@ -6,16 +6,11 @@ module BaseballDiscord
       extend Discordrb::Commands::CommandContainer
 
       command(
-        :team,
+        %i[team teams],
         description: 'Change your team tag',
         min_args: 1,
         usage: 'team [name]'
       ) do |event, *args|
-        TeamRolesCommand.new(event, *args).update_member_roles
-      end
-
-      # Alias
-      command(:teams, help_available: false) do |event, *args|
         TeamRolesCommand.new(event, *args).update_member_roles
       end
 

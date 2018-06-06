@@ -7,15 +7,11 @@ module BaseballDiscord
       extend Discordrb::Commands::CommandContainer
 
       command(
-        :glossary,
+        %i[define glossary],
         description: 'Look up a term from FanGraphs',
         usage: 'glossary [term]',
         min_args: 1
       ) do |event, *args|
-        GlossaryCommand.new(event, *args).define_term
-      end
-
-      command(:define, help_available: false, min_args: 1) do |event, *args|
         GlossaryCommand.new(event, *args).define_term
       end
 
