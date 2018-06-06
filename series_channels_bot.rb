@@ -15,8 +15,6 @@ class SeriesChannelsBot
   LIVE_GAMES_ID = 453783826095669248
   # rubocop:enable Style/NumericLiterals
 
-  LIVE_GAME_STATUSES = [].freeze
-
   SCHEDULE = \
     'https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=%<date>s&' \
     'hydrate=game(content(summary)),linescore,flags,team&t=%<t>d'
@@ -56,9 +54,7 @@ class SeriesChannelsBot
         game.dig('teams', 'home', 'team', 'teamName')
       ].join(' at ').downcase.gsub(/[^a-z]/, '-').gsub(/\-{2,}/, '-')
 
-      status = game.dig('status', 'abstractGameState')
-
-      channels[name] ||= LIVE_GAME_STATUSES.include?(status)
+      channels[name] ||= game.dig('status', 'abstractGameState') == 'Live'
     end
 
     channels
@@ -98,7 +94,7 @@ class SeriesChannelsBot
   end
 
   def move_channel(channel_id, parent_id)
-    data = { parent: parent_id }
+    data = { parent_id: parent_id }
 
     request(:channels_cid, channel_id, :patch, "channels/#{channel_id}", data)
   end
