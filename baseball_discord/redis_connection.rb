@@ -143,6 +143,10 @@ module BaseballDiscord
     def process_member_verification(member, data, reddit_username)
       return unless member
 
+      @bot.logger.debug(
+        "[Verified] #{member.distinct} verified as #{reddit_username}"
+      )
+
       member.add_role data['role'].to_i
 
       update_member_name(member, reddit_username)
