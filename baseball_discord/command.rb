@@ -78,7 +78,7 @@ module BaseballDiscord
       top_border = lines.shift
       bottom_border = lines.pop
 
-      new_table = all_lines.map do |line|
+      new_table = lines.map do |line|
         line[0] == '+' ? "├#{line[1...-1].tr('-+', '─┼')}┤" : line.tr('|', '│')
       end
 
