@@ -105,8 +105,6 @@ module BaseballDiscord
     protected
 
     def check_verification_queue
-      @bot.logger.debug '[Redis] Checking queue...'
-
       ensure_redis
 
       @redis.lpop('discord.verification_queue') do |message|
