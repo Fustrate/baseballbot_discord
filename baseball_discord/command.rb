@@ -74,7 +74,7 @@ module BaseballDiscord
     end
 
     def prettify_table(table)
-      lines = table.lines.map(&:strip)
+      lines = table.to_s.lines.map(&:strip)
       top_border = lines.shift
       bottom_border = lines.pop
 
