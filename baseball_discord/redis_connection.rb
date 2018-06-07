@@ -18,7 +18,7 @@ module BaseballDiscord
       ensure_redis
 
       # Make sure we eventually clear the queue
-      EM.add_periodic_timer(300) { check_verification_queue }
+      EM.add_periodic_timer(30) { check_verification_queue }
 
       EM.next_tick do
         subscribe('discord.verified') do
@@ -124,6 +124,8 @@ module BaseballDiscord
 
     def user_verified_on_reddit!(state_token, reddit_username)
       @redis.get("discord.verification.#{state_token}") do |state_data|
+        return unless state_data
+
         data = JSON.parse state_data
 
         member = @bot.server(data['server'].to_i).member(data['user'].to_i)
