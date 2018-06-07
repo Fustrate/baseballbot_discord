@@ -26,6 +26,8 @@ module BaseballDiscord
 
           check_verification_queue
         end
+
+        check_verification_queue
       end
     end
 
