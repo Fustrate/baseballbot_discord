@@ -49,7 +49,7 @@ module BaseballDiscord
           table.align_column(1, :right)
           table.align_column(4, :right)
 
-          "```\n#{table}\n```"
+          format_table table
         end
 
         def scores_table_rows(games)

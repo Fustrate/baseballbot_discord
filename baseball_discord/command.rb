@@ -69,6 +69,25 @@ module BaseballDiscord
       nil
     end
 
+    def format_table(table)
+      "```\n#{prettify_table(table)}\n```"
+    end
+
+    def prettify_table(table)
+      lines = table.lines.map(&:strip)
+      top_border = lines.shift
+      bottom_border = lines.pop
+
+      new_table = all_lines.map do |line|
+        line[0] == '+' ? "├#{line[1...-1].tr('-+', '─┼')}┤" : line.tr('|', '│')
+      end
+
+      new_table.unshift "┌#{top_border[1...-1].tr('-+', '─┬')}┐"
+      new_table.push "└#{bottom_border[1...-1].tr('-+', '─┴')}┘"
+
+      new_table.join("\n")
+    end
+
     def bot
       event.bot
     end

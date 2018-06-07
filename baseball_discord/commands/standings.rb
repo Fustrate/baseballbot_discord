@@ -99,7 +99,7 @@ module BaseballDiscord
           table.align_column(3, :right)
           table.align_column(5, :right)
 
-          "```\n#{table}\n```"
+          format_table table
         end
       end
     end

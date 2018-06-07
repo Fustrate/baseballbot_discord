@@ -114,7 +114,7 @@ module BaseballDiscord
           table.align_column(0, :right)
           table.align_column(3, :right) if future?
 
-          "```\n#{table}\n```"
+          format_table table
         end
 
         def table_headings
