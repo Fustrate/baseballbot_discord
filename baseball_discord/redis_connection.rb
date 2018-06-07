@@ -126,14 +126,18 @@ module BaseballDiscord
 
     def user_verified_on_reddit!(state_token, reddit_username)
       @redis.get("discord.verification.#{state_token}") do |state_data|
-        break unless state_data
-
-        data = JSON.parse state_data
-
-        member = @bot.server(data['server'].to_i).member(data['user'].to_i)
-
-        process_member_verification(member, data, reddit_username)
+        process_verification_data(state_data, reddit_username)
       end
+    end
+
+    def process_verification_data(state_data, reddit_username)
+      return unless state_data
+
+      data = JSON.parse state_data
+
+      member = @bot.server(data['server'].to_i).member(data['user'].to_i)
+
+      process_member_verification(member, data, reddit_username)
     end
 
     def process_member_verification(member, data, reddit_username)
