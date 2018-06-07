@@ -124,7 +124,7 @@ module BaseballDiscord
 
     def user_verified_on_reddit!(state_token, reddit_username)
       @redis.get("discord.verification.#{state_token}") do |state_data|
-        return unless state_data
+        break unless state_data
 
         data = JSON.parse state_data
 
