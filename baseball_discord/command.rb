@@ -86,7 +86,7 @@ module BaseballDiscord
       # Move the T-shaped corners down two rows if there's a title
       if table.title
         new_table[0] = new_table[0].tr('┬', '─')
-        new_table[2] = new_table[0].tr('┼', '┬')
+        new_table[2] = new_table[2].tr('┼', '┬')
       end
 
       new_table.join("\n")
