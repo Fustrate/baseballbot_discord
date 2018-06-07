@@ -68,9 +68,7 @@ module BaseballDiscord
 
     def prefix_proc(prefixes)
       lambda do |message|
-        list = prefixes[message.channel.server&.id] || ['!']
-
-        list.each do |prefix|
+        (prefixes[message.channel.server&.id] || ['!']).each do |prefix|
           next unless message.content.start_with?(prefix)
 
           return message.content[prefix.size..-1]
