@@ -68,14 +68,6 @@ class SeriesChannelsBot
     channels
   end
 
-  def all_channels
-    @all_channels ||= begin
-      response = Discordrb::API::Server.channels(@token, SERVER_ID)
-
-      JSON.parse(response).map { |channel| [channel['id'].to_i, channel] }.to_h
-    end
-  end
-
   def existing_channels
     all_channels.select do |_, channel|
       [GAME_CHATS_ID, LIVE_GAMES_ID].include?(channel['parent_id'].to_i)
@@ -105,6 +97,14 @@ class SeriesChannelsBot
   # @!endgroup MLB Data
 
   # @!group Discord
+
+  def all_channels
+    @all_channels ||= begin
+      response = Discordrb::API::Server.channels(@token, SERVER_ID)
+
+      JSON.parse(response).map { |channel| [channel['id'].to_i, channel] }.to_h
+    end
+  end
 
   def create_channel(name)
     data = { name: name, type: 0, parent_id: GAME_CHATS_ID }
