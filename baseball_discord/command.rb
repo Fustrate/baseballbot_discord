@@ -83,8 +83,7 @@ module BaseballDiscord
       new_table.unshift "┌#{top_border[1...-1].tr('-+', '─┬')}┐"
       new_table.push "└#{bottom_border[1...-1].tr('-+', '─┴')}┘"
 
-      # Move the T-shaped corners down two rows if there's a title, and make the
-      # borders around the title bold
+      # Move the T-shaped corners down two rows if there's a title
       if table.title
         new_table[0] = new_table[0].tr('┬', '─')
         new_table[2] = new_table[2].tr('┼', '┬')
