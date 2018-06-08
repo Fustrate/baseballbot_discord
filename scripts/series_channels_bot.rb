@@ -121,13 +121,13 @@ class SeriesChannelsBot
   end
 
   def remove_channel(channel_id)
-    puts "Remove #{channel_id}"
+    request :channels_cid, channel_id, :delete, "channels/#{channel_id}"
   end
 
   def move_channel(channel_id, parent_id)
     data = { parent_id: parent_id }
 
-    request(:channels_cid, channel_id, :patch, "channels/#{channel_id}", data)
+    request :channels_cid, channel_id, :patch, "channels/#{channel_id}", data
   end
 
   def request(key, major_parameter, method, endpoint, data = {})
