@@ -62,9 +62,7 @@ module BaseballDiscord
           end
 
           # Remove the last separator
-          rows.pop
-
-          rows
+          rows[0...-1]
         end
 
         def append_game_rows(rows, games)

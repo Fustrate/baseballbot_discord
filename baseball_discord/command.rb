@@ -39,7 +39,9 @@ module BaseballDiscord
     def log(str, level: :info)
       @log_tags ||= "[#{message.id}] [#{user.distinct}]"
 
-      bot.logger.add LOG_LEVELS.index(level), "#{@log_tags} #{str}"
+      str.lines.map(&:strip).each do |line|
+        bot.logger.add LOG_LEVELS.index(level), "#{@log_tags} #{line}"
+      end
     end
 
     # Try the channel first, then roles, then the server

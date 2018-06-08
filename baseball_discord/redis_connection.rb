@@ -44,16 +44,6 @@ module BaseballDiscord
       sleep 0.25
     end
 
-    def mapped_hmset(key, values = {})
-      ensure_redis
-
-      EM.next_tick do
-        @bot.logger.debug "[Redis] Mapped HM Set #{key}: #{values.inspect}"
-
-        @redis.mapped_hmset key, values
-      end
-    end
-
     def expire(key, ttl)
       ensure_redis
 
@@ -88,18 +78,6 @@ module BaseballDiscord
       ensure_redis
 
       @redis.pubsub.subscribe channel, &block
-    end
-
-    def psubscribe(pattern)
-      ensure_redis
-
-      @redis.pubsub.psubscribe(pattern)
-
-      @redis.pubsub.on(:pmessage) do |key, channel, message|
-        break unless key == pattern
-
-        yield key, channel, message
-      end
     end
 
     protected

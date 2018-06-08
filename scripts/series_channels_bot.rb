@@ -81,15 +81,9 @@ class SeriesChannelsBot
   end
 
   def game_is_live?(game)
-    abstract = game.dig('status', 'abstractGameState')
+    return true if game.dig('status', 'abstractGameState') == 'Live'
 
-    return true if abstract == 'Live'
-
-    detailed = game.dig('status', 'detailedState')
-
-    return true if ['Pre-Game', 'Warmup'].include?(detailed)
-
-    false
+    ['Pre-Game', 'Warmup'].include? game.dig('status', 'detailedState')
   end
 
   # @!endgroup MLB Data
