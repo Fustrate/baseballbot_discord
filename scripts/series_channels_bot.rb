@@ -119,7 +119,7 @@ class SeriesChannelsBot
   end
 
   def remove_channel(channel_id)
-    request :channels_cid, channel_id, :delete, "channels/#{channel_id}"
+    Discordrb::API::Channel.delete(@token, channel_id)
   end
 
   def move_channel(channel_id, parent_id)
