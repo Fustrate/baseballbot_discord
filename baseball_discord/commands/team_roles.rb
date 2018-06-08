@@ -24,36 +24,36 @@ module BaseballDiscord
         PM
 
         TEAM_ROLES = {
-          108 => ['LAA', 448_515_259_561_541_632], # Los Angeles Angels
-          109 => ['ARI', 448_515_130_632_831_005], # Arizona Diamondbacks
-          110 => ['BAL', 448_515_245_812_613_121], # Baltimore Orioles
-          111 => ['BOS', 448_515_246_949_138_443], # Boston Red Sox
-          112 => ['CHC', 448_515_249_268_588_554], # Chicago Cubs
-          113 => ['CIN', 448_515_251_483_443_200], # Cincinnati Reds
-          114 => ['CLE', 448_515_252_615_905_322], # Cleveland Indians
-          115 => ['COL', 448_515_253_366_685_707], # Colorado Rockies
-          116 => ['DET', 448_515_254_771_646_475], # Detroit Tigers
-          117 => ['HOU', 448_515_255_686_135_819], # Houston Astros
-          118 => ['KC',  448_515_257_019_793_418], # Kansas City Royals
-          119 => ['LAD', 448_515_263_965_691_906], # Los Angeles Dodgers
-          120 => ['WAS', 448_517_695_948_980_224], # Washington Nationals
-          121 => ['NYM', 448_515_313_546_559_488], # New York Mets
-          133 => ['OAK', 448_515_319_007_281_162], # Oakland Athletics
-          134 => ['PIT', 448_515_386_522_992_670], # Pittsburgh Pirates
-          135 => ['SD',  448_517_669_948_227_594], # San Diego Padres
-          136 => ['SEA', 448_517_678_693_351_434], # Seattle Mariners
-          137 => ['SF',  448_517_675_270_930_442], # San Francisco Giants
-          138 => ['STL', 448_517_681_818_239_006], # St. Louis Cardinals
-          139 => ['TB',  448_517_685_047_853_086], # Tampa Bay Rays
-          140 => ['TEX', 448_517_687_962_763_265], # Texas Rangers
-          141 => ['TOR', 448_517_693_470_146_561], # Toronto Blue Jays
-          142 => ['MIN', 448_515_311_314_927_626], # Minnesota Twins
-          143 => ['PHI', 448_515_321_473_662_976], # Philadelphia Phillies
-          144 => ['ATL', 448_515_244_143_280_138], # Atlanta Braves
-          145 => ['CWS', 448_515_250_422_153_226], # Chicago White Sox
-          146 => ['MIA', 448_515_265_882_226_688], # Miami Marlins
-          147 => ['NYY', 448_515_316_360_937_472], # New York Yankees
-          158 => ['MIL', 448_515_267_384_049_674]  # Milwaukee Brewers
+          108 => ['LAA', 448515259561541632], # Los Angeles Angels
+          109 => ['ARI', 448515130632831005], # Arizona Diamondbacks
+          110 => ['BAL', 448515245812613121], # Baltimore Orioles
+          111 => ['BOS', 448515246949138443], # Boston Red Sox
+          112 => ['CHC', 448515249268588554], # Chicago Cubs
+          113 => ['CIN', 448515251483443200], # Cincinnati Reds
+          114 => ['CLE', 448515252615905322], # Cleveland Indians
+          115 => ['COL', 448515253366685707], # Colorado Rockies
+          116 => ['DET', 448515254771646475], # Detroit Tigers
+          117 => ['HOU', 448515255686135819], # Houston Astros
+          118 => ['KC',  448515257019793418], # Kansas City Royals
+          119 => ['LAD', 448515263965691906], # Los Angeles Dodgers
+          120 => ['WAS', 448517695948980224], # Washington Nationals
+          121 => ['NYM', 448515313546559488], # New York Mets
+          133 => ['OAK', 448515319007281162], # Oakland Athletics
+          134 => ['PIT', 448515386522992670], # Pittsburgh Pirates
+          135 => ['SD',  448517669948227594], # San Diego Padres
+          136 => ['SEA', 448517678693351434], # Seattle Mariners
+          137 => ['SF',  448517675270930442], # San Francisco Giants
+          138 => ['STL', 448517681818239006], # St. Louis Cardinals
+          139 => ['TB',  448517685047853086], # Tampa Bay Rays
+          140 => ['TEX', 448517687962763265], # Texas Rangers
+          141 => ['TOR', 448517693470146561], # Toronto Blue Jays
+          142 => ['MIN', 448515311314927626], # Minnesota Twins
+          143 => ['PHI', 448515321473662976], # Philadelphia Phillies
+          144 => ['ATL', 448515244143280138], # Atlanta Braves
+          145 => ['CWS', 448515250422153226], # Chicago White Sox
+          146 => ['MIA', 448515265882226688], # Miami Marlins
+          147 => ['NYY', 448515316360937472], # New York Yankees
+          158 => ['MIL', 448515267384049674]  # Milwaukee Brewers
         }.freeze
 
         def update_member_roles
@@ -67,7 +67,7 @@ module BaseballDiscord
         protected
 
         def check_member_of_baseball
-          @baseball = bot.server 400_516_567_735_074_817
+          @baseball = bot.server 400516567735074817
 
           @member = @baseball.member(user.id)
 

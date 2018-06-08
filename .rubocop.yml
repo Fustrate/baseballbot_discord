@@ -12,3 +12,6 @@ Layout/MultilineMethodCallIndentation:
 
 Layout/MultilineMethodCallBraceLayout:
   EnforcedStyle: new_line
+
+Style/NumericLiterals:
+  Enabled: false

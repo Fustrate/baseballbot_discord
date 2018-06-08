@@ -31,7 +31,7 @@ module BaseballDiscord
     attr_reader :db, :mlb, :redis, :logger, :config
 
     # ID of the user allowed to administrate the bot
-    ADMIN_ID = 429_364_871_121_993_728
+    ADMIN_ID = 429364871121993728
 
     def initialize(attributes = {})
       @db = PG::Connection.new attributes.delete(:db)

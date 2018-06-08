@@ -9,11 +9,9 @@ require 'discordrb/api/channel'
 require 'discordrb/api/server'
 
 class SeriesChannelsBot
-  # rubocop:disable Style/NumericLiterals
   SERVER_ID = 450792745553100801
   GAME_CHATS_ID = 453783775302909952
   LIVE_GAMES_ID = 453783826095669248
-  # rubocop:enable Style/NumericLiterals
 
   LIVE_GAME_STATUSES = %w[Live Preview].freeze
 
