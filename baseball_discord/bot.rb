@@ -8,7 +8,6 @@ require 'eventmachine'
 require 'json'
 require 'mlb_stats_api'
 require 'open-uri'
-require 'pg'
 require 'redd'
 require 'redis'
 require 'securerandom'
@@ -28,14 +27,12 @@ end
 
 module BaseballDiscord
   class Bot < Discordrb::Commands::CommandBot
-    attr_reader :db, :mlb, :redis, :logger, :config
+    attr_reader :mlb, :redis, :logger, :config
 
     # ID of the user allowed to administrate the bot
     ADMIN_ID = 429364871121993728
 
     def initialize(attributes = {})
-      @db = PG::Connection.new attributes.delete(:db)
-
       @config = Config.new
 
       super attributes.merge(prefix: prefix_proc(@config.server_prefixes))

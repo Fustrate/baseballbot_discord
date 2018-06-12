@@ -10,7 +10,7 @@ gem 'rake'
 
 # Local services
 gem 'em-hiredis'
-gem 'pg'
+# gem 'pg'
 
 # Outside services
 gem 'discordrb', git: 'https://github.com/meew0/discordrb.git'

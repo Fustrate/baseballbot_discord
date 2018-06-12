@@ -4,12 +4,7 @@ require_relative 'baseball_discord/bot'
 
 @discord_bot = BaseballDiscord::Bot.new(
   client_id: ENV['DISCORD_CLIENT_ID'],
-  token: ENV['DISCORD_TOKEN'],
-  db: {
-    user: ENV['PG_USERNAME'],
-    dbname: ENV['PG_DATABASE'],
-    password: ENV['PG_PASSWORD']
-  }
+  token: ENV['DISCORD_TOKEN']
 )
 
 trap('TERM') do
