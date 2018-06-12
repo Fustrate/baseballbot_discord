@@ -22,6 +22,7 @@ gem 'chronic'
 gem 'tzinfo'
 
 # Utilities
+gem 'rufus-scheduler'
 gem 'terminal-table'
 
 group :development do
