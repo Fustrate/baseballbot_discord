@@ -132,6 +132,10 @@ module GameChatBot
       embed = Alert.new(alert, self).embed
 
       @channel.send_embed '', embed if embed
+
+      return unless embed['category'] == 'game_over'
+
+      @bot.end_feed_for_channel @channel
     end
   end
 end

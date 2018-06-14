@@ -47,37 +47,41 @@ module GameChatBot
       @games[event.channel&.id]
     end
 
+    def end_feed_for_channel(channel)
+      @games.del channel.id
+    end
+
     def start_loop
       scheduler = Rufus::Scheduler.new
 
+      scheduler.every('5m') { start_games }
       scheduler.every('20s') { update_games }
 
+      # Start right away
+      start_games
       update_games
     end
 
     def update_games
-      load_games if @games.empty?
-
       @games.each_value(&:update_game_chat)
     end
 
-    def load_games
-      # @games[455657467360313357] = game_feed(530388, 455657467360313357)
-      # @games[455657468442443777] = game_feed(530394, 455657468442443777)
-      # @games[455657468102443018] = game_feed(530395, 455657468102443018)
-      # @games[455657469268590592] = game_feed(530389, 455657469268590592)
-      # @games[455657469600071684] = game_feed(530390, 455657469600071684)
-      # @games[455657469947936770] = game_feed(530393, 455657469947936770)
-      @games[456019857838833665] = game_feed(530423, 456019857838833665)
+    def start_games
+      @redis.hgetall('live_games').each do |channel_name, game_pk|
+        channel = channels.find { |chan| chan.name == channel_name }
+
+        next if @games[channel.id]&.game_pk == game_pk
+
+        @games[channel.id] = game_feed(game_pk, channel)
+      end
     end
 
-    def game_feed(game_pk, channel_id)
-      Feed.new(
-        self,
-        game_pk,
-        servers[SERVER_ID].channels.find { |channel| channel.id == channel_id },
-        @client.live_feed(game_pk)
-      )
+    def channels
+      @channels ||= servers[SERVER_ID].channels
+    end
+
+    def game_feed(game_pk, channel)
+      Feed.new(self, game_pk, channel, @client.live_feed(game_pk))
     end
   end
 end
