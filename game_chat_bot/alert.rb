@@ -4,12 +4,16 @@ module GameChatBot
   class Alert
     include OutputHelpers
 
+    IGNORE_CATEGORIES = %w[scoring_position_extra].freeze
+
     def initialize(alert, game)
       @alert = alert
       @game = game
     end
 
     def embed
+      return if IGNORE_CATEGORIES.include?(@alert['category'])
+
       case @alert['category']
       when 'end_of_half_inning' then end_of_inning_embed
       when 'game_over' then end_of_game_embed
