@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/meew0/discordrb.git
-  revision: 8cbc39cacf584799477085b34ed534eadc388557
+  revision: d645ef96bb5d75bbb2f31ba2404ba2ace70b8bba
   specs:
     discordrb (3.2.1)
       discordrb-webhooks (~> 3.2.0.1)
@@ -65,6 +65,7 @@ GEM
       ffi
     redd (0.8.8)
       http (~> 2.2)
+    redis (4.0.1)
     rest-client (2.1.0.rc1)
       http-accept (>= 1.7.0, < 2.0)
       http-cookie (>= 1.0.2, < 2.0)
@@ -98,6 +99,7 @@ DEPENDENCIES
   mlb_stats_api
   rake
   redd
+  redis
   rufus-scheduler
   terminal-table
   tzinfo

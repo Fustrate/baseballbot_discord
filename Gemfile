@@ -10,6 +10,7 @@ gem 'rake'
 
 # Local services
 gem 'em-hiredis'
+gem 'redis'
 # gem 'pg'
 
 # Outside services
