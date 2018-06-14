@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'open-uri'
+require 'redis'
 
 require 'discordrb'
 require 'discordrb/light'
@@ -21,6 +22,7 @@ class SeriesChannelsBot
 
   def initialize(token:)
     @token = "Bot #{token}"
+    @redis = Redis.new
   end
 
   def update_channels
@@ -59,11 +61,21 @@ class SeriesChannelsBot
         game.dig('teams', 'home', 'team', 'teamName')
       ].join(' at ').downcase.gsub(/[^a-z]/, '-').gsub(/\-{2,}/, '-')
 
+      update_redis(game, name)
+
       # In case of a double header, || the status
       channels[name] ||= game_is_live?(game)
     end
 
     channels
+  end
+
+  def update_redis(game, name)
+    if game_is_live?(game)
+      @redis.hset('live_games', name, game['gamePk'])
+    else
+      @redis.hdel('live_games', name)
+    end
   end
 
   def existing_channels
