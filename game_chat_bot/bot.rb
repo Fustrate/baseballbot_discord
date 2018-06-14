@@ -77,7 +77,7 @@ module GameChatBot
     end
 
     def game_channels
-      @channels ||= servers[SERVER_ID].channels
+      @game_channels ||= servers[SERVER_ID].channels
     end
 
     def game_feed(game_pk, channel)
