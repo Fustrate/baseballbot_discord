@@ -68,15 +68,15 @@ module GameChatBot
 
     def start_games
       @redis.hgetall('live_games').each do |channel_name, game_pk|
-        channel = channels.find { |chan| chan.name == channel_name }
+        channel = game_channels.find { |chan| chan.name == channel_name }
 
-        next if @games[channel.id]&.game_pk == game_pk
+        next unless channel && @games[channel.id]&.game_pk != game_pk
 
         @games[channel.id] = game_feed(game_pk, channel)
       end
     end
 
-    def channels
+    def game_channels
       @channels ||= servers[SERVER_ID].channels
     end
 
