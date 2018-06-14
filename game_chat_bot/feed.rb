@@ -122,10 +122,16 @@ module GameChatBot
 
         @bot.redis.sadd key, alert['alertId']
 
-        puts alert
-
-        @channel.send_embed '', Alert.new(alert, self).embed
+        output_alert(alert)
       end
+    end
+
+    def output_alert(alert)
+      puts alert
+
+      embed = Alert.new(alert, self).embed
+
+      @channel.send_embed '', embed if embed
     end
   end
 end
