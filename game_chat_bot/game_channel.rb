@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module GameChatBot
-  class Feed
+  class GameChannel
     attr_reader :bot, :channel, :feed, :game_pk, :line_score
 
     def initialize(bot, game_pk, channel, feed)
@@ -20,7 +20,7 @@ module GameChatBot
 
       @line_score = LineScore.new(self)
 
-      output_last_play
+      output_plays
 
       output_alerts
 
@@ -61,10 +61,14 @@ module GameChatBot
 
     def send_umpires
       umpires = @feed.live_data.dig('boxscore', 'officials').map do |umpire|
-        "**#{umpire['officialType']}**: #{umpire.dig('official', 'fullName')}"
+        {
+          name: umpire['officialType'],
+          value: umpire.dig('official', 'fullName'),
+          inline: true
+        }
       end
 
-      @channel.send_message umpires.join("\n")
+      @channel.send_embed '', fields: umpires
     end
 
     protected
@@ -82,53 +86,79 @@ module GameChatBot
       positions.zip(names).map { |pos, name| "#{name} *#{pos}*" }.join(' | ')
     end
 
-    def plays_to_output
-      plays = @feed.plays['allPlays']
+    def redis_key
+      @redis_key ||= "#{@channel.id}_#{@game_pk}"
+    end
 
-      # No plays yet; game probably hasn't started.
-      return [] unless plays&.any?
+    def output_plays
+      last_event = @bot.redis.get "#{redis_key}_last_event"
 
-      if @last_play
-        # Check to see if the last play we looked at has any more info
-        # Output any more plays after this one
+      if last_event
+        process_plays_since(last_event)
       else
-        # Output all plays, I guess
+        process_plays(@feed.plays['allPlays'])
       end
     end
 
-    def output_last_play
-      last_play = @feed.plays['allPlays']
-        .select { |play| play['about']['isComplete'] }
-        .last
+    def process_plays_since(last_event)
+      play_id, event_id = last_event.split(',').map(&:to_i)
 
-      return unless last_play
+      plays = @feed.plays['allPlays']
 
-      index = last_play.dig('about', 'atBatIndex')
+      if plays.dig(play_id, 'playEvents').length > event_id
+        process_rest_of_play(plays[play_id], events_after: event_id)
+      end
 
-      return if index <= @last_play
+      process_plays(plays[(play_id + 1)..-1])
+    end
 
-      @last_play = index
+    def process_plays(plays)
+      return if plays&.none?
+
+      plays.each { |play| process_play(play) }
+
+      @bot.redis.set "#{redis_key}_last_event", [
+        @feed.plays['allPlays'].length,
+        plays.last['playEvents'].length
+      ].join(',')
+    end
+
+    def process_play(play, events_after: -1)
+      events = play['playEvents'][(events_after + 1)..-1]
+
+      post_interesting_actions(events)
+
+      return unless play.dig('about', 'isComplete')
 
       @channel.send_embed '', Play.new(last_play, self).embed
+    end
+
+    def post_interesting_actions(events)
+      actions = events.select { |event| event['type'] == 'action' }
+        .map { |action| action.dig('details', 'description') }
+
+      return if actions.none?
+
+      @channel.send_embed(
+        '',
+        description: actions.join("\n"),
+        color: '999999'.to_i(16)
+      )
     end
 
     def output_alerts
       return unless @feed.game_data
 
-      key = "#{@channel.id}_#{@game_pk}_alerts"
-
       @feed.game_data['alerts'].each do |alert|
-        next if @bot.redis.sismember key, alert['alertId']
+        next if @bot.redis.sismember "#{redis_key}_alerts", alert['alertId']
 
-        @bot.redis.sadd key, alert['alertId']
+        @bot.redis.sadd "#{redis_key}_alerts", alert['alertId']
 
         output_alert(alert)
       end
     end
 
     def output_alert(alert)
-      puts alert
-
       embed = Alert.new(alert, self).embed
 
       @channel.send_embed '', embed if embed

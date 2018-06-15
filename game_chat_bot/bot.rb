@@ -10,7 +10,7 @@ require_relative '../baseball_discord/utilities'
 require_relative 'output_helpers'
 
 require_relative 'alert'
-require_relative 'feed'
+require_relative 'game_channel'
 require_relative 'line_score'
 require_relative 'play'
 
@@ -68,20 +68,20 @@ module GameChatBot
 
     def start_games
       @redis.hgetall('live_games').each do |channel_name, game_pk|
-        channel = game_channels.find { |chan| chan.name == channel_name }
+        channel = server_channels.find { |chan| chan.name == channel_name }
 
         next unless channel && @games[channel.id]&.game_pk != game_pk
 
-        @games[channel.id] = game_feed(game_pk, channel)
+        @games[channel.id] = game_channel(game_pk, channel)
       end
     end
 
-    def game_channels
-      @game_channels ||= servers[SERVER_ID].channels
+    def server_channels
+      @server_channels ||= servers[SERVER_ID].channels
     end
 
-    def game_feed(game_pk, channel)
-      Feed.new(self, game_pk, channel, @client.live_feed(game_pk))
+    def game_channel(game_pk, channel)
+      GameChannel.new(self, game_pk, channel, @client.live_feed(game_pk))
     end
   end
 end
