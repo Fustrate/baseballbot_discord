@@ -84,7 +84,7 @@ class SeriesChannelsBot
     delete_keys = current_value.keys - active_games.keys
 
     @redis.hdel 'live_games', *delete_keys if delete_keys.any?
-    @redis.mapped_hmset 'live_games', active_games
+    @redis.mapped_hmset 'live_games', active_games if active_games.any?
   end
 
   def existing_channels
