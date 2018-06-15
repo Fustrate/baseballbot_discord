@@ -10,7 +10,7 @@ gem 'rake'
 
 # Local services
 gem 'em-hiredis'
-gem 'redis'
+gem 'redis', git: 'https://github.com/redis/redis-rb.git'
 # gem 'pg'
 
 # Outside services
