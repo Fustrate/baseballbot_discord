@@ -55,27 +55,36 @@ class SeriesChannelsBot
   def series_channels
     channels = {}
 
-    todays_games.map do |game|
-      name = [
-        game.dig('teams', 'away', 'team', 'teamName'),
-        game.dig('teams', 'home', 'team', 'teamName')
-      ].join(' at ').downcase.gsub(/[^a-z]/, '-').gsub(/\-{2,}/, '-')
+    active_games = []
 
-      update_redis(game, name)
+    todays_games.map do |game|
+      name = channel_name_for_game(game)
+
+      active_games[name] = game['gamePk'] if game_is_live?(game)
 
       # In case of a double header, || the status
       channels[name] ||= game_is_live?(game)
     end
 
+    update_redis(active_games)
+
     channels
   end
 
-  def update_redis(game, name)
-    if game_is_live?(game)
-      @redis.hset('live_games', name, game['gamePk'])
-    else
-      @redis.hdel('live_games', name)
-    end
+  def channel_name_for_game(game)
+    [
+      game.dig('teams', 'away', 'team', 'teamName'),
+      game.dig('teams', 'home', 'team', 'teamName')
+    ].join(' at ').downcase.gsub(/[^a-z]/, '-').gsub(/\-{2,}/, '-')
+  end
+
+  def update_redis(active_games)
+    current_value = @redis.hgetall('live_games')
+
+    delete_keys = current_value.keys - active_games.keys
+
+    @redis.hdel 'live_games', *delete_keys if delete_keys.any?
+    @redis.mapped_hmset(active_games)
   end
 
   def existing_channels
