@@ -25,7 +25,7 @@ module GameChatBot
     end
 
     def description
-      description = @play.dig('result', 'description')
+      description = squish @play.dig('result', 'description')
 
       return description unless @play.dig('about', 'isScoringPlay')
 
