@@ -63,12 +63,13 @@ module GameChatBot
     def home_run_fields
       event = @play['playEvents'].last
 
-      hit = event['hitData']
+      angle, speed, distance = event['hitData']
+        .values_at 'launchAngle', 'launchSpeed', 'totalDistance'
 
       [
-        { name: 'Launch Angle', value: "#{hit['launchAngle']} deg", inline: true },
-        { name: 'Launch Speed', value: "#{hit['launchSpeed']} mph", inline: true },
-        { name: 'Distance', value: "#{hit['totalDistance']} feet", inline: true },
+        { name: 'Launch Angle', value: "#{angle} deg", inline: true },
+        { name: 'Launch Speed', value: "#{speed} mph", inline: true },
+        { name: 'Distance', value: "#{distance} feet", inline: true },
         { name: 'Pitch', value: pitch_type(event), inline: true }
       ]
     end
