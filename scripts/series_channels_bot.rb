@@ -55,7 +55,7 @@ class SeriesChannelsBot
   def series_channels
     channels = {}
 
-    active_games = []
+    active_games = {}
 
     todays_games.map do |game|
       name = channel_name_for_game(game)
