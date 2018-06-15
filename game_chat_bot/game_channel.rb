@@ -10,9 +10,6 @@ module GameChatBot
       @game_pk = game_pk
       @channel = channel
       @feed = feed
-
-      @last_play = -1
-      @last_event = -1
     end
 
     def update_game_chat
