@@ -2,4 +2,11 @@
 
 require 'daemons'
 
-Daemons.run('discord_bot.rb', log_output: true)
+options = {
+  log_output: true,
+  backtrace: true,
+  output_logfilename: 'log/discord_bot_output.txt',
+  logfilename: 'log/discord_bot.log'
+}
+
+Daemons.run 'discord_bot.rb', options
