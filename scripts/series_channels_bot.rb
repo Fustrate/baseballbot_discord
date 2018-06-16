@@ -60,7 +60,7 @@ class SeriesChannelsBot
     todays_games.map do |game|
       name = channel_name_for_game(game)
 
-      active_games[name] = game['gamePk'] if game_is_live?(game)
+      active_games[name] = game['gamePk'].to_s if game_is_live?(game)
 
       # In case of a double header, || the status
       channels[name] ||= game_is_live?(game)
@@ -80,6 +80,8 @@ class SeriesChannelsBot
 
   def update_redis(active_games)
     current_value = @redis.hgetall('live_games')
+
+    return if current_value == active_games
 
     delete_keys = current_value.keys - active_games.keys
 
