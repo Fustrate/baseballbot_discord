@@ -102,27 +102,29 @@ module GameChatBot
     end
 
     def output_plays
-      last_event = @bot.redis.get "#{redis_key}_last_event"
+      @last_event = @bot.redis.get "#{redis_key}_last_event"
 
-      if last_event
-        process_plays_since(last_event)
-      else
-        process_plays(@feed.plays['allPlays'])
-      end
+      return process_plays_since_last_event if @last_event
+
+      process_plays @feed.plays['allPlays']
     end
 
-    def process_plays_since(last_event)
-      play_id, event_id = last_event.split(',').map(&:to_i)
+    def process_plays_since_last_event
+      play_id, event_id = @last_event.split(',').map(&:to_i)
 
       plays = @feed.plays['allPlays']
 
-      if plays.dig(play_id, 'playEvents').length - 1 > event_id
-        process_play(plays[play_id], events_after: event_id)
+      process_unfinished_event plays[play_id], event_id
 
-        update_last_event(plays[play_id])
-      end
+      process_plays plays[(play_id + 1)..-1]
+    end
 
-      process_plays(plays[(play_id + 1)..-1])
+    def process_unfinished_event(play, event_id)
+      return unless play['playEvents'].length - 1 > event_id
+
+      process_play play, events_after: event_id
+
+      update_last_event play
     end
 
     def last_actual_plays(plays, count)
@@ -141,10 +143,14 @@ module GameChatBot
     end
 
     def update_last_event(play)
-      @bot.redis.set "#{redis_key}_last_event", [
+      value = [
         play['atBatIndex'],
         play['playEvents'].length - 1
       ].join(',')
+
+      return if value == @last_event
+
+      @bot.redis.set "#{redis_key}_last_event", value
     end
 
     def process_play(play, events_after: -1)
