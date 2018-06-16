@@ -6,7 +6,7 @@ module OutputHelpers
   end
 
   def titleize(text)
-    text.tr('_', ' ').gsub(/\b[a-z]/, &:capitalize)
+    text&.tr('_', ' ')&.gsub(/\b[a-z]/, &:capitalize)
   end
 
   def prettify_table(table)
