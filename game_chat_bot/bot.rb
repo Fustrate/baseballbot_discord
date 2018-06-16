@@ -55,7 +55,6 @@ module GameChatBot
     def start_loop
       scheduler = Rufus::Scheduler.new
 
-      scheduler.every('5m') { start_games }
       scheduler.every('20s') { update_games }
 
       # Start right away
@@ -65,6 +64,8 @@ module GameChatBot
 
     def update_games
       @games.each_value(&:update_game_chat)
+
+      start_games
     end
 
     def start_games
