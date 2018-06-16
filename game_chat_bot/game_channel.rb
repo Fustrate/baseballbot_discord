@@ -117,7 +117,7 @@ module GameChatBot
       plays = @feed.plays['allPlays']
 
       if plays.dig(play_id, 'playEvents').length > event_id
-        process_rest_of_play(plays[play_id], events_after: event_id)
+        process_play(plays[play_id], events_after: event_id)
       end
 
       process_plays(plays[(play_id + 1)..-1])
