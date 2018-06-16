@@ -149,11 +149,17 @@ module GameChatBot
       ]
 
       # We have to rewind if this is complete-but-not-complete
-      value[1] -= 1 if play['about']['isInPlay'] && !play['about']['isComplete']
+      value[1] -= 1 if incomplete_but_in_play?(play)
 
       return if value.join(',') == @last_event
 
       @bot.redis.set "#{redis_key}_last_event", value.join(',')
+    end
+
+    def incomplete_but_in_play?(play)
+      return false if play['about']['isComplete']
+
+      play.dig('playEvents', -1, 'details', 'isInPlay')
     end
 
     def process_play(play, events_after: -1)
