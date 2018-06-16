@@ -69,9 +69,9 @@ module GameChatBot
       return '' unless offense
 
       bitmap = 0b000
-      bitmap |= 0b001 if offense.dig['first']
-      bitmap |= 0b010 if offense.dig['second']
-      bitmap |= 0b100 if offense.dig['third']
+      bitmap |= 0b001 if offense['first']
+      bitmap |= 0b010 if offense['second']
+      bitmap |= 0b100 if offense['third']
 
       BASERUNNERS[bitmap]
     end
