@@ -118,6 +118,8 @@ module GameChatBot
 
       if plays.dig(play_id, 'playEvents').length > event_id
         process_play(plays[play_id], events_after: event_id)
+
+        update_last_event(plays[play_id])
       end
 
       process_plays(plays[(play_id + 1)..-1])
@@ -135,9 +137,13 @@ module GameChatBot
 
       last_plays.each { |play| process_play(play) }
 
+      update_last_event(last_plays.last)
+    end
+
+    def update_last_event(play)
       @bot.redis.set "#{redis_key}_last_event", [
-        last_plays.last['atBatIndex'],
-        last_plays.last['playEvents'].length - 1
+        play['atBatIndex'],
+        play['playEvents'].length - 1
       ].join(',')
     end
 
