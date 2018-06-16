@@ -135,6 +135,8 @@ module GameChatBot
       # If we missed some things, oh well
       last_plays = last_actual_plays(plays, 3)
 
+      return if last_plays.none?
+
       last_plays.each { |play| process_play(play) }
 
       update_last_event(last_plays.last)
