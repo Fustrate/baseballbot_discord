@@ -112,7 +112,8 @@ module GameChatBot
     def process_plays(plays)
       return if plays&.none?
 
-      plays.each { |play| process_play(play) }
+      # If we missed some things, oh well
+      plays.last(3).each { |play| process_play(play) }
 
       @bot.redis.set "#{redis_key}_last_event", [
         @feed.plays['allPlays'].length,
