@@ -5,6 +5,7 @@ require 'mlb_stats_api'
 require 'redis'
 require 'rufus-scheduler'
 require 'terminal-table'
+require 'time'
 
 require_relative '../baseball_discord/utilities'
 require_relative 'output_helpers'

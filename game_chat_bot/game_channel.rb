@@ -10,10 +10,13 @@ module GameChatBot
       @game_pk = game_pk
       @channel = channel
       @feed = feed
+
+      @starts_at = Time.parse @feed.game_data.dig('datetime', 'dateTime')
+      @last_update = Time.now - 3600 # So we can at least do one update
     end
 
     def update_game_chat
-      return unless @feed.update!
+      return unless ready_to_update? && @feed.update!
 
       @line_score = LineScore.new(self)
 
@@ -24,6 +27,17 @@ module GameChatBot
       @channel.topic = @line_score.line_score_state
     rescue Net::OpenTimeout, SocketError
       nil
+    end
+
+    def ready_to_update?
+      return true if Time.now >= @starts_at
+
+      # Only update every ~5 minutes when the game hasn't started yet
+      return false unless @last_update + 300 <= Time.now
+
+      @last_update = Time.now
+
+      true
     end
 
     def send_line_score
