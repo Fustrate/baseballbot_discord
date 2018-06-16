@@ -146,11 +146,14 @@ module GameChatBot
       value = [
         play['atBatIndex'],
         play['playEvents'].length - 1
-      ].join(',')
+      ]
 
-      return if value == @last_event
+      # We have to rewind if this is complete-but-not-complete
+      value[1] -= 1 if play['about']['isInPlay'] && !play['about']['isComplete']
 
-      @bot.redis.set "#{redis_key}_last_event", value
+      return if value.join(',') == @last_event
+
+      @bot.redis.set "#{redis_key}_last_event", value.join(',')
     end
 
     def process_play(play, events_after: -1)

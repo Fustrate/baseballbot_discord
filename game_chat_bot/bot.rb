@@ -34,6 +34,8 @@ module GameChatBot
       super attributes.merge(prefix: '!')
     end
 
+    protected
+
     def register_commands
       command(:linescore) { |event| feed_for_event(event)&.send_line_score }
       command(:lineups) { |event| feed_for_event(event)&.send_lineups }
