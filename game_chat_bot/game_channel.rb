@@ -127,7 +127,7 @@ module GameChatBot
 
       return unless play.dig('about', 'isComplete')
 
-      @channel.send_embed '', Play.new(last_play, self).embed
+      @channel.send_embed '', Play.new(play, self).embed
     end
 
     def post_interesting_actions(events)
