@@ -57,6 +57,8 @@ module GameChatBot
     def resulting_context
       outs = @game.feed.linescore['outs']
 
+      return { text: '3 Outs' } if outs == 3
+
       text = [
         "#{outs} #{outs == 1 ? 'Out' : 'Outs'}",
         runners
