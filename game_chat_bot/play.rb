@@ -57,10 +57,12 @@ module GameChatBot
     def resulting_context
       outs = @game.feed.linescore['outs']
 
-      [
+      text = [
         "#{outs} #{outs == 1 ? 'Out' : 'Outs'}",
         runners
       ].join(', ')
+
+      { text: text }
     end
 
     def runners
