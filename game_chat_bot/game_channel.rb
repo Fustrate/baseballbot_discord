@@ -123,15 +123,21 @@ module GameChatBot
       process_plays(plays[(play_id + 1)..-1])
     end
 
+    def last_actual_plays(plays, count)
+      plays.select { |play| play['playEvents'].any? }.last(count)
+    end
+
     def process_plays(plays)
       return if plays&.none?
 
       # If we missed some things, oh well
-      plays.last(3).each { |play| process_play(play) }
+      last_plays = last_actual_plays(plays, 3)
+
+      last_plays.each { |play| process_play(play) }
 
       @bot.redis.set "#{redis_key}_last_event", [
-        @feed.plays['allPlays'].length - 1,
-        plays.last['playEvents'].length - 1
+        last_plays.last['atBatIndex'],
+        last_plays.last['playEvents'].length - 1
       ].join(',')
     end
 
