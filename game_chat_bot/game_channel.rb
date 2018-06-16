@@ -116,8 +116,8 @@ module GameChatBot
       plays.last(3).each { |play| process_play(play) }
 
       @bot.redis.set "#{redis_key}_last_event", [
-        @feed.plays['allPlays'].length,
-        plays.last['playEvents'].length
+        @feed.plays['allPlays'].length - 1,
+        plays.last['playEvents'].length - 1
       ].join(',')
     end
 
