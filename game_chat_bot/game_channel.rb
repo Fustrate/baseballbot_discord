@@ -177,7 +177,7 @@ module GameChatBot
 
       send_lineups if alert['description']['Lineups posted']
 
-      @bot.end_feed_for_channel @channel
+      @bot.end_feed_for_channel @channel if alert['category'] == 'game_over'
     end
   end
 end
