@@ -116,7 +116,7 @@ module GameChatBot
 
       plays = @feed.plays['allPlays']
 
-      if plays.dig(play_id, 'playEvents').length > event_id
+      if plays.dig(play_id, 'playEvents').length - 1 > event_id
         process_play(plays[play_id], events_after: event_id)
 
         update_last_event(plays[play_id])
