@@ -112,11 +112,9 @@ module GameChatBot
     def process_plays_since_last_event
       play_id, event_id = @last_event.split(',').map(&:to_i)
 
-      plays = @feed.plays['allPlays']
+      process_unfinished_event @feed.plays['allPlays'][play_id], event_id
 
-      process_unfinished_event plays[play_id], event_id
-
-      process_plays plays[(play_id + 1)..-1]
+      process_plays @feed.plays['allPlays'][(play_id + 1)..-1]
     end
 
     def process_unfinished_event(play, event_id)
@@ -154,9 +152,7 @@ module GameChatBot
     end
 
     def process_play(play, events_after: -1)
-      events = play['playEvents'][(events_after + 1)..-1]
-
-      post_interesting_actions(events)
+      post_interesting_actions play['playEvents'][(events_after + 1)..-1]
 
       return unless play.dig('about', 'isComplete')
 
