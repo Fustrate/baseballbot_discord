@@ -4,6 +4,17 @@ module GameChatBot
   class Play
     include OutputHelpers
 
+    BASERUNNERS = [
+      'bases empty',
+      'runner on first',
+      'runner on second',
+      'first and second',
+      'runner on third',
+      'first and third',
+      'second and third',
+      'bases loaded'
+    ].freeze
+
     def initialize(play, game)
       @play = play
       @game = game
@@ -43,11 +54,32 @@ module GameChatBot
       the_count.join('-')
     end
 
+    def resulting_context
+      outs = @game.line_score['outs']
+
+      [
+        "#{outs} #{outs == 1 ? 'Out' : 'Outs'}",
+        runners
+      ].join(', ')
+    end
+
+    def runners
+      return '' unless @game.line_score&.dig('offense')
+
+      bitmap = 0b000
+      bitmap |= 0b001 if @game.line_score.dig('offense', 'first')
+      bitmap |= 0b010 if @game.line_score.dig('offense', 'second')
+      bitmap |= 0b100 if @game.line_score.dig('offense', 'third')
+
+      BASERUNNERS[bitmap]
+    end
+
     def strikeout_or_walk_embed
       {
         title: "#{type} (#{count})",
         description: description,
-        color: color
+        color: color,
+        footer: resulting_context
       }
     end
 
@@ -56,7 +88,8 @@ module GameChatBot
         title: "#{type} (#{count})",
         description: description,
         color: color,
-        fields: home_run_fields
+        fields: home_run_fields,
+        footer: resulting_context
       }
     end
 
@@ -84,7 +117,8 @@ module GameChatBot
       {
         title: "#{type} (#{count})",
         description: description,
-        color: color
+        color: color,
+        footer: resulting_context
       }
     end
 
