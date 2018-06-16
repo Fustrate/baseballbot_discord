@@ -35,7 +35,7 @@ module GameChatBot
     end
 
     def end_feed_for_channel(channel)
-      @games.del channel.id
+      @games.delete channel.id
     end
 
     protected
