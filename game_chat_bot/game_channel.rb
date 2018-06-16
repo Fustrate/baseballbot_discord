@@ -175,7 +175,7 @@ module GameChatBot
 
       @channel.send_embed '', embed if embed
 
-      return unless embed['category'] == 'game_over'
+      send_lineups if alert['description']['Lineups posted']
 
       @bot.end_feed_for_channel @channel
     end
