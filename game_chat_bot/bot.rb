@@ -34,6 +34,10 @@ module GameChatBot
       super attributes.merge(prefix: '!')
     end
 
+    def end_feed_for_channel(channel)
+      @games.del channel.id
+    end
+
     protected
 
     def register_commands
@@ -48,10 +52,6 @@ module GameChatBot
 
     def feed_for_event(event)
       @games[event.channel&.id]
-    end
-
-    def end_feed_for_channel(channel)
-      @games.del channel.id
     end
 
     def start_loop
