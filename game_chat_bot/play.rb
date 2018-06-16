@@ -55,7 +55,7 @@ module GameChatBot
     end
 
     def resulting_context
-      outs = @game.line_score['outs']
+      outs = @game.feed.line_score['outs']
 
       [
         "#{outs} #{outs == 1 ? 'Out' : 'Outs'}",
@@ -64,12 +64,12 @@ module GameChatBot
     end
 
     def runners
-      return '' unless @game.line_score&.dig('offense')
+      return '' unless @game.feed.line_score&.dig('offense')
 
       bitmap = 0b000
-      bitmap |= 0b001 if @game.line_score.dig('offense', 'first')
-      bitmap |= 0b010 if @game.line_score.dig('offense', 'second')
-      bitmap |= 0b100 if @game.line_score.dig('offense', 'third')
+      bitmap |= 0b001 if @game.feed.line_score.dig('offense', 'first')
+      bitmap |= 0b010 if @game.feed.line_score.dig('offense', 'second')
+      bitmap |= 0b100 if @game.feed.line_score.dig('offense', 'third')
 
       BASERUNNERS[bitmap]
     end
