@@ -38,6 +38,10 @@ module GameChatBot
       @games.delete channel.id
     end
 
+    def home_run_alert(embed)
+      channel(457653686118907936).send_embed '', embed
+    end
+
     protected
 
     def register_commands

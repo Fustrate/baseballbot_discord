@@ -167,7 +167,11 @@ module GameChatBot
 
       return unless play.dig('about', 'isComplete')
 
-      @channel.send_embed '', Play.new(play, self).embed
+      embed = Play.new(play, self).embed
+
+      @bot.home_run_alert(embed) if play.dig('result', 'event') == 'Home Run'
+
+      @channel.send_embed '', embed
     end
 
     def post_interesting_actions(events)
