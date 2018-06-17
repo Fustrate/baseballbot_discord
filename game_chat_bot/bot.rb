@@ -32,10 +32,6 @@ module GameChatBot
       super attributes.merge(prefix: '!')
     end
 
-    def end_feed_for_channel(channel)
-      @games.delete channel.id
-    end
-
     def home_run_alert(embed)
       channel(457653686118907936).send_embed '', embed
     end
@@ -69,6 +65,10 @@ module GameChatBot
       @games.each_value(&:update_game_chat)
 
       start_games
+
+      @games.select { |_, game| game.game_over }.keys.each do |channel_id|
+        @games.delete channel_id
+      end
     end
 
     def start_games

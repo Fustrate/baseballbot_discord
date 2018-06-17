@@ -2,7 +2,7 @@
 
 module GameChatBot
   class GameChannel
-    attr_reader :bot, :channel, :feed, :game_pk, :line_score
+    attr_reader :bot, :channel, :feed, :game_pk, :line_score, :game_over
 
     def initialize(bot, game_pk, channel, feed)
       @bot = bot
@@ -13,6 +13,7 @@ module GameChatBot
 
       @starts_at = Time.parse @feed.game_data.dig('datetime', 'dateTime')
       @last_update = Time.now - 3600 # So we can at least do one update
+      @game_over = false
     end
 
     def update_game_chat
@@ -30,6 +31,8 @@ module GameChatBot
     end
 
     def ready_to_update?
+      return false if @game_over
+
       return true if Time.now >= @starts_at
 
       # Only update every ~5 minutes when the game hasn't started yet
@@ -213,7 +216,10 @@ module GameChatBot
 
       send_lineups if alert['description']['Lineups posted']
 
-      @bot.end_feed_for_channel @channel if alert['category'] == 'game_over'
+      return unless alert['category'] == 'game_over'
+
+      # Stop trying to update
+      @game_over = true
     end
   end
 end
