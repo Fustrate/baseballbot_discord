@@ -68,6 +68,7 @@ module GameChatBot
 
       @games.select { |_, game| game.game_over }.keys.each do |channel_id|
         @games.delete channel_id
+        @redis.hdel 'live_games', channel(channel_id).name
       end
     end
 
