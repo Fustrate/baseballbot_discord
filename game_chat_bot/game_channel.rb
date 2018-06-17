@@ -114,9 +114,11 @@ module GameChatBot
     def output_plays
       @next_event = @bot.redis.get "#{redis_key}_next_event"
 
-      return process_next_plays if @next_event
-
-      process_plays @feed.plays['allPlays']
+      if @next_event
+        process_next_plays
+      else
+        process_plays @feed.plays['allPlays']
+      end
 
       update_next_event
     end
