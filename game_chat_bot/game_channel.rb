@@ -15,17 +15,17 @@ module GameChatBot
       @last_update = Time.now - 3600 # So we can at least do one update
 
       @game_over = false
-      @muted = !bot.redis.get("#{redis_key}_unmuted")
+      @unmuted = bot.redis.get("#{redis_key}_unmuted")
     end
 
     def send_message(text: '', embed: nil)
-      return if @muted
+      return unless @unmuted
 
       @channel.send_message text, false, embed
     end
 
     def mute!
-      @muted = true
+      @unmuted = false
 
       bot.redis.del "#{redis_key}_unmuted"
 
@@ -33,7 +33,7 @@ module GameChatBot
     end
 
     def unmute!
-      @muted = false
+      @unmuted = true
 
       bot.redis.set "#{redis_key}_unmuted", 1
 
