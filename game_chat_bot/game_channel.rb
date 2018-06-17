@@ -88,13 +88,20 @@ module GameChatBot
       ids = @feed.boxscore.dig('teams', flag, 'battingOrder')
         .map { |id| "ID#{id}" }
 
-      names = @feed.game_data['players'].values_at(*ids)
+      lineup_positions(flag, ids)
+        .zip(lineup_names(ids))
+        .map { |pos, name| "#{name} *#{pos}*" }.join(' | ')
+    end
+
+    def lineup_names(ids)
+      @feed.game_data['players'].values_at(*ids)
         .map { |player| player['lastName'] }
+    end
 
-      positions = @feed.boxscore.dig('teams', flag, 'players').values_at(*ids)
+    def lineup_positions(flag, ids)
+      @feed.boxscore.dig('teams', flag, 'players')
+        .values_at(*ids)
         .map { |player| player.dig('position', 'abbreviation') }
-
-      positions.zip(names).map { |pos, name| "#{name} *#{pos}*" }.join(' | ')
     end
 
     def redis_key

@@ -51,8 +51,8 @@ module GameChatBot
         rows: [
           ['', 'R', 'H', 'E'],
           :separator,
-          [away_team_name] + away_rhe,
-          [home_team_name] + home_rhe
+          [team_name('away')] + team_rhe('away'),
+          [team_name('home')] + team_rhe('home')
         ]
       )
     end
@@ -83,22 +83,13 @@ module GameChatBot
       [@game.feed.live_data.dig('linescore', 'innings').count, 9].max
     end
 
-    def away_rhe
-      @game.feed.live_data.dig('linescore', 'teams', 'away')
+    def team_rhe(flag)
+      @game.feed.live_data.dig('linescore', 'teams', flag)
         .values_at('runs', 'hits', 'errors')
     end
 
-    def home_rhe
-      @game.feed.live_data.dig('linescore', 'teams', 'home')
-        .values_at('runs', 'hits', 'errors')
-    end
-
-    def away_team_name
-      @game.feed.game_data.dig('teams', 'away', 'abbreviation')
-    end
-
-    def home_team_name
-      @game.feed.game_data.dig('teams', 'home', 'abbreviation')
+    def team_name(flag)
+      @game.feed.game_data.dig('teams', flag, 'abbreviation')
     end
   end
 end

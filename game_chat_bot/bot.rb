@@ -17,8 +17,6 @@ require_relative 'play'
 
 module GameChatBot
   class Bot < Discordrb::Commands::CommandBot
-    SERVER_ID = 450792745553100801
-
     attr_reader :client, :redis
 
     def initialize(attributes = {})
@@ -64,7 +62,6 @@ module GameChatBot
       scheduler.every('20s') { update_games }
 
       # Start right away
-      start_games
       update_games
     end
 
@@ -76,16 +73,12 @@ module GameChatBot
 
     def start_games
       @redis.hgetall('live_games').each do |channel_name, game_pk|
-        channel = server_channels.find { |chan| chan.name == channel_name }
+        chan = find_channel(channel_name)
 
-        next unless channel && @games[channel.id]&.game_pk != game_pk
+        next unless chan && @games[chan.id]&.game_pk != game_pk
 
-        @games[channel.id] = game_channel(game_pk, channel)
+        @games[chan.id] = game_channel(game_pk, chan)
       end
-    end
-
-    def server_channels
-      @server_channels ||= servers[SERVER_ID].channels
     end
 
     def game_channel(game_pk, channel)
