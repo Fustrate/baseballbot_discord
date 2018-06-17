@@ -60,7 +60,7 @@ module GameChatBot
     end
 
     def resulting_context
-      outs = @game.feed.linescore['outs']
+      outs = @play.dig('count', 'outs')
 
       text = [
         "#{outs} #{outs == 1 ? 'Out' : 'Outs'}",
