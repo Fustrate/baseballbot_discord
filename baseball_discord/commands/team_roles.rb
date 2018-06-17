@@ -87,7 +87,7 @@ module BaseballDiscord
         def find_and_assign_role(inputs)
           team_ids = inputs.map do |input|
             BaseballDiscord::Utilities.find_team_by_name [input]
-          end.compact.first(2)
+          end.compact.uniq.first(2)
 
           return react_to_message('❓') unless team_ids.any?
 
