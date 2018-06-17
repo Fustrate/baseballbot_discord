@@ -66,7 +66,7 @@ module GameChatBot
         "#{outs} #{outs == 1 ? 'Out' : 'Outs'}",
         (runners unless outs == 3),
         pitcher
-      ].compact.join(', ')
+      ].compact.join('  |  ')
 
       { text: text }
     end
