@@ -47,8 +47,11 @@ module GameChatBot
         feed_for_event(event)&.send_lineup(event, args.join(' '))
       end
 
-      command(:start) { |event| feed_for_event(event)&.unmute! }
-      command(:stop) { |event| feed_for_event(event)&.mute! }
+      command(:autoupdate) do |event, *args|
+        feed_for_event(event)&.autoupdate(args.join(' '))
+      end
+
+      # command(:update) { |event| feed_for_event(event)&.update }
     end
 
     def feed_for_event(event)
@@ -65,7 +68,7 @@ module GameChatBot
     end
 
     def update_games
-      @games.each_value(&:update_game_chat)
+      @games.each_value(&:update)
 
       start_games
 

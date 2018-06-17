@@ -24,12 +24,20 @@ module GameChatBot
       @channel.send_message text, false, embed
     end
 
+    def autoupdate(new_state)
+      return unmute! if %w[1 yes on true].include?(new_state.downcase.strip)
+
+      return mute! if %w[0 no off false].include?(new_state.downcase.strip)
+
+      nil
+    end
+
     def mute!
       @unmuted = false
 
       bot.redis.del "#{redis_key}_unmuted"
 
-      @channel.send_message 'Game feed muted. Use `!start` to unmute.'
+      'Autoupdates are off. Use `!autoupdate on` to unmute.'
     end
 
     def unmute!
@@ -37,10 +45,10 @@ module GameChatBot
 
       bot.redis.set "#{redis_key}_unmuted", 1
 
-      @channel.send_message 'Game feed unmuted. Use `!stop` to mute.'
+      'Autoupdates are on. Use `!autoupdate off` to mute.'
     end
 
-    def update_game_chat
+    def update
       return unless ready_to_update? && @feed.update!
 
       @line_score = LineScore.new(self)
