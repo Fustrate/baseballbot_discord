@@ -46,6 +46,9 @@ module GameChatBot
       command(:lineup) do |event, *args|
         feed_for_event(event)&.send_lineup(event, args.join(' '))
       end
+
+      command(:start) { |event| feed_for_event(event)&.unmute! }
+      command(:stop) { |event| feed_for_event(event)&.mute! }
     end
 
     def feed_for_event(event)

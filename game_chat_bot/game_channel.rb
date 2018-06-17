@@ -13,7 +13,27 @@ module GameChatBot
 
       @starts_at = Time.parse @feed.game_data.dig('datetime', 'dateTime')
       @last_update = Time.now - 3600 # So we can at least do one update
+
       @game_over = false
+      @muted = !bot.redis.get("#{redis_key}_unmuted")
+    end
+
+    def send_message(text: '', embed: nil)
+      return if @muted
+
+      @channel.send_message text, false, embed
+    end
+
+    def mute!
+      @muted = true
+
+      bot.redis.del "#{redis_key}_unmuted"
+    end
+
+    def unmute!
+      @muted = false
+
+      bot.redis.set "#{redis_key}_unmuted", 1
     end
 
     def update_game_chat
@@ -44,7 +64,7 @@ module GameChatBot
     end
 
     def send_line_score
-      @channel.send_message <<~LINESCORE
+      send_message text: <<~LINESCORE
         #{@line_score.line_score_state}
 
         ```#{@line_score.line_score}```
@@ -55,7 +75,7 @@ module GameChatBot
       away_abbrev = @feed.game_data.dig('teams', 'away', 'abbreviation')
       home_abbrev = @feed.game_data.dig('teams', 'home', 'abbreviation')
 
-      @channel.send_message <<~MESSAGE
+      send_message text: <<~MESSAGE
         **#{away_abbrev}:** #{team_lineup('away')}
         **#{home_abbrev}:** #{team_lineup('home')}
       MESSAGE
@@ -65,9 +85,9 @@ module GameChatBot
       team_id = BaseballDiscord::Utilities.find_team_by_name(input)
 
       if @feed.game_data.dig('teams', 'away', 'id') == team_id
-        @channel.send_message team_lineup('away')
+        send_message text: team_lineup('away')
       elsif @feed.game_data.dig('teams', 'home', 'id') == team_id
-        @channel.send_message team_lineup('home')
+        send_message text: team_lineup('home')
       else
         return event.message.react '❓'
       end
@@ -82,7 +102,7 @@ module GameChatBot
         }
       end
 
-      @channel.send_embed '', fields: umpires
+      send_embed embed: { fields: umpires }
     end
 
     protected
@@ -153,7 +173,7 @@ module GameChatBot
 
       @bot.home_run_alert(embed) if play.dig('result', 'event') == 'Home Run'
 
-      @channel.send_embed '', embed
+      send_message embed: embed
     end
 
     def post_interesting_actions(events)
@@ -164,11 +184,10 @@ module GameChatBot
 
       return if actions.none?
 
-      @channel.send_embed(
-        '',
+      send_message embed: {
         description: actions.join("\n"),
         color: '999999'.to_i(16)
-      )
+      }
     end
 
     def update_next_event
@@ -202,7 +221,7 @@ module GameChatBot
     def output_alert(alert)
       embed = Alert.new(alert, self).embed
 
-      @channel.send_embed '', embed if embed
+      send_message embed: embed if embed
 
       send_lineups if alert['description']['Lineups posted']
 
