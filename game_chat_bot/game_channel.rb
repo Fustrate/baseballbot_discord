@@ -28,12 +28,16 @@ module GameChatBot
       @muted = true
 
       bot.redis.del "#{redis_key}_unmuted"
+
+      @channel.send_message 'Game feed muted. Use `!start` to unmute.'
     end
 
     def unmute!
       @muted = false
 
       bot.redis.set "#{redis_key}_unmuted", 1
+
+      @channel.send_message 'Game feed unmuted. Use `!stop` to mute.'
     end
 
     def update_game_chat
