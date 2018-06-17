@@ -54,15 +54,19 @@ module GameChatBot
       the_count.join('-')
     end
 
+    def pitcher
+      "#{@play.dig('matchup', 'pitchHand', 'code')}HP " +
+        @play.dig('matchup', 'pitcher', 'fullName')
+    end
+
     def resulting_context
       outs = @game.feed.linescore['outs']
 
-      return { text: '3 Outs' } if outs == 3
-
       text = [
         "#{outs} #{outs == 1 ? 'Out' : 'Outs'}",
-        runners
-      ].join(', ')
+        (runners unless outs == 3),
+        pitcher
+      ].compact.join(', ')
 
       { text: text }
     end
