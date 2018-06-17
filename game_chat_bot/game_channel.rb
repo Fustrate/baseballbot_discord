@@ -139,6 +139,8 @@ module GameChatBot
     end
 
     def process_play(play, events_after: -1)
+      return unless play
+
       post_interesting_actions play['playEvents'][(events_after + 1)..-1]
 
       @last_play = play
