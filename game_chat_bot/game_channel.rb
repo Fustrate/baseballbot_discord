@@ -112,68 +112,36 @@ module GameChatBot
     end
 
     def output_plays
-      @last_event = @bot.redis.get "#{redis_key}_last_event"
+      @next_event = @bot.redis.get "#{redis_key}_next_event"
 
-      return process_plays_since_last_event if @last_event
+      return process_next_plays if @next_event
 
       process_plays @feed.plays['allPlays']
+
+      update_next_event
     end
 
-    def process_plays_since_last_event
-      play_id, event_id = @last_event.split(',').map(&:to_i)
+    def process_next_plays
+      play_id, event_id = @next_event.split(',').map(&:to_i)
 
-      process_unfinished_event @feed.plays['allPlays'][play_id], event_id
+      process_play @feed.plays['allPlays'][play_id], events_after: event_id
 
       process_plays @feed.plays['allPlays'][(play_id + 1)..-1]
     end
 
-    def process_unfinished_event(play, event_id)
-      return unless play['playEvents'].length - 1 > event_id
-
-      process_play play, events_after: event_id
-
-      update_last_event play
-    end
-
-    def last_actual_plays(plays, count)
-      plays.select { |play| play['playEvents'].any? }.last(count)
+    def last_eventful_plays(plays, count)
+      plays&.select { |play| play['playEvents'].any? }&.last(count) || []
     end
 
     def process_plays(plays)
-      return if plays&.none?
-
       # If we missed some things, oh well
-      last_plays = last_actual_plays(plays, 3)
-
-      return if last_plays.none?
-
-      last_plays.each { |play| process_play(play) }
-
-      update_last_event(last_plays.last)
-    end
-
-    def update_last_event(play)
-      value = [
-        play['atBatIndex'],
-        play['playEvents'].length - 1
-      ]
-
-      # We have to rewind if this is complete-but-not-complete
-      value[1] -= 1 if incomplete_but_in_play?(play)
-
-      return if value.join(',') == @last_event
-
-      @bot.redis.set "#{redis_key}_last_event", value.join(',')
-    end
-
-    def incomplete_but_in_play?(play)
-      return false if play['about']['isComplete']
-
-      play.dig('playEvents', -1, 'details', 'isInPlay')
+      last_eventful_plays(plays, 3).each { |play| process_play(play) }
     end
 
     def process_play(play, events_after: -1)
       post_interesting_actions play['playEvents'][(events_after + 1)..-1]
+
+      @last_play = play
 
       return unless play.dig('about', 'isComplete')
 
@@ -185,6 +153,8 @@ module GameChatBot
     end
 
     def post_interesting_actions(events)
+      return unless events&.any?
+
       actions = events.select { |event| event['type'] == 'action' }
         .map { |action| action.dig('details', 'description') }
 
@@ -196,6 +166,22 @@ module GameChatBot
         color: '999999'.to_i(16)
       )
     end
+
+    def update_next_event
+      return unless @last_play
+
+      value = if @last_play.dig('about', 'isComplete')
+                [@last_play['atBatIndex'] + 1, 0]
+              else
+                [@last_play['atBatIndex'], @last_play['playEvents'].length]
+              end
+
+      return if value.join(',') == @next_event
+
+      @bot.redis.set "#{redis_key}_next_event", value.join(',')
+    end
+
+    # @!group Alerts
 
     def output_alerts
       return unless @feed.game_data
@@ -221,5 +207,7 @@ module GameChatBot
       # Stop trying to update
       @game_over = true
     end
+
+    # @!endgroup Alerts
   end
 end
