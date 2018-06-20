@@ -33,7 +33,9 @@ module GameChatBot
     end
 
     def home_run_alert(embed)
-      channel(457653686118907936).send_embed '', embed
+      @scheduler.in('15s') do
+        channel(457653686118907936).send_embed '', embed
+      end
     end
 
     protected

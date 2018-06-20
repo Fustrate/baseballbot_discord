@@ -63,7 +63,9 @@ module GameChatBot
 
       output_alerts
 
-      @channel.topic = @line_score.line_score_state
+      @bot.scheduler.in('15s') do
+        @channel.topic = @line_score.line_score_state
+      end
     rescue Net::OpenTimeout, SocketError
       nil
     end
@@ -191,7 +193,7 @@ module GameChatBot
 
       @bot.home_run_alert(embed) if play.dig('result', 'event') == 'Home Run'
 
-      send_message embed: embed, at: Time.parse(play['playEndTime']) + 20
+      send_message embed: embed, at: Time.parse(play['playEndTime']) + 15
     end
 
     def post_interesting_actions(events)
@@ -240,7 +242,7 @@ module GameChatBot
       embed = Alert.new(alert, self).embed
 
       # Alerts don't have a timestamp, so wait 20 seconds by default.
-      send_message embed: embed, at: Time.now + 20 if embed
+      send_message embed: embed, at: Time.now + 15 if embed
 
       send_lineups if alert['description']['Lineups posted']
 
