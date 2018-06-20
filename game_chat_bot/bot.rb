@@ -17,7 +17,7 @@ require_relative 'play'
 
 module GameChatBot
   class Bot < Discordrb::Commands::CommandBot
-    attr_reader :client, :redis
+    attr_reader :client, :redis, :scheduler
 
     def initialize(attributes = {})
       @games = {}
@@ -59,9 +59,9 @@ module GameChatBot
     end
 
     def start_loop
-      scheduler = Rufus::Scheduler.new
+      @scheduler = Rufus::Scheduler.new
 
-      scheduler.every('20s') { update_games }
+      @scheduler.every('20s') { update_games }
 
       # Start right away
       update_games

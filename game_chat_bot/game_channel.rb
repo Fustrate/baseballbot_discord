@@ -18,10 +18,16 @@ module GameChatBot
       @unmuted = bot.redis.get("#{redis_key}_unmuted")
     end
 
-    def send_message(text: '', embed: nil)
+    def send_message(text: '', embed: nil, at: nil)
       return unless @unmuted
 
-      @channel.send_message text, false, embed
+      if delay
+        @bot.scheduler.at(at) do
+          @channel.send_message text, false, embed
+        end
+      else
+        @channel.send_message text, false, embed
+      end
     end
 
     def autoupdate(new_state)
@@ -185,7 +191,7 @@ module GameChatBot
 
       @bot.home_run_alert(embed) if play.dig('result', 'event') == 'Home Run'
 
-      send_message embed: embed
+      send_message embed: embed, at: Time.parse(play['playEndTime']) + 20
     end
 
     def post_interesting_actions(events)
@@ -233,7 +239,8 @@ module GameChatBot
     def output_alert(alert)
       embed = Alert.new(alert, self).embed
 
-      send_message embed: embed if embed
+      # Alerts don't have a timestamp, so wait 20 seconds by default.
+      send_message embed: embed, at: Time.now + 20 if embed
 
       send_lineups if alert['description']['Lineups posted']
 
