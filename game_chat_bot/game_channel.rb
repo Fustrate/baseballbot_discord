@@ -21,7 +21,7 @@ module GameChatBot
     def send_message(text: '', embed: nil, at: nil)
       return unless @unmuted
 
-      if delay
+      if at
         @bot.scheduler.at(at) do
           @channel.send_message text, false, embed
         end
