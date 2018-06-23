@@ -27,10 +27,8 @@ module GameChatBot
       {
         title: @game.line_score.line_score_inning,
         color: '109799'.to_i(16),
+        fields: next_up,
         description: <<~DESCRIPTION
-          Due Up:
-          #{next_up.join("\n")}
-
           ```
           #{@game.line_score.rhe_table}
           ```
@@ -39,9 +37,14 @@ module GameChatBot
     end
 
     def next_up
-      @game.feed.live_data.dig('linescore', 'offense')
+      players = @game.feed.live_data.dig('linescore', 'offense')
         .values_at('batter', 'onDeck', 'inHole')
-        .map.with_index { |player, i| "#{i + 1}. #{player['fullName']}" }
+
+      [
+        { name: 'At Bat', value: players[0]['fullName'], inline: true },
+        { name: 'On Deck', value: players[1]['fullName'], inline: true },
+        { name: 'In the Hole', value: players[2]['fullName'], inline: true }
+      ]
     end
 
     def end_of_game_embed
