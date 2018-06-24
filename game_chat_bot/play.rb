@@ -36,7 +36,7 @@ module GameChatBot
     end
 
     def description
-      description = "#{team_emoji} #{squish @play.dig('result', 'description')}"
+      description = squish @play.dig('result', 'description')
 
       return description unless @play.dig('about', 'isScoringPlay')
 
@@ -86,7 +86,7 @@ module GameChatBot
 
     def strikeout_or_walk_embed
       {
-        title: "#{team_abbreviation} #{type} (#{count})",
+        title: "#{team_emoji} #{type} (#{count})",
         description: description,
         color: color,
         footer: resulting_context
@@ -95,7 +95,7 @@ module GameChatBot
 
     def home_run_embed
       {
-        title: "#{team_abbreviation} #{type} (#{count})",
+        title: "#{team_emoji} #{type} (#{count})",
         description: description,
         color: color,
         fields: home_run_fields,
@@ -131,7 +131,7 @@ module GameChatBot
 
     def basic_embed
       {
-        title: "#{team_abbreviation} #{type} (#{count})",
+        title: "#{team_emoji} #{type} (#{count})",
         description: description,
         color: color,
         footer: resulting_context
@@ -147,7 +147,7 @@ module GameChatBot
     end
 
     def team_emoji
-      @bot.team_emoji(team_abbreviation)
+      @game.bot.team_emoji(team_abbreviation)
     end
 
     def color
