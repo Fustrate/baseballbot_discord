@@ -36,7 +36,7 @@ module GameChatBot
     end
 
     def description
-      description = squish @play.dig('result', 'description')
+      description = "#{team_emoji} #{squish @play.dig('result', 'description')}"
 
       return description unless @play.dig('about', 'isScoringPlay')
 
@@ -144,6 +144,10 @@ module GameChatBot
 
     def team_abbreviation
       @game.feed.game_data.dig('teams', team_flag, 'abbreviation')
+    end
+
+    def team_emoji
+      ":#{team_abbreviation.downcase}:"
     end
 
     def color
