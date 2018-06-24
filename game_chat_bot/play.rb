@@ -86,7 +86,7 @@ module GameChatBot
 
     def strikeout_or_walk_embed
       {
-        title: "#{team_emoji} #{type} (#{count})",
+        title: "#{team_abbreviation} #{type} (#{count})",
         description: description,
         color: color,
         footer: resulting_context
@@ -95,7 +95,7 @@ module GameChatBot
 
     def home_run_embed
       {
-        title: "#{team_emoji} #{type} (#{count})",
+        title: "#{team_abbreviation} #{type} (#{count})",
         description: description,
         color: color,
         fields: home_run_fields,
@@ -131,7 +131,7 @@ module GameChatBot
 
     def basic_embed
       {
-        title: "#{team_emoji} #{type} (#{count})",
+        title: "#{team_abbreviation} #{type} (#{count})",
         description: description,
         color: color,
         footer: resulting_context
@@ -142,10 +142,8 @@ module GameChatBot
       @play.dig('about', 'halfInning') == 'top' ? 'away' : 'home'
     end
 
-    def team_emoji
-      abbr = @game.feed.game_data.dig('teams', team_flag, 'abbreviation')
-
-      ":#{abbr.downcase}:"
+    def team_abbreviation
+      @game.feed.game_data.dig('teams', team_flag, 'abbreviation')
     end
 
     def color
