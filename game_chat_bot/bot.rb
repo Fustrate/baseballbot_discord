@@ -14,9 +14,12 @@ require_relative 'alert'
 require_relative 'game_channel'
 require_relative 'line_score'
 require_relative 'play'
+require_relative 'emoji'
 
 module GameChatBot
   class Bot < Discordrb::Commands::CommandBot
+    include GameChatBot::Emoji
+
     attr_reader :client, :redis, :scheduler
 
     def initialize(attributes = {})

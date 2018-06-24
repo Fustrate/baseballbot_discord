@@ -147,7 +147,7 @@ module GameChatBot
     end
 
     def team_emoji
-      ":#{team_abbreviation.downcase}:"
+      @bot.team_emoji(team_abbreviation)
     end
 
     def color
