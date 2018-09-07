@@ -45,6 +45,8 @@ module BaseballDiscord
 
         def run
           start_verification_for_server find_server_by_name(args.join(' '))
+        rescue UserErro => error
+          send_pm error.message
         end
 
         def send_welcome_pm
