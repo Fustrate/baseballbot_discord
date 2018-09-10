@@ -66,7 +66,7 @@ module GameChatBot
       @bot.scheduler.in('15s') do
         @channel.topic = @line_score.line_score_state
       end
-    rescue Net::OpenTimeout, SocketError
+    rescue Net::OpenTimeout, SocketError, RestClient::NotFound
       nil
     end
 
