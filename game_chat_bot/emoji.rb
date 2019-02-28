@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 module GameChatBot
+  # Keeps track of all team logo emojis for the /r/baseball discord server.
   module Emoji
     TEAM_EMOJI = {
-      # These must be in largest-to-smallest match order for the regexp to work
       'laa' => ':laa:451995933086056448',
       'ari' => ':ari:452001179191345153',
       'bal' => ':bal:451991444614414336',

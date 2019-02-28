@@ -95,9 +95,9 @@ module BaseballDiscord
 
       players = [players] if players.is_a? Hash
 
-      players.sort_by do |player|
+      players.max_by do |player|
         [player['active_sw'] == 'Y' ? 1 : 0, player['pro_debut_date']]
-      end.reverse.first
+      end
     end
 
     def self.division_for_team(team_id)
@@ -116,15 +116,17 @@ module BaseballDiscord
 
       if match && match[:team]
         # yay we got a team
-        if match[:date] && !match[:date].strip.empty?
-          [match[:team], Chronic.parse(match[:date], context: :past).to_date]
-        else
-          [match[:team], Time.now]
-        end
+        [match[:team], date_for_match(match[:date])]
       else
         # no team :(
         [nil, Chronic.parse(input, context: :past).to_date]
       end
+    end
+
+    def self.date_for_match(date)
+      return Time.now unless date && !date.strip.empty?
+
+      Chronic.parse(date, context: :past).to_date
     end
 
     def self.team_names_regexp

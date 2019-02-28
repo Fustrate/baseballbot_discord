@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module GameChatBot
+  # Handles everything related to having a channel for a specific game.
   class GameChannel
     attr_reader :bot, :channel, :feed, :game_pk, :line_score, :game_over
 

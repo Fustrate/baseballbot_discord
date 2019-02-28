@@ -17,6 +17,7 @@ require_relative 'play'
 require_relative 'emoji'
 
 module GameChatBot
+  # The master bot that controls all of the game channels
   class Bot < Discordrb::Commands::CommandBot
     include GameChatBot::Emoji
 
@@ -55,8 +56,6 @@ module GameChatBot
       command(:autoupdate) do |event, *args|
         feed_for_event(event)&.autoupdate(args.join(' '))
       end
-
-      # command(:update) { |event| feed_for_event(event)&.update }
     end
 
     def feed_for_event(event)
@@ -89,12 +88,8 @@ module GameChatBot
 
         next unless chan && @games[chan.id]&.game_pk != game_pk
 
-        @games[chan.id] = game_channel(game_pk, chan)
+        @games[chan.id] = GameChannel.new(self, game_pk, channel)
       end
-    end
-
-    def game_channel(game_pk, channel)
-      GameChannel.new(self, game_pk, channel, @client.live_feed(game_pk))
     end
   end
 end

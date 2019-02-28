@@ -30,7 +30,7 @@ module BaseballDiscord
           'eventTypes=primary&scheduleTypes=games&hydrate=team' \
           '(venue(timezone)),game(content(summary)),linescore,broadcasts(all)'
 
-          PREGAME_STATUSES = /
+        PREGAME_STATUSES = /
           Preview|Warmup|Pre-Game|Delayed Start|Scheduled
         /x.freeze
 
