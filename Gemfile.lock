@@ -1,45 +1,46 @@
 GIT
   remote: https://github.com/meew0/discordrb.git
-  revision: bd1068ed9279529d60aef96751c4a56364983c5b
+  revision: c45d57b16f51257e96b7b26d6ad9e2b134418432
   specs:
-    discordrb (3.2.1)
-      discordrb-webhooks (~> 3.2.0.1)
+    discordrb (3.3.0)
+      discordrb-webhooks (~> 3.3.0)
       ffi (>= 1.9.24)
       opus-ruby
-      rbnacl (~> 3.4.0)
+      rbnacl (~> 5.0)
       rest-client (>= 2.1.0.rc1)
       websocket-client-simple (>= 0.3.0)
-    discordrb-webhooks (3.2.0.1)
+    discordrb-webhooks (3.3.0)
       rest-client (>= 2.1.0.rc1)
 
 GIT
   remote: https://github.com/redis/redis-rb.git
-  revision: 99325d42f411fd29081a82759d2ef719c246581e
+  revision: df07a4c90413ed5dda7bc8fe928b00aaad5462fa
   specs:
-    redis (4.0.2)
+    redis (4.1.0)
 
 GEM
   remote: https://rubygems.org/
   specs:
-    addressable (2.5.2)
+    addressable (2.6.0)
       public_suffix (>= 2.0.2, < 4.0)
     chronic (0.10.2)
-    daemons (1.2.6)
+    concurrent-ruby (1.1.4)
+    daemons (1.3.1)
     domain_name (0.5.20180417)
       unf (>= 0.0.5, < 1.0.0)
     em-hiredis (0.3.1)
       eventmachine (~> 1.0)
       hiredis (~> 0.6.0)
-    et-orbi (1.1.6)
+    et-orbi (1.1.7)
       tzinfo
     event_emitter (0.2.6)
     eventmachine (1.2.7)
-    ffi (1.9.25)
-    fugit (1.1.6)
-      et-orbi (~> 1.1, >= 1.1.6)
+    ffi (1.10.0)
+    fugit (1.1.8)
+      et-orbi (~> 1.1, >= 1.1.7)
       raabro (~> 1.1)
-    hana (1.3.4)
-    hiredis (0.6.1)
+    hana (1.3.5)
+    hiredis (0.6.3)
     http (2.2.2)
       addressable (~> 2.3)
       http-cookie (~> 1.0)
@@ -50,7 +51,8 @@ GEM
       domain_name (~> 0.5)
     http-form_data (1.0.3)
     http_parser.rb (0.6.0)
-    httparty (0.16.2)
+    httparty (0.16.4)
+      mime-types (~> 3.0)
       multi_xml (>= 0.5.2)
     mime-types (3.2.2)
       mime-types-data (~> 3.2015)
@@ -67,8 +69,8 @@ GEM
       ffi
     public_suffix (3.0.3)
     raabro (1.1.6)
-    rake (12.3.1)
-    rbnacl (3.4.0)
+    rake (12.3.2)
+    rbnacl (5.0.0)
       ffi
     redd (0.8.8)
       http (~> 2.2)
@@ -81,13 +83,12 @@ GEM
       fugit (~> 1.1, >= 1.1.5)
     terminal-table (1.8.0)
       unicode-display_width (~> 1.1, >= 1.1.1)
-    thread_safe (0.3.6)
-    tzinfo (1.2.5)
-      thread_safe (~> 0.1)
+    tzinfo (2.0.0)
+      concurrent-ruby (~> 1.0)
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.5)
-    unicode-display_width (1.4.0)
+    unicode-display_width (1.4.1)
     websocket (1.2.8)
     websocket-client-simple (0.3.0)
       event_emitter
@@ -111,7 +112,7 @@ DEPENDENCIES
   tzinfo
 
 RUBY VERSION
-   ruby 2.5.1p57
+   ruby 2.6.1p33
 
 BUNDLED WITH
-   1.16.5
+   1.17.2
