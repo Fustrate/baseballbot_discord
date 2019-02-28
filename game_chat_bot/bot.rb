@@ -10,17 +10,21 @@ require 'time'
 require_relative '../baseball_discord/utilities'
 require_relative 'output_helpers'
 
-require_relative 'alert'
-require_relative 'game_channel'
-require_relative 'line_score'
-require_relative 'play'
 require_relative 'emoji'
+require_relative 'game_channel'
+
+require_relative 'embeds/alert'
+require_relative 'embeds/end_of_game'
+require_relative 'embeds/end_of_inning'
+
+require_relative 'embeds/play'
+require_relative 'embeds/home_run'
+require_relative 'embeds/interesting'
+require_relative 'embeds/strikeout_or_walk'
 
 module GameChatBot
   # The master bot that controls all of the game channels
   class Bot < Discordrb::Commands::CommandBot
-    include GameChatBot::Emoji
-
     attr_reader :client, :redis, :scheduler
 
     def initialize(attributes = {})

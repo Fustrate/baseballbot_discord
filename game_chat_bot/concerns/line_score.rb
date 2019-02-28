@@ -1,19 +1,13 @@
 # frozen_string_literal: true
 
 module GameChatBot
-  class LineScore
-    include OutputHelpers
-
+  module LineScore
     POSTGAME_STATUSES = /Final|Game Over|Postponed|Completed Early/.freeze
-
-    def initialize(game)
-      @game = game
-    end
 
     def line_score
       rows = base_line_score
 
-      @game.feed.live_data.dig('linescore', 'innings').each do |inning|
+      @feed.live_data.dig('linescore', 'innings').each do |inning|
         rows[2][inning['num']] = inning.dig('away', 'runs')
         rows[3][inning['num']] = inning.dig('home', 'runs')
       end
@@ -35,7 +29,7 @@ module GameChatBot
     end
 
     def line_score_inning
-      linescore = @game.feed.live_data['linescore']
+      linescore = @feed.live_data['linescore']
 
       format(
         '%<side>s of the %<inning>s',
@@ -56,15 +50,11 @@ module GameChatBot
     end
 
     def line_score_state
-      status = @game.feed.game_data.dig('status', 'abstractGameState')
-
-      if POSTGAME_STATUSES.match?(status)
-        return innings == 9 ? 'Final' : "Final/#{innings}"
-      end
+      return innings == 9 ? 'Final' : "Final/#{innings}" if game_over?
 
       str = line_score_inning
 
-      linescore = @game.feed.live_data['linescore']
+      linescore = @feed.live_data['linescore']
 
       if %w[Top Bottom].include?(linescore['inningState'])
         outs = linescore['outs'] == 1 ? '1 Out' : "#{linescore['outs']} Outs"
@@ -75,19 +65,32 @@ module GameChatBot
       str
     end
 
+    def line_score_block
+      <<~LINESCORE
+        #{@line_score.line_score_state}
+
+        ```#{@line_score.line_score}```
+      LINESCORE
+    end
+
     protected
 
     def innings
-      [@game.feed.live_data.dig('linescore', 'innings').count, 9].max
+      [@feed.live_data.dig('linescore', 'innings').count, 9].max
     end
 
     def team_rhe(flag)
-      @game.feed.live_data.dig('linescore', 'teams', flag)
+      @feed.live_data.dig('linescore', 'teams', flag)
         .values_at('runs', 'hits', 'errors')
     end
 
     def team_name(flag)
-      @game.feed.game_data.dig('teams', flag, 'abbreviation')
+      @feed.game_data.dig('teams', flag, 'abbreviation')
+    end
+
+    def game_over?
+      POSTGAME_STATUSES
+        .match?(@feed.game_data.dig('status', 'abstractGameState'))
     end
   end
 end

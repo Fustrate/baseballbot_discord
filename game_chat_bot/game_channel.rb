@@ -1,16 +1,30 @@
 # frozen_string_literal: true
 
+require_relative 'concerns/alerts'
+require_relative 'concerns/game_feed'
+require_relative 'concerns/line_score'
+require_relative 'concerns/plays'
+
+require_relative 'output_helpers'
+
 module GameChatBot
   # Handles everything related to having a channel for a specific game.
   class GameChannel
-    attr_reader :bot, :channel, :feed, :game_pk, :line_score, :game_over
+    include Alerts
+    include GameFeed
+    include LineScore
+    include Plays
 
-    def initialize(bot, game_pk, channel, feed)
+    include OutputHelpers
+
+    attr_reader :bot, :channel, :feed, :game_pk, :game_over
+
+    def initialize(bot, game_pk, channel)
       @bot = bot
 
       @game_pk = game_pk
       @channel = channel
-      @feed = feed
+      @feed = @bot.client.live_feed(game_pk)
 
       @starts_at = Time.parse @feed.game_data.dig('datetime', 'dateTime')
       @last_update = Time.now - 3600 # So we can at least do one update
@@ -39,36 +53,43 @@ module GameChatBot
       nil
     end
 
-    def mute!
-      @unmuted = false
-
-      bot.redis.del "#{redis_key}_unmuted"
-
-      'Autoupdates are off. Use `!autoupdate on` to unmute.'
-    end
-
-    def unmute!
-      @unmuted = true
-
-      bot.redis.set "#{redis_key}_unmuted", 1
-
-      'Autoupdates are on. Use `!autoupdate off` to mute.'
-    end
-
     def update
       return unless ready_to_update? && @feed.update!
 
-      @line_score = LineScore.new(self)
-
       output_plays
-
       output_alerts
 
       @bot.scheduler.in('15s') do
-        @channel.topic = @line_score.line_score_state
+        @channel.topic = line_score_state
       end
     rescue Net::OpenTimeout, SocketError, RestClient::NotFound
       nil
+    end
+
+    def send_line_score
+      send_message text: line_score_block
+    end
+
+    def send_lineups
+      send_message text: lineups
+    end
+
+    def send_lineup(event, input)
+      lineup = team_lineup(input)
+
+      return event.message.react('❓') unless lineup
+
+      send_message(text: lineup)
+    end
+
+    def send_umpires
+      send_embed embed: { fields: fields_for_umpires }
+    end
+
+    protected
+
+    def redis_key
+      @redis_key ||= "#{@channel.id}_#{@game_pk}"
     end
 
     def ready_to_update?
@@ -84,175 +105,20 @@ module GameChatBot
       true
     end
 
-    def send_line_score
-      send_message text: <<~LINESCORE
-        #{@line_score.line_score_state}
+    def mute!
+      @unmuted = false
 
-        ```#{@line_score.line_score}```
-      LINESCORE
+      bot.redis.del "#{redis_key}_unmuted"
+
+      'Autoupdates are off. Use `!autoupdate on` to unmute.'
     end
 
-    def send_lineups
-      away_abbrev = @feed.game_data.dig('teams', 'away', 'abbreviation')
-      home_abbrev = @feed.game_data.dig('teams', 'home', 'abbreviation')
+    def unmute!
+      @unmuted = true
 
-      send_message text: <<~MESSAGE
-        **#{away_abbrev}:** #{team_lineup('away')}
-        **#{home_abbrev}:** #{team_lineup('home')}
-      MESSAGE
+      bot.redis.set "#{redis_key}_unmuted", 1
+
+      'Autoupdates are on. Use `!autoupdate off` to mute.'
     end
-
-    def send_lineup(event, input)
-      team_id = BaseballDiscord::Utilities.find_team_by_name(input)
-
-      if @feed.game_data.dig('teams', 'away', 'id') == team_id
-        send_message text: team_lineup('away')
-      elsif @feed.game_data.dig('teams', 'home', 'id') == team_id
-        send_message text: team_lineup('home')
-      else
-        return event.message.react '❓'
-      end
-    end
-
-    def send_umpires
-      umpires = @feed.live_data.dig('boxscore', 'officials').map do |umpire|
-        {
-          name: umpire['officialType'],
-          value: umpire.dig('official', 'fullName'),
-          inline: true
-        }
-      end
-
-      send_embed embed: { fields: umpires }
-    end
-
-    protected
-
-    def team_lineup(flag)
-      ids = @feed.boxscore.dig('teams', flag, 'battingOrder')
-        .map { |id| "ID#{id}" }
-
-      lineup_positions(flag, ids)
-        .zip(lineup_names(ids))
-        .map { |pos, name| "#{name} *#{pos}*" }.join(' | ')
-    end
-
-    def lineup_names(ids)
-      @feed.game_data['players'].values_at(*ids)
-        .map { |player| player['lastName'] }
-    end
-
-    def lineup_positions(flag, ids)
-      @feed.boxscore.dig('teams', flag, 'players')
-        .values_at(*ids)
-        .map { |player| player.dig('position', 'abbreviation') }
-    end
-
-    def redis_key
-      @redis_key ||= "#{@channel.id}_#{@game_pk}"
-    end
-
-    def output_plays
-      @next_event = @bot.redis.get "#{redis_key}_next_event"
-
-      if @next_event
-        process_next_plays
-      else
-        process_plays @feed.plays['allPlays']
-      end
-
-      update_next_event
-    end
-
-    def process_next_plays
-      play_id, event_id = @next_event.split(',').map(&:to_i)
-
-      process_play @feed.plays['allPlays'][play_id], events_after: event_id
-
-      process_plays @feed.plays['allPlays'][(play_id + 1)..-1]
-    end
-
-    def last_eventful_plays(plays, count)
-      plays&.select { |play| play['playEvents'].any? }&.last(count) || []
-    end
-
-    def process_plays(plays)
-      # If we missed some things, oh well
-      last_eventful_plays(plays, 3).each { |play| process_play(play) }
-    end
-
-    def process_play(play, events_after: -1)
-      return unless play
-
-      post_interesting_actions play['playEvents'][(events_after + 1)..-1]
-
-      @last_play = play
-
-      return unless play.dig('about', 'isComplete')
-
-      embed = Play.new(play, self).embed
-
-      @bot.home_run_alert(embed) if play.dig('result', 'event') == 'Home Run'
-
-      send_message embed: embed, at: Time.parse(play['playEndTime']) + 15
-    end
-
-    def post_interesting_actions(events)
-      return unless events&.any?
-
-      actions = events.select { |event| event['type'] == 'action' }
-        .map { |action| action.dig('details', 'description') }
-
-      return if actions.none?
-
-      send_message embed: {
-        description: actions.join("\n"),
-        color: '999999'.to_i(16)
-      }
-    end
-
-    def update_next_event
-      return unless @last_play
-
-      value = if @last_play.dig('about', 'isComplete')
-                [@last_play['atBatIndex'] + 1, 0]
-              else
-                [@last_play['atBatIndex'], @last_play['playEvents'].length]
-              end
-
-      return if value.join(',') == @next_event
-
-      @bot.redis.set "#{redis_key}_next_event", value.join(',')
-    end
-
-    # @!group Alerts
-
-    def output_alerts
-      return unless @feed.game_data
-
-      @feed.game_data['alerts'].each do |alert|
-        next if @bot.redis.sismember "#{redis_key}_alerts", alert['alertId']
-
-        @bot.redis.sadd "#{redis_key}_alerts", alert['alertId']
-
-        output_alert(alert)
-      end
-    end
-
-    def output_alert(alert)
-      embed = Alert.new(alert, self).embed
-
-      # Alerts don't have a timestamp, so wait 20 seconds by default.
-      send_message embed: embed, at: Time.now + 15 if embed
-
-      send_lineups if alert['description']['Lineups posted']
-
-      return unless alert['category'] == 'game_over'
-
-      # Stop trying to update
-      @game_over = true
-    end
-
-    # @!endgroup Alerts
   end
 end
