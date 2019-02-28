@@ -18,13 +18,11 @@ module BaseballDiscord
           'https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=%<date>s&' \
           'hydrate=game(content(summary)),linescore,flags,team&t=%<t>d'
 
-        PREGAME_STATUSES = [
-          'Preview', 'Warmup', 'Pre-Game', 'Delayed Start', 'Scheduled'
-        ].freeze
+        PREGAME_STATUSES = /
+          Preview|Warmup|Pre-Game|Delayed Start|Scheduled
+        /x.freeze
 
-        POSTGAME_STATUSES = [
-          'Final', 'Game Over', 'Postponed', 'Completed Early'
-        ].freeze
+        POSTGAME_STATUSES = /Final|Game Over|Postponed|Completed Early/.freeze
 
         def run
           date = BaseballDiscord::Utilities.parse_date args.join(' ')
@@ -85,7 +83,7 @@ module BaseballDiscord
         def process_game(game)
           status = game.dig('status', 'abstractGameState')
 
-          return future_game(game) if PREGAME_STATUSES.include?(status)
+          return future_game(game) if PREGAME_STATUSES.match?(status)
 
           {
             away_name: game.dig('teams', 'away', 'team', 'abbreviation'),
@@ -130,7 +128,7 @@ module BaseballDiscord
         end
 
         def pre_or_post_game_status(game, status)
-          if POSTGAME_STATUSES.include?(status)
+          if POSTGAME_STATUSES.match?(status)
             innings = game.dig('linescore', 'currentInning')
 
             return innings == 9 ? 'F' : "F/#{innings}"

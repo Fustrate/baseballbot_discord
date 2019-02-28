@@ -4,9 +4,7 @@ module GameChatBot
   class LineScore
     include OutputHelpers
 
-    POSTGAME_STATUSES = [
-      'Final', 'Game Over', 'Postponed', 'Completed Early'
-    ].freeze
+    POSTGAME_STATUSES = /Final|Game Over|Postponed|Completed Early/.freeze
 
     def initialize(game)
       @game = game
@@ -60,7 +58,7 @@ module GameChatBot
     def line_score_state
       status = @game.feed.game_data.dig('status', 'abstractGameState')
 
-      if POSTGAME_STATUSES.include?(status)
+      if POSTGAME_STATUSES.match?(status)
         return innings == 9 ? 'Final' : "Final/#{innings}"
       end
 

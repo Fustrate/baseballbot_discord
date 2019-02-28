@@ -30,13 +30,11 @@ module BaseballDiscord
           'eventTypes=primary&scheduleTypes=games&hydrate=team' \
           '(venue(timezone)),game(content(summary)),linescore,broadcasts(all)'
 
-        PREGAME_STATUSES = [
-          'Preview', 'Warmup', 'Pre-Game', 'Delayed Start', 'Scheduled'
-        ].freeze
+          PREGAME_STATUSES = /
+          Preview|Warmup|Pre-Game|Delayed Start|Scheduled
+        /x.freeze
 
-        POSTGAME_STATUSES = [
-          'Final', 'Game Over', 'Postponed', 'Completed Early'
-        ].freeze
+        POSTGAME_STATUSES = /Final|Game Over|Postponed|Completed Early/.freeze
 
         def list_games(past_or_future)
           @past_or_future = past_or_future
@@ -199,7 +197,7 @@ module BaseballDiscord
         def include_game?(game)
           status = game.dig('status', 'abstractGameState')
 
-          (past? ? POSTGAME_STATUSES : PREGAME_STATUSES).include?(status)
+          (past? ? POSTGAME_STATUSES : PREGAME_STATUSES).match?(status)
         end
 
         def game_data(game)
