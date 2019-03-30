@@ -17,6 +17,8 @@ module GameChatBot
       end
 
       def post_at
+        return Time.now + 5 unless @play['playEndTime']
+
         Time.parse(@play['playEndTime']) + 15
       end
     end
