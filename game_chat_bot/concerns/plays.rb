@@ -10,7 +10,7 @@ module GameChatBot
 
         @bot.home_run_alert(embed) if play.is_a?(Embeds::HomeRun)
 
-        send_message embed, at: play.post_at
+        send_message embed: embed, at: play.post_at
       end
 
       update_next_event
