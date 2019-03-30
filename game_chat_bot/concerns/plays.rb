@@ -59,7 +59,7 @@ module GameChatBot
       [
         interesting_events(play, play['playEvents'][(after + 1)..-1]),
         (embed_for(play) if play.dig('about', 'isComplete'))
-      ].compact
+      ].flatten.compact
     end
 
     def embeds_for_plays(plays)
