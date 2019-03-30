@@ -68,7 +68,7 @@ module GameChatBot
       # If we missed some things, oh well
       plays
         .select { |play| play['playEvents'].any? }
-        .last(count)
+        .last(3)
         .map { |play| embeds_for_play(play) }
     end
 
