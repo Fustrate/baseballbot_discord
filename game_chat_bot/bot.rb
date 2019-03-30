@@ -90,7 +90,7 @@ module GameChatBot
       @redis.hgetall('live_games').each do |channel_name, game_pk|
         channel = find_channel(channel_name).first
 
-        next unless chan && @games[channel.id]&.game_pk != game_pk
+        next unless channel && @games[channel.id]&.game_pk != game_pk
 
         @games[channel.id] = GameChannel.new(self, game_pk, channel)
       end
