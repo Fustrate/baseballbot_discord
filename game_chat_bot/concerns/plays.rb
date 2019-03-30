@@ -8,7 +8,7 @@ module GameChatBot
       plays_starting_with(@next_event).each do |play|
         embed = play.embed
 
-        @bot.home_run_alert(embed) if play.type == 'Home Run'
+        @bot.home_run_alert(embed) if play.is_a?(Embeds::HomeRun)
 
         send_message embed, at: play.post_at
       end
@@ -69,7 +69,7 @@ module GameChatBot
       plays
         .select { |play| play['playEvents'].any? }
         .last(3)
-        .map { |play| embeds_for_play(play) }
+        .flat_map { |play| embeds_for_play(play) }
     end
 
     def interesting_events(play, events)
