@@ -37,7 +37,7 @@ module GameChatBot
       'mil' => ':mil:451999627655380994'
     }.freeze
 
-    def team_emoji(abbreviation)
+    def self.team_emoji(abbreviation)
       "<#{TEAM_EMOJI[abbreviation.downcase]}>"
     end
   end
