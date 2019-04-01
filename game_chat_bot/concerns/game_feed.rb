@@ -57,6 +57,9 @@ module GameChatBot
 
       return unless rows&.any?
 
+      rows.insert(3, :separator)
+      rows.insert(6, :separator)
+
       send_message text: lineup_table(flag, rows), force: true
 
       bot.redis.set "#{redis_key}_#{flag}_lineup_posted", 1
