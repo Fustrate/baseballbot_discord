@@ -6,7 +6,11 @@ module GameChatBot
       color_feed_items.each do |item|
         @bot.redis.sadd "#{redis_key}_color", item['guid']
 
-        send_message embed: color_feed_embed_for(item)
+        embed = color_feed_embed_for(item)
+
+        next unless embed
+
+        send_message embed: embed.to_h
       end
     end
 
