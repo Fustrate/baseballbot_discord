@@ -25,6 +25,7 @@ gem 'tzinfo'
 # Utilities
 gem 'rufus-scheduler'
 gem 'terminal-table'
+gem 'terrapin'
 
 group :development do
   gem 'minitest'
