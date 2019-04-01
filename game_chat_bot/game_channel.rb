@@ -59,6 +59,8 @@ module GameChatBot
       output_plays
       output_alerts
 
+      output_lineups
+
       @bot.scheduler.in('15s') do
         @channel.topic = line_score_state
       end

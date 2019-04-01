@@ -6,18 +6,21 @@ module GameChatBot
       away_abbrev = @feed.game_data.dig('teams', 'away', 'abbreviation')
       home_abbrev = @feed.game_data.dig('teams', 'home', 'abbreviation')
 
+      away_lineup = lineup_data('away').map { |pos, name| "#{name} *#{pos}*" }
+      home_lineup = lineup_data('home').map { |pos, name| "#{name} *#{pos}*" }
+
       <<~MESSAGE
-        **#{away_abbrev}:** #{lineup_for_team('away')}
-        **#{home_abbrev}:** #{lineup_for_team('home')}
+        **#{away_abbrev}:** #{away_lineup.join(' | ')}
+        **#{home_abbrev}:** #{home_lineup.join(' | ')}
       MESSAGE
     end
 
     def team_lineup(input)
       case BaseballDiscord::Utilities.find_team_by_name(input)
       when @feed.game_data.dig('teams', 'away', 'id')
-        lineup_for_team('away')
+        lineup_data('away').map { |pos, name| "#{name} *#{pos}*" }.join(' | ')
       when @feed.game_data.dig('teams', 'home', 'id')
-        lineup_for_team('home')
+        lineup_data('home').map { |pos, name| "#{name} *#{pos}*" }.join(' | ')
       else
         false
       end
@@ -37,15 +40,39 @@ module GameChatBot
       @feed.game_data.dig('status', 'abstractGameState') == 'Final'
     end
 
+    def output_lineups
+      # Once the game has started, don't bother
+      return true if Time.now >= @starts_at
+
+      output_team_lineup_table('home')
+      output_team_lineup_table('away')
+    end
+
     protected
 
-    def lineup_for_team(flag)
+    def output_team_lineup_table(flag)
+      return if bot.redis.get("#{redis_key}_#{flag}_lineup_posted")
+
+      rows = lineup_data(flag)
+
+      return unless rows&.any?
+
+      send_message text: lineup_table(flag, rows), force: true
+
+      bot.redis.set "#{redis_key}_#{flag}_lineup_posted", 1
+    end
+
+    def lineup_table(flag, rows)
+      table = Terminal::Table.new rows: rows, title: "#{team_name(flag)} Lineup"
+
+      format_table table
+    end
+
+    def lineup_data(flag)
       ids = @feed.boxscore.dig('teams', flag, 'battingOrder')
         .map { |id| "ID#{id}" }
 
-      lineup_positions(flag, ids)
-        .zip(lineup_names(ids))
-        .map { |pos, name| "#{name} *#{pos}*" }.join(' | ')
+      lineup_positions(flag, ids).zip(lineup_names(ids))
     end
 
     def lineup_names(ids)
