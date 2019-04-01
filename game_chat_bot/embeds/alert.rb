@@ -15,7 +15,7 @@ module GameChatBot
         @alert['alertId']
       end
 
-      def embed
+      def to_h
         {
           title: @title || titleize(@alert['category']),
           description: description,

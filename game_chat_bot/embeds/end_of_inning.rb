@@ -3,7 +3,7 @@
 module GameChatBot
   module Embeds
     class EndOfInning < Alert
-      def embed
+      def to_h
         {
           title: @channel.line_score_inning,
           color: '109799'.to_i(16),

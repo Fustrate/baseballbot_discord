@@ -7,7 +7,7 @@ module GameChatBot
       MINIMUM_SPEED = 110
       BORING_LAUNCH_ANGLE = (18..42).freeze
 
-      def embed
+      def to_h
         {
           title: "#{team_emoji} #{type} (#{count})",
           description: description,

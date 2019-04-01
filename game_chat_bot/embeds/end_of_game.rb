@@ -3,7 +3,7 @@
 module GameChatBot
   module Embeds
     class EndOfGame < Alert
-      def embed
+      def to_h
         {
           title: 'Game Over',
           color: 'ffffff'.to_i(16),

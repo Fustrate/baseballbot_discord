@@ -10,7 +10,7 @@ module GameChatBot
         @channel = channel
       end
 
-      def embed
+      def to_h
         {
           title: @item['des'],
           description: @item['description_tracking'],

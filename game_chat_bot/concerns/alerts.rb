@@ -6,25 +6,26 @@ module GameChatBot
 
     def output_alerts
       alerts.each do |alert|
-        @bot.redis.sadd "#{redis_key}_alerts", alert.id
+        @bot.redis.sadd "#{redis_key}_alerts", alert['alertId']
 
-        send_message embed: alert.embed, at: alert.post_at
+        embed = alert_embed_for(alert)
 
-        send_lineups if alert.description['Lineups posted']
+        send_message embed: embed.to_h, at: embed.post_at
+
+        send_lineups if embed.description['Lineups posted']
       end
     end
 
     def alerts
       return [] unless @feed.game_data
 
-      @feed.game_data['alerts']
-        .reject { |alert| IGNORE_ALERT_CATEGORIES.include?(alert['category']) }
-        .reject { |alert| posted_alert?(alert) }
-        .map { |alert| alert_embed_for(alert) }
+      @feed.game_data['alerts'].select { |alert| post_alert?(alert) }
     end
 
-    def posted_alert?(alert)
-      @bot.redis.sismember "#{redis_key}_alerts", alert['alertId']
+    def post_alert?(alert)
+      return false if IGNORE_ALERT_CATEGORIES.include?(alert['category'])
+
+      !@bot.redis.sismember "#{redis_key}_alerts", alert['alertId']
     end
 
     def alert_embed_for(alert)

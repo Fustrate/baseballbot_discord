@@ -21,7 +21,7 @@ module GameChatBot
         @channel = channel
       end
 
-      def embed
+      def to_h
         {
           title: "#{team_emoji} #{type} (#{count})",
           description: description,
