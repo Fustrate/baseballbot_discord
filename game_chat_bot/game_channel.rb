@@ -63,9 +63,7 @@ module GameChatBot
         @channel.topic = line_score_state
       end
 
-      if @feed.game_data.dig('status', 'abstractGameState') == 'Final'
-        @game_over = true
-      end
+      @game_over = true if game_ended?
     rescue Net::OpenTimeout, SocketError, RestClient::NotFound
       nil
     end

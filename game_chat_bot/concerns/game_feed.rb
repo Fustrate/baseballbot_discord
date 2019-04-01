@@ -33,6 +33,10 @@ module GameChatBot
       end
     end
 
+    def game_ended?
+      @feed.game_data.dig('status', 'abstractGameState') == 'Final'
+    end
+
     protected
 
     def lineup_for_team(flag)
