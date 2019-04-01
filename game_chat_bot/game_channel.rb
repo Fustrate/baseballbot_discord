@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'concerns/alerts'
+require_relative 'concerns/color_feed'
 require_relative 'concerns/game_feed'
 require_relative 'concerns/line_score'
 require_relative 'concerns/plays'
@@ -11,6 +12,7 @@ module GameChatBot
   # Handles everything related to having a channel for a specific game.
   class GameChannel
     include Alerts
+    include ColorFeed
     include GameFeed
     include LineScore
     include Plays
@@ -25,6 +27,7 @@ module GameChatBot
       @game_pk = game_pk
       @channel = channel
       @feed = @bot.client.live_feed(game_pk)
+      @color_feed = @bot.client.color_feed(game_pk)
 
       @starts_at = Time.parse @feed.game_data.dig('datetime', 'dateTime')
       @last_update = Time.now - 3600 # So we can at least do one update
@@ -59,6 +62,7 @@ module GameChatBot
       output_plays
       output_alerts
       output_lineups
+      process_color_feed
 
       @bot.scheduler.in('15s') do
         @channel.topic = line_score_state
