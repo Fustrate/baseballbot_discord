@@ -57,8 +57,8 @@ module GameChatBot
 
       return unless rows&.any?
 
-      rows.insert(3, :separator)
       rows.insert(6, :separator)
+      rows.insert(3, :separator)
 
       send_message text: lineup_table(flag, rows), force: true
 
