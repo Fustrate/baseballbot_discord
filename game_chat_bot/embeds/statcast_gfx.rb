@@ -32,7 +32,7 @@ module GameChatBot
       end
 
       def download_image
-        command = Terrapin::CommandLine.new('wget :remote :local')
+        command = Terrapin::CommandLine.new('wget', ':remote :local')
 
         output_dir = '/home/baseballbot/apps/baseballbot.io/shared/public/mlb'
 
