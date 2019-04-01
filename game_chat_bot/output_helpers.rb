@@ -10,6 +10,10 @@ module GameChatBot
       text&.tr('_', ' ')&.gsub(/\b[a-z]/, &:capitalize)
     end
 
+    def format_table(table)
+      "```\n#{prettify_table(table)}\n```"
+    end
+
     def prettify_table(table)
       top_border, *middle, bottom_border = table.to_s.lines.map(&:strip)
 
