@@ -2,7 +2,7 @@
 
 module GameChatBot
   module Embeds
-    class StatcastGfx < Color
+    class Video < Color
       include OutputHelpers
 
       def initialize(item, channel)
@@ -12,12 +12,11 @@ module GameChatBot
 
       def to_h
         {
-          title: @item.dig('data', 'details', 'des'),
-          description: @item.dig('data', 'details', 'description_tracking'),
-          image: {
-            url: @item['data']['url'],
-            height: 640,
-            width: 640
+          title: @item.dig('data', 'title'),
+          video: {
+            url: @item.dig('data', 'url', 0, '_'),
+            height: 720,
+            width: 1280
           },
           color: '999999'.to_i(16)
         }

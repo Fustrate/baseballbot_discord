@@ -30,6 +30,8 @@ module GameChatBot
       case item['group']
       when 'statcastGFX'
         Embeds::StatcastGfx.new(item, self)
+      when 'video'
+        Embeds::Video.new(item, self)
       end
     end
   end

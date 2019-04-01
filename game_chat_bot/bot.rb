@@ -23,6 +23,7 @@ require_relative 'embeds/home_run'
 require_relative 'embeds/interesting'
 require_relative 'embeds/statcast_gfx'
 require_relative 'embeds/strikeout_or_walk'
+require_relative 'embeds/video'
 
 module GameChatBot
   # The master bot that controls all of the game channels
