@@ -6,8 +6,6 @@ module GameChatBot
 
     def output_alerts
       alerts.each do |alert|
-        next if posted_alert?(alert)
-
         @bot.redis.sadd "#{redis_key}_alerts", alert.id
 
         send_message embed: alert.embed, at: alert.post_at
@@ -21,14 +19,15 @@ module GameChatBot
 
       @feed.game_data['alerts']
         .reject { |alert| IGNORE_ALERT_CATEGORIES.include?(alert['category']) }
-        .map { |alert| embed_for(alert) }
+        .reject { |alert| posted_alert?(alert) }
+        .map { |alert| alert_embed_for(alert) }
     end
 
     def posted_alert?(alert)
-      @bot.redis.sismember "#{redis_key}_alerts", alert.id
+      @bot.redis.sismember "#{redis_key}_alerts", alert['alertId']
     end
 
-    def embed_for(alert)
+    def alert_embed_for(alert)
       case alert['category']
       when 'game_over'
         Embeds::EndOfGame.new(alert, self)
