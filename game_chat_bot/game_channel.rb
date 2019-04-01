@@ -33,8 +33,8 @@ module GameChatBot
       @unmuted = bot.redis.get("#{redis_key}_unmuted")
     end
 
-    def send_message(text: '', embed: nil, at: nil)
-      return unless @unmuted
+    def send_message(text: '', embed: nil, at: nil, force: false)
+      return unless force || @unmuted
 
       if at
         @bot.scheduler.at(at) do
