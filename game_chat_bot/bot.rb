@@ -21,7 +21,6 @@ require_relative 'embeds/end_of_inning'
 require_relative 'embeds/play'
 require_relative 'embeds/home_run'
 require_relative 'embeds/interesting'
-require_relative 'embeds/social'
 require_relative 'embeds/statcast_gfx'
 require_relative 'embeds/strikeout_or_walk'
 
