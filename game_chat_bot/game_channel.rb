@@ -97,8 +97,8 @@ module GameChatBot
 
       return true if Time.now >= @starts_at
 
-      # Only update every ~5 minutes when the game hasn't started yet
-      return false unless @last_update + 300 <= Time.now
+      # Only update every ~30 minutes when the game hasn't started yet
+      return false unless @last_update + 1800 <= Time.now
 
       @last_update = Time.now
 
