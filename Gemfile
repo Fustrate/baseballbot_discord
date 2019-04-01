@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-ruby '2.6.1'
+ruby '2.6.2'
 
 # Run the script as a daemon
 gem 'daemons'
@@ -15,7 +15,7 @@ gem 'redis', git: 'https://github.com/redis/redis-rb.git'
 
 # Outside services
 gem 'discordrb', git: 'https://github.com/meew0/discordrb.git'
-gem 'mlb_stats_api'
+gem 'mlb_stats_api', '>= 0.2.3'
 gem 'redd'
 
 # Parse dates and times
