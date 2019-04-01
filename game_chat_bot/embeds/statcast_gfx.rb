@@ -28,13 +28,13 @@ module GameChatBot
       end
 
       def local_url
-        "https://baseballbot.io/mlb/#{@item['guid']}.png"
+        "https://baseballbot.io/system/mlb/#{@item['guid']}.png"
       end
 
       def download_image
         command = Terrapin::CommandLine.new('wget', '-O :local :remote')
 
-        output_dir = '/home/baseballbot/apps/baseballbot.io/shared/public/mlb'
+        output_dir = '/home/baseballbot/apps/baseballbot.io/shared/public/system/mlb'
 
         command.run(
           remote: @item['data']['url'],
