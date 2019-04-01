@@ -56,7 +56,7 @@ GEM
       multi_xml (>= 0.5.2)
     mime-types (3.2.2)
       mime-types-data (~> 3.2015)
-    mime-types-data (3.2018.0812)
+    mime-types-data (3.2019.0331)
     minitest (5.11.3)
     mlb_stats_api (0.2.1)
       hana (~> 1.3)
