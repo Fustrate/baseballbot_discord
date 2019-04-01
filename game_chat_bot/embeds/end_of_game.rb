@@ -16,10 +16,6 @@ module GameChatBot
           DESCRIPTION
         }
       end
-
-      def game_over?
-        true
-      end
     end
   end
 end

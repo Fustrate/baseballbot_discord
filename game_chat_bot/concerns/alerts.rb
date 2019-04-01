@@ -13,9 +13,6 @@ module GameChatBot
         send_message embed: alert.embed, at: alert.post_at
 
         send_lineups if alert.description['Lineups posted']
-
-        # Stop trying to update
-        @game_over = true if alert.game_over?
       end
     end
 

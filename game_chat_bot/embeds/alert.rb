@@ -27,10 +27,6 @@ module GameChatBot
         Time.now + 15
       end
 
-      def game_over?
-        false
-      end
-
       def description
         # Get rid of the "In Los Angeles:" part that's in every description
         @description ||= @alert['description'].gsub(/\Ain [a-z\. ]+: /i, '')
