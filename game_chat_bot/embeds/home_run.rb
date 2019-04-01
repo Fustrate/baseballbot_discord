@@ -4,7 +4,7 @@ module GameChatBot
   module Embeds
     class HomeRun < Play
       MINIMUM_DISTANCE = 420
-      MINIMUM_SPEED = 115
+      MINIMUM_SPEED = 110
       BORING_LAUNCH_ANGLE = (18..42).freeze
 
       def embed
