@@ -5,20 +5,10 @@ module GameChatBot
     class Social < Color
       def to_h
         {
-          title: title,
-          description: description,
-          color: '109799'.to_i(16)
-        }
-      end
-
-      def title
-        tweet = item.dig('data', 'tweet')
-        user = tweet['user']
-
-        {
           url: "https://twitter.com/#{user['screen_name']}/status/#{tweet['id']}",
           author: tweet_author(user),
-          description: tweet['full_text']
+          description: tweet['full_text'],
+          color: '109799'.to_i(16)
         }
       end
 
