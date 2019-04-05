@@ -39,6 +39,17 @@ module GameChatBot
           .gsub(%r{<b>(.*?)</b>}, '*\1*'),
         description: item.dig('data', 'url')
       }
+
+      send_message embed: {
+        title: item.dig('data', 'details', 'description_tracking')
+          .gsub(%r{<b>(.*?)</b>}, '*\1*'),
+        description: item.dig('data', 'url'),
+        image: {
+          item.dig('data', 'url'),
+          height: 640,
+          width: 640
+        }
+      }
     end
 
     def send_social_message(item)
@@ -63,6 +74,9 @@ module GameChatBot
     end
 
     def send_video_message(item)
+      thumbnail = item.dig('data', 'thumbnails', 'thumb')
+        .select { |thumb| thumb['type'] == 13 }
+
       send_message embed: {
         title: item.dig('data', 'headline'),
         description: item.dig('data', 'url', 0, '_'),
@@ -70,6 +84,11 @@ module GameChatBot
           url: item.dig('data', 'url', 0, '_'),
           height: 720,
           width: 1280
+        },
+        thumbnail: {
+          url: thumbnail['_'],
+          height: 180,
+          width: 320
         }
       }
     end
