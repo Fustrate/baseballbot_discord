@@ -18,7 +18,7 @@ module GameChatBot
 
       def tweet_author(user)
         {
-          name: "#{user.dig['name']} (#{user['screen_name']})",
+          name: "#{user['name']} (#{user['screen_name']})",
           url: "https://twitter.com/#{user['screen_name']}",
           icon_url: user['profile_image_url_https']
         }
