@@ -4,6 +4,7 @@ require 'terrapin'
 
 module GameChatBot
   module Embeds
+    # A statcast graphic from the color feed.
     class StatcastGfx < Color
       include OutputHelpers
 

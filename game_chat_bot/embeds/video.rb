@@ -2,6 +2,7 @@
 
 module GameChatBot
   module Embeds
+    # A video highlight from the color feed.
     class Video < Color
       include OutputHelpers
 

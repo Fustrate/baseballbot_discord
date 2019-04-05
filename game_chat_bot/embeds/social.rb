@@ -2,6 +2,7 @@
 
 module GameChatBot
   module Embeds
+    # A tweet from the color feed.
     class Social < Color
       def to_h
         {

@@ -64,9 +64,7 @@ module GameChatBot
       output_lineups
       process_color_feed
 
-      @bot.scheduler.in('15s') do
-        @channel.topic = line_score_state
-      end
+      @bot.scheduler.in('15s') { update_channel_topic }
 
       @game_over = true if game_ended?
     rescue Net::OpenTimeout, SocketError, RestClient::NotFound
@@ -126,6 +124,10 @@ module GameChatBot
       bot.redis.set "#{redis_key}_unmuted", 1
 
       'Autoupdates are on. Use `!autoupdate off` to mute.'
+    end
+
+    def update_channel_topic
+      @channel.topic = line_score_state
     end
   end
 end
