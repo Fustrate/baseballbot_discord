@@ -25,25 +25,12 @@ module GameChatBot
     def send_color_feed_embed_for(item)
       case item['group']
       when 'statcastGFX'
-        send_statcast_message(item)
+        send_message embed: Embeds::StatcastGfx.new(item).to_h
       when 'social'
         send_social_message(item)
       when 'video'
         send_video_message(item)
       end
-    end
-
-    def send_statcast_message(item)
-      send_message embed: {
-        title: item.dig('data', 'details', 'des'),
-        description: item.dig('data', 'details', 'description_tracking')
-          .gsub(%r{<b>(.*?)</b>}, '**\1**'),
-        image: {
-          url: item.dig('data', 'url'),
-          height: 640,
-          width: 640
-        }
-      }
     end
 
     def send_social_message(item)
