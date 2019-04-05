@@ -2,7 +2,15 @@
 
 module GameChatBot
   module LineScore
+    PREGAME_STATUSES = /Preview|Pre-Game|Warmup|Delayed Start|Scheduled/.freeze
     POSTGAME_STATUSES = /Final|Game Over|Postponed|Completed Early/.freeze
+
+    TIMEZONES = {
+      ET: 'America/New_York',
+      CT: 'America/Chicago',
+      MT: 'America/Denver',
+      PT: 'America/Los_Angeles'
+    }.freeze
 
     def line_score
       rows = base_line_score
@@ -48,19 +56,37 @@ module GameChatBot
     end
 
     def line_score_state
+      return game_start_times unless game_started?
       return innings == 9 ? 'Final' : "Final/#{innings}" if game_over?
 
-      str = line_score_inning
+      inning_state = @feed.linescore['inningState']
 
-      linescore = @feed.live_data['linescore']
+      return line_score_inning unless %w[Top Bottom].include?(inning_state)
 
-      if %w[Top Bottom].include?(linescore['inningState'])
-        outs = linescore['outs'] == 1 ? '1 Out' : "#{linescore['outs']} Outs"
+      "#{line_score_outs}, #{line_score_inning}"
+    end
 
-        str = "#{outs}, #{str}"
-      end
+    def game_start_times
+      utc = Time.parse @feed.game_data.dig('datetime', 'dateTime')
 
-      str
+      TIMEZONES.map do |code, identifier|
+        time = time_in_time_zone(utc, TZInfo::Timezone.get(identifier))
+
+        "#{time.strftime('%-I:%M')} #{code}"
+      end.join(' | ')
+    end
+
+    def time_in_time_zone(utc, time_zone)
+      period = time_zone.period_for_utc(utc)
+      with_offset = utc + period.utc_total_offset
+
+      Time.parse "#{with_offset.strftime('%FT%T')} #{period.zone_identifier}"
+    end
+
+    def line_score_outs
+      outs = @feed.linescore['outs']
+
+      outs == 1 ? '1 Out' : "#{outs} Outs"
     end
 
     def line_score_block
@@ -87,6 +113,11 @@ module GameChatBot
 
     def game_over?
       POSTGAME_STATUSES
+        .match?(@feed.game_data.dig('status', 'abstractGameState'))
+    end
+
+    def game_started?
+      !PREGAME_STATUSES
         .match?(@feed.game_data.dig('status', 'abstractGameState'))
     end
   end
