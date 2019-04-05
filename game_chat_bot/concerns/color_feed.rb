@@ -4,7 +4,10 @@ module GameChatBot
   module ColorFeed
     def process_color_feed
       color_feed_items.each do |item|
-        @bot.redis.sadd "#{redis_key}_color", item['guid']
+        @bot.redis.sadd(
+          "#{redis_key}_color",
+          item.dig('data', 'mediaPlaybackId') || item['guid']
+        )
 
         embed = color_feed_embed_for(item)
 
