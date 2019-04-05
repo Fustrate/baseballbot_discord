@@ -6,11 +6,7 @@ module GameChatBot
       color_feed_items.each do |item|
         @bot.redis.sadd "#{redis_key}_color", item['guid']
 
-        embed = color_feed_embed_for(item)
-
-        next unless embed
-
-        send_message embed: embed.to_h
+        send_color_feed_embed_for(item)
       end
     end
 
@@ -26,12 +22,16 @@ module GameChatBot
       @bot.redis.sismember "#{redis_key}_color", item['guid']
     end
 
-    def color_feed_embed_for(item)
+    def send_color_feed_embed_for(item)
       case item['group']
       when 'statcastGFX'
-        Embeds::StatcastGfx.new(item, self)
+        send_message <<~DESCRIPTION
+          #{item.dig('data', 'details', 'description_tracking')}
+
+          #{item.dig('data', 'url')}
+        DESCRIPTION
       when 'video'
-        Embeds::Video.new(item, self)
+        send_message item.dig('data', 'url', 0, '_')
       end
     end
   end
