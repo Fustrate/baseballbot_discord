@@ -23,7 +23,11 @@ module GameChatBot
     end
 
     def posted_color_feed_item?(item)
-      @bot.redis.sismember "#{redis_key}_color", item['guid']
+      # Non-play videos have a guid of "video_undefined"
+      @bot.redis.sismember(
+        "#{redis_key}_color",
+        item.dig('data', 'mediaPlaybackId') || item['guid']
+      )
     end
 
     def color_feed_embed_for(item)
