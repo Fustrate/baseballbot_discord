@@ -95,7 +95,7 @@ module GameChatBot
       end
 
       def runners
-        offense = @channel.feed.live_data&.dig('linescore', 'offense')
+        offense = @channel.feed.linescore&.dig('offense')
 
         return '' unless offense
 

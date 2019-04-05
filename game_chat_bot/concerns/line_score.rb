@@ -7,7 +7,7 @@ module GameChatBot
     def line_score
       rows = base_line_score
 
-      @feed.live_data.dig('linescore', 'innings').each do |inning|
+      @feed.linescore['innings'].each do |inning|
         rows[2][inning['num']] = inning.dig('away', 'runs')
         rows[3][inning['num']] = inning.dig('home', 'runs')
       end
@@ -29,12 +29,10 @@ module GameChatBot
     end
 
     def line_score_inning
-      linescore = @feed.live_data['linescore']
-
       format(
         '%<side>s of the %<inning>s',
-        side: linescore['inningState'],
-        inning: linescore['currentInningOrdinal']
+        side: @feed.linescore['inningState'],
+        inning: @feed.linescore['currentInningOrdinal']
       )
     end
 
@@ -76,12 +74,11 @@ module GameChatBot
     protected
 
     def innings
-      [@feed.live_data.dig('linescore', 'innings').count, 9].max
+      [@feed.linescore['innings'].count, 9].max
     end
 
     def team_rhe(flag)
-      @feed.live_data.dig('linescore', 'teams', flag)
-        .values_at('runs', 'hits', 'errors')
+      @feed.linescore.dig('teams', flag).values_at('runs', 'hits', 'errors')
     end
 
     def team_name(flag)

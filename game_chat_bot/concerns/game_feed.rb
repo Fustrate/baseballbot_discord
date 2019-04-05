@@ -24,7 +24,7 @@ module GameChatBot
     end
 
     def fields_for_umpires
-      @feed.live_data.dig('boxscore', 'officials').map do |umpire|
+      @feed.boxscore['officials'].map do |umpire|
         {
           name: umpire['officialType'],
           value: umpire.dig('official', 'fullName'),
