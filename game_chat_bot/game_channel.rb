@@ -41,10 +41,10 @@ module GameChatBot
 
       if at
         @bot.scheduler.at(at) do
-          @channel.send_message text, false, embed
+          puts @channel.send_message(text, false, embed)
         end
       else
-        @channel.send_message text, false, embed
+        puts @channel.send_message(text, false, embed)
       end
     end
 
