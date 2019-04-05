@@ -5,7 +5,7 @@ module GameChatBot
     # A tweet from the color feed.
     class Social < Color
       def to_h
-        tweet = @item['tweet']
+        tweet = @item.dig('data', 'tweet')
         user = tweet['user']
 
         {
