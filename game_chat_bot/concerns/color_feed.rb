@@ -35,15 +35,9 @@ module GameChatBot
 
     def send_statcast_message(item)
       send_message embed: {
-        title: item.dig('data', 'details', 'description_tracking')
-          .gsub(%r{<b>(.*?)</b>}, '*\1*'),
-        description: item.dig('data', 'url')
-      }
-
-      send_message embed: {
-        title: item.dig('data', 'details', 'description_tracking')
-          .gsub(%r{<b>(.*?)</b>}, '*\1*'),
-        description: item.dig('data', 'url'),
+        title: item.dig('data', 'details', 'des'),
+        description: item.dig('data', 'details', 'description_tracking')
+          .gsub(%r{<b>(.*?)</b>}, '**\1**'),
         image: {
           url: item.dig('data', 'url'),
           height: 640,
