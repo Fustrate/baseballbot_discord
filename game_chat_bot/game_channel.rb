@@ -39,6 +39,8 @@ module GameChatBot
     def send_message(text: '', embed: nil, at: nil, force: false)
       return unless force || @unmuted
 
+      puts embed.inspect if embed[:video] || embed[:image]
+
       if at
         @bot.scheduler.at(at) do
           @channel.send_message(text, false, embed)
