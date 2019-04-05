@@ -29,16 +29,15 @@ module GameChatBot
       when 'social'
         send_social_message(item)
       when 'video'
-        send_message text: item.dig('data', 'url', 0, '_')
+        send_video_message(item)
       end
     end
 
     def send_statcast_message(item)
-      send_message text: <<~DESCRIPTION
-        #{item.dig('data', 'details', 'description_tracking')}
-
-        #{item.dig('data', 'url')}
-      DESCRIPTION
+      send_message embed: {
+        title: item.dig('data', 'details', 'description_tracking'),
+        message: item.dig('data', 'url')
+      }
     end
 
     def send_social_message(item)
@@ -46,6 +45,13 @@ module GameChatBot
       username = tweet.dig('user', 'screen_name')
 
       send_message text: "https://twitter.com/#{username}/status/#{tweet['id']}"
+    end
+
+    def send_video_message(item)
+      send_message embed: {
+        title: item.dig('data', 'headline'),
+        message: item.dig('data', 'url', 0, '_')
+      }
     end
   end
 end
