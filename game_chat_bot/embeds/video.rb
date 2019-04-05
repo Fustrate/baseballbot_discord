@@ -8,6 +8,8 @@ module GameChatBot
       def initialize(item, channel)
         @item = item
         @channel = channel
+
+        puts @item.dig('data', 'url', 0, '_')
       end
 
       def to_h
