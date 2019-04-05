@@ -49,11 +49,11 @@ module GameChatBot
           }
         }
 
-        Embeds::StatcastGfx.new(item)
+        Embeds::StatcastGfx.new(item, self)
       when 'social'
-        Embeds::Social.new(item)
+        Embeds::Social.new(item, self)
       when 'video'
-        Embeds::Video.new(item)
+        Embeds::Video.new(item, self)
       end
     end
   end
