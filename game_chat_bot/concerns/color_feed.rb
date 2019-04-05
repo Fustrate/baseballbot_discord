@@ -37,21 +37,35 @@ module GameChatBot
       send_message embed: {
         title: item.dig('data', 'details', 'description_tracking')
           .gsub(%r{<b>(.*?)</b>}, '*\1*'),
-        message: item.dig('data', 'url')
+        description: item.dig('data', 'url')
       }
     end
 
     def send_social_message(item)
       tweet = item.dig('data', 'tweet')
-      username = tweet.dig('user', 'screen_name')
+      user = tweet['user']
 
-      send_message text: "https://twitter.com/#{username}/status/#{tweet['id']}"
+      embed = {
+        url: "https://twitter.com/#{user['screen_name']}/status/#{tweet['id']}",
+        author: tweet_author(user),
+        description: tweet['full_text']
+      }
+
+      send_message embed: embed
+    end
+
+    def tweet_author(user)
+      {
+        name: "#{user.dig['name']} (#{user['screen_name']})",
+        url: "https://twitter.com/#{user['screen_name']}",
+        icon_url: user['profile_image_url_https']
+      }
     end
 
     def send_video_message(item)
       send_message embed: {
         title: item.dig('data', 'headline'),
-        message: item.dig('data', 'url', 0, '_')
+        description: item.dig('data', 'url', 0, '_')
       }
     end
   end
