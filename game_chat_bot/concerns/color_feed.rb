@@ -65,7 +65,12 @@ module GameChatBot
     def send_video_message(item)
       send_message embed: {
         title: item.dig('data', 'headline'),
-        description: item.dig('data', 'url', 0, '_')
+        description: item.dig('data', 'url', 0, '_'),
+        video: {
+          url: item.dig('data', 'url', 0, '_'),
+          height: 720,
+          width: 1280
+        }
       }
     end
   end
