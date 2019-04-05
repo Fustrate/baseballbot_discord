@@ -12,11 +12,6 @@ module GameChatBot
         'sideways' => [640, 265]
       }.freeze
 
-      def initialize(item, channel)
-        @item = item
-        @channel = channel
-      end
-
       def to_h
         {
           title: @item.dig('data', 'details', 'des'),
@@ -31,7 +26,7 @@ module GameChatBot
       end
 
       def image
-        width, height = STATCAST_IMAGE_DIMENSIONS[@item['id']]
+        width, height = STATCAST_IMAGE_DIMENSIONS[@item['id']] || [640, 640]
 
         {
           url: @item.dig('data', 'url'),

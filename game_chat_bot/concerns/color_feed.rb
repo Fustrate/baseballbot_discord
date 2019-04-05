@@ -27,31 +27,10 @@ module GameChatBot
       when 'statcastGFX'
         send_message embed: Embeds::StatcastGfx.new(item).to_h
       when 'social'
-        send_social_message(item)
+        send_message embed: Embeds::Social.new(item).to_h
       when 'video'
         send_video_message(item)
       end
-    end
-
-    def send_social_message(item)
-      tweet = item.dig('data', 'tweet')
-      user = tweet['user']
-
-      embed = {
-        url: "https://twitter.com/#{user['screen_name']}/status/#{tweet['id']}",
-        author: tweet_author(user),
-        description: tweet['full_text']
-      }
-
-      send_message embed: embed
-    end
-
-    def tweet_author(user)
-      {
-        name: "#{user.dig['name']} (#{user['screen_name']})",
-        url: "https://twitter.com/#{user['screen_name']}",
-        icon_url: user['profile_image_url_https']
-      }
     end
 
     def send_video_message(item)
