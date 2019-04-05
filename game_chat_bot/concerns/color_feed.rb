@@ -8,7 +8,7 @@ module GameChatBot
 
         embed = color_feed_embed_for(item)
 
-        return unless embed
+        next unless embed
 
         send_message embed: embed.to_h
       end
