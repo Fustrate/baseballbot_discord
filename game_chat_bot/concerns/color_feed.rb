@@ -35,7 +35,8 @@ module GameChatBot
 
     def send_statcast_message(item)
       send_message embed: {
-        title: item.dig('data', 'details', 'description_tracking'),
+        title: item.dig('data', 'details', 'description_tracking')
+          .gsub(%r{<b>(.*?)</b>}, '*\1*'),
         message: item.dig('data', 'url')
       }
     end
