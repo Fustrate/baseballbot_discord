@@ -29,11 +29,11 @@ module GameChatBot
     def color_feed_embed_for(item)
       case item['group']
       when 'statcastGFX'
-        # send_message embed: {
-        #   title: item.dig('data', 'details', 'description_tracking')
-        #     .gsub(%r{<b>(.*?)</b>}, '*\1*'),
-        #   description: item.dig('data', 'url')
-        # }
+        send_message embed: {
+          title: item.dig('data', 'details', 'description_tracking')
+            .gsub(%r{<b>(.*?)</b>}, '*\1*'),
+          description: item.dig('data', 'url')
+        }
 
         send_message embed: {
           title: item.dig('data', 'details', 'des'),
