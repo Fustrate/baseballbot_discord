@@ -45,7 +45,7 @@ module GameChatBot
           .gsub(%r{<b>(.*?)</b>}, '*\1*'),
         description: item.dig('data', 'url'),
         image: {
-          item.dig('data', 'url'),
+          url: item.dig('data', 'url'),
           height: 640,
           width: 640
         }
