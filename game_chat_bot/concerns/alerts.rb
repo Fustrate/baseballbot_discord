@@ -6,32 +6,29 @@ module GameChatBot
 
     def output_alerts
       alerts.each do |alert|
-        next if posted_alert?(alert)
+        @bot.redis.sadd "#{redis_key}_alerts", alert['alertId']
 
-        @bot.redis.sadd "#{redis_key}_alerts", alert.id
+        embed = alert_embed_for(alert)
 
-        send_message embed: alert.embed, at: alert.post_at
+        send_message embed: embed.to_h, at: embed.post_at
 
-        send_lineups if alert.description['Lineups posted']
-
-        # Stop trying to update
-        @game_over = true if alert.game_over?
+        send_lineups if embed.description['Lineups posted']
       end
     end
 
     def alerts
       return [] unless @feed.game_data
 
-      @feed.game_data['alerts']
-        .reject { |alert| IGNORE_ALERT_CATEGORIES.include?(alert['category']) }
-        .map { |alert| embed_for(alert) }
+      @feed.game_data['alerts'].select { |alert| post_alert?(alert) }
     end
 
-    def posted_alert?(alert)
-      @bot.redis.sismember "#{redis_key}_alerts", alert.id
+    def post_alert?(alert)
+      return false if IGNORE_ALERT_CATEGORIES.include?(alert['category'])
+
+      !@bot.redis.sismember "#{redis_key}_alerts", alert['alertId']
     end
 
-    def embed_for(alert)
+    def alert_embed_for(alert)
       case alert['category']
       when 'game_over'
         Embeds::EndOfGame.new(alert, self)

@@ -9,7 +9,7 @@ module GameChatBot
         @description = description
       end
 
-      def embed
+      def to_h
         {
           description: @description,
           color: '999999'.to_i(16)

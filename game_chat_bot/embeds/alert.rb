@@ -15,7 +15,7 @@ module GameChatBot
         @alert['alertId']
       end
 
-      def embed
+      def to_h
         {
           title: @title || titleize(@alert['category']),
           description: description,
@@ -25,10 +25,6 @@ module GameChatBot
 
       def post_at
         Time.now + 15
-      end
-
-      def game_over?
-        false
       end
 
       def description

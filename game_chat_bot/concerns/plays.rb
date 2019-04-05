@@ -5,12 +5,12 @@ module GameChatBot
     def output_plays
       @next_event = @bot.redis.get "#{redis_key}_next_event"
 
-      plays_starting_with(@next_event).each do |play|
-        embed = play.embed
+      plays_starting_with(@next_event).each do |embed|
+        embed_hash = embed.to_h
 
-        @bot.home_run_alert(embed) if play.is_a?(Embeds::HomeRun)
+        @bot.home_run_alert(embed_hash) if embed.is_a?(Embeds::HomeRun)
 
-        send_message embed: embed, at: play.post_at
+        send_message embed: embed_hash, at: embed.post_at
       end
 
       update_next_event

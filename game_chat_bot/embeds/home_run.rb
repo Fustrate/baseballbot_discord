@@ -3,7 +3,11 @@
 module GameChatBot
   module Embeds
     class HomeRun < Play
-      def embed
+      MINIMUM_DISTANCE = 420
+      MINIMUM_SPEED = 110
+      BORING_LAUNCH_ANGLE = (18..42).freeze
+
+      def to_h
         {
           title: "#{team_emoji} #{type} (#{count})",
           description: description,
@@ -35,10 +39,28 @@ module GameChatBot
           .values_at 'launchAngle', 'launchSpeed', 'totalDistance'
 
         [
-          { name: 'Launch Angle', value: "#{angle} deg", inline: true },
-          { name: 'Launch Speed', value: "#{speed} mph", inline: true },
-          { name: 'Distance', value: "#{distance} feet", inline: true }
+          { name: 'Launch Angle', value: angle_for(angle), inline: true },
+          { name: 'Launch Speed', value: speed_for(speed), inline: true },
+          { name: 'Distance', value: distance_for(distance), inline: true }
         ]
+      end
+
+      def distance_for(distance)
+        return "#{distance} feet" if distance < MINIMUM_DISTANCE
+
+        ":star2: **#{distance} feet** :star2:"
+      end
+
+      def speed_for(speed)
+        return "#{speed} mph" if speed < MINIMUM_SPEED
+
+        ":star2: **#{speed} mph** :star2:"
+      end
+
+      def angle_for(angle)
+        return "#{angle} deg" if BORING_LAUNCH_ANGLE.cover?(angle)
+
+        ":star2: **#{angle} deg** :star2:"
       end
 
       def pitch_type
