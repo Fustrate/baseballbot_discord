@@ -46,18 +46,24 @@ module GameChatBot
       end
 
       def distance_for(distance)
+        return '???' unless distance
+
         return "#{distance} feet" if distance < MINIMUM_DISTANCE
 
         ":star2: **#{distance} feet** :star2:"
       end
 
       def speed_for(speed)
+        return '???' unless speed
+
         return "#{speed} mph" if speed < MINIMUM_SPEED
 
         ":star2: **#{speed} mph** :star2:"
       end
 
       def angle_for(angle)
+        return '???' unless angle
+
         return "#{angle} deg" if BORING_LAUNCH_ANGLE.cover?(angle)
 
         ":star2: **#{angle} deg** :star2:"
