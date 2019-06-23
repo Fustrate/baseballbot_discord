@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/meew0/discordrb.git
-  revision: 764298a1ff0be69a1853b510d736f21c2b91a2fe
+  revision: 329045797fb2eb76275d47403eb08016458910e6
   specs:
     discordrb (3.3.0)
       discordrb-webhooks (~> 3.3.0)
@@ -14,9 +14,9 @@ GIT
 
 GIT
   remote: https://github.com/redis/redis-rb.git
-  revision: df07a4c90413ed5dda7bc8fe928b00aaad5462fa
+  revision: 1b527b1e536008aa19e11d64390e3d96c936a80e
   specs:
-    redis (4.1.0)
+    redis (4.1.2)
 
 GEM
   remote: https://rubygems.org/
@@ -32,12 +32,12 @@ GEM
     em-hiredis (0.3.1)
       eventmachine (~> 1.0)
       hiredis (~> 0.6.0)
-    et-orbi (1.1.8)
+    et-orbi (1.2.1)
       tzinfo
     event_emitter (0.2.6)
     eventmachine (1.2.7)
-    ffi (1.10.0)
-    fugit (1.1.10)
+    ffi (1.11.1)
+    fugit (1.2.2)
       et-orbi (~> 1.1, >= 1.1.8)
       raabro (~> 1.1)
     hana (1.3.5)
@@ -52,7 +52,7 @@ GEM
       domain_name (~> 0.5)
     http-form_data (1.0.3)
     http_parser.rb (0.6.0)
-    httparty (0.16.4)
+    httparty (0.17.0)
       mime-types (~> 3.0)
       multi_xml (>= 0.5.2)
     mime-types (3.2.2)
@@ -68,7 +68,7 @@ GEM
     netrc (0.11.0)
     opus-ruby (1.0.1)
       ffi
-    public_suffix (3.0.3)
+    public_suffix (3.1.0)
     raabro (1.1.6)
     rake (12.3.2)
     rbnacl (6.0.1)
@@ -80,8 +80,8 @@ GEM
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
-    rufus-scheduler (3.5.2)
-      fugit (~> 1.1, >= 1.1.5)
+    rufus-scheduler (3.6.0)
+      fugit (~> 1.1, >= 1.1.6)
     terminal-table (1.8.0)
       unicode-display_width (~> 1.1, >= 1.1.1)
     terrapin (0.6.0)
@@ -90,8 +90,8 @@ GEM
       concurrent-ruby (~> 1.0)
     unf (0.1.4)
       unf_ext
-    unf_ext (0.0.7.5)
-    unicode-display_width (1.5.0)
+    unf_ext (0.0.7.6)
+    unicode-display_width (1.6.0)
     websocket (1.2.8)
     websocket-client-simple (0.3.0)
       event_emitter
