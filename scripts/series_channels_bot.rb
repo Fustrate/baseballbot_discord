@@ -106,7 +106,7 @@ class SeriesChannelsBot
   def game_is_live?(game)
     return true if game.dig('status', 'abstractGameState') == 'Live'
 
-    ['Pre-Game', 'Warmup'].include? game.dig('status', 'detailedState')
+    %w[Pre-Game Warmup].include? game.dig('status', 'detailedState')
   end
 
   # @!endgroup MLB Data

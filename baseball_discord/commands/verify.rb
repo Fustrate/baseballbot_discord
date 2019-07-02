@@ -45,8 +45,8 @@ module BaseballDiscord
 
         def run
           start_verification_for_server find_server_by_name(args.join(' '))
-        rescue UserErro => error
-          send_pm error.message
+        rescue UserError => e
+          send_pm e.message
         end
 
         def send_welcome_pm
@@ -70,8 +70,8 @@ module BaseballDiscord
           raise UserError, ALREADY_VERIFIED if member_verified?(member)
 
           send_verification_pm(guild, welcome)
-        rescue UserError => error
-          send_pm error.message
+        rescue UserError => e
+          send_pm e.message
         end
 
         def send_verification_pm(guild, welcome)

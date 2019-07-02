@@ -62,8 +62,8 @@ module BaseballDiscord
           check_member_of_baseball
 
           find_and_assign_role multiple_inputs
-        rescue UserError => error
-          send_pm error.message
+        rescue UserError => e
+          send_pm e.message
         end
 
         protected
@@ -119,7 +119,7 @@ module BaseballDiscord
 
           @member.nick = "#{base_name} #{abbrs.join('')}"
         rescue Discordrb::Errors::NoPermission
-          @bot.logger.info "Couldn't update name for #{@member.distinct}"
+          bot.logger.info "Couldn't update name for #{@member.distinct}"
         end
 
         def all_team_roles_on_server
