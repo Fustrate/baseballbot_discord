@@ -62,8 +62,8 @@ module BaseballDiscord
           check_member_of_baseball
 
           find_and_assign_role multiple_inputs
-        rescue UserError => e
-          send_pm e.message
+        rescue UserError => error
+          send_pm error.message
         end
 
         protected

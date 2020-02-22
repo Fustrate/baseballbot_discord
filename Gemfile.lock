@@ -1,43 +1,42 @@
 GIT
   remote: https://github.com/meew0/discordrb.git
-  revision: 329045797fb2eb76275d47403eb08016458910e6
+  revision: 2c2b50e32c055aa8288b34644346a10696d5efa1
   specs:
     discordrb (3.3.0)
       discordrb-webhooks (~> 3.3.0)
       ffi (>= 1.9.24)
       opus-ruby
-      rbnacl (~> 6.0)
-      rest-client (>= 2.1.0.rc1)
+      rest-client (>= 2.0.0)
       websocket-client-simple (>= 0.3.0)
     discordrb-webhooks (3.3.0)
       rest-client (>= 2.1.0.rc1)
 
 GIT
   remote: https://github.com/redis/redis-rb.git
-  revision: 1b527b1e536008aa19e11d64390e3d96c936a80e
+  revision: 41395e9a1923fe72fad8403e60cb98627d515a85
   specs:
-    redis (4.1.2)
+    redis (4.1.3)
 
 GEM
   remote: https://rubygems.org/
   specs:
-    addressable (2.6.0)
-      public_suffix (>= 2.0.2, < 4.0)
+    addressable (2.7.0)
+      public_suffix (>= 2.0.2, < 5.0)
     chronic (0.10.2)
     climate_control (0.2.0)
-    concurrent-ruby (1.1.5)
+    concurrent-ruby (1.1.6)
     daemons (1.3.1)
-    domain_name (0.5.20180417)
+    domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
     em-hiredis (0.3.1)
       eventmachine (~> 1.0)
       hiredis (~> 0.6.0)
-    et-orbi (1.2.1)
+    et-orbi (1.2.2)
       tzinfo
     event_emitter (0.2.6)
     eventmachine (1.2.7)
-    ffi (1.11.1)
-    fugit (1.2.2)
+    ffi (1.12.2)
+    fugit (1.3.3)
       et-orbi (~> 1.1, >= 1.1.8)
       raabro (~> 1.1)
     hana (1.3.5)
@@ -52,30 +51,28 @@ GEM
       domain_name (~> 0.5)
     http-form_data (1.0.3)
     http_parser.rb (0.6.0)
-    httparty (0.17.0)
+    httparty (0.18.0)
       mime-types (~> 3.0)
       multi_xml (>= 0.5.2)
-    mime-types (3.2.2)
+    mime-types (3.3.1)
       mime-types-data (~> 3.2015)
-    mime-types-data (3.2019.0331)
-    minitest (5.11.3)
-    mlb_stats_api (0.2.3)
+    mime-types-data (3.2019.1009)
+    minitest (5.14.0)
+    mlb_stats_api (0.2.4)
       hana (~> 1.3)
       httparty (~> 0.16)
       moneta (~> 1.0)
-    moneta (1.1.1)
+    moneta (1.2.1)
     multi_xml (0.6.0)
     netrc (0.11.0)
     opus-ruby (1.0.1)
       ffi
-    public_suffix (3.1.1)
+    public_suffix (4.0.3)
     raabro (1.1.6)
-    rake (12.3.2)
-    rbnacl (6.0.1)
-      ffi
+    rake (13.0.1)
     redd (0.8.8)
       http (~> 2.2)
-    rest-client (2.1.0.rc1)
+    rest-client (2.1.0)
       http-accept (>= 1.7.0, < 2.0)
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 4.0)
@@ -86,12 +83,12 @@ GEM
       unicode-display_width (~> 1.1, >= 1.1.1)
     terrapin (0.6.0)
       climate_control (>= 0.0.3, < 1.0)
-    tzinfo (2.0.0)
+    tzinfo (2.0.1)
       concurrent-ruby (~> 1.0)
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.6)
-    unicode-display_width (1.6.0)
+    unicode-display_width (1.6.1)
     websocket (1.2.8)
     websocket-client-simple (0.3.0)
       event_emitter
@@ -116,7 +113,7 @@ DEPENDENCIES
   tzinfo
 
 RUBY VERSION
-   ruby 2.6.3p62
+   ruby 2.6.5p114
 
 BUNDLED WITH
-   2.0.2
+   2.1.4
