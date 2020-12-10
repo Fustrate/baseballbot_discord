@@ -12,9 +12,7 @@ module BaseballDiscord
       # Allows the administrator to invite this bot to a server
       class InviteCommand < Command
         def send_invite_url
-          unless user.id == BaseballDiscord::Bot::ADMIN_ID
-            return react_to_message '🔒'
-          end
+          return react_to_message('🔒') unless user.id == BaseballDiscord::Bot::ADMIN_ID
 
           bot.invite_url
         end

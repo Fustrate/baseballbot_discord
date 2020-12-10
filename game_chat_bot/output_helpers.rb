@@ -15,14 +15,7 @@ module GameChatBot
     end
 
     def prettify_table(table)
-      top_border, *middle, bottom_border = table.to_s.lines.map(&:strip)
-
-      new_table = middle.map do |line|
-        line[0] == '+' ? "├#{line[1...-1].tr('-+', '─┼')}┤" : line.tr('|', '│')
-      end
-
-      new_table.unshift "┌#{top_border[1...-1].tr('-+', '─┬')}┐"
-      new_table.push "└#{bottom_border[1...-1].tr('-+', '─┴')}┘"
+      new_table = prettify_table_contents(table)
 
       # Move the T-shaped corners down two rows if there's a title
       if table.title
@@ -31,6 +24,20 @@ module GameChatBot
       end
 
       new_table.join("\n")
+    end
+
+    protected
+
+    def prettify_table_contents(table)
+      top_border, *middle, bottom_border = table.to_s.lines.map(&:strip)
+
+      new_table = middle
+        .map { |line| line[0] == '+' ? "├#{line[1...-1].tr('-+', '─┼')}┤" : line.tr('|', '│') }
+
+      new_table.unshift "┌#{top_border[1...-1].tr('-+', '─┬')}┐"
+      new_table.push "└#{bottom_border[1...-1].tr('-+', '─┴')}┘"
+
+      new_table
     end
   end
 end

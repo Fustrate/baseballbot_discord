@@ -24,7 +24,7 @@ module BaseballDiscord
         }.freeze
 
         def define_term
-          definition = terms[args.join(' ').downcase]
+          definition = terms[raw_args.downcase]
 
           return react_to_message '❓' unless definition
 
@@ -54,10 +54,8 @@ module BaseballDiscord
 
         def terms
           @terms ||= YAML.safe_load(
-            File.open(
-              File.expand_path(__dir__ + '/../../config/glossary.yml')
-            ).read
-          ).dig('glossary').map do |abbr, data|
+            File.open(File.expand_path("#{__dir__}/../../config/glossary.yml")).read
+          )['glossary'].map do |abbr, data|
             [abbr.downcase, data.merge('abbr' => abbr)]
           end.to_h
         end

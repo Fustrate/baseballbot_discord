@@ -3,7 +3,7 @@
 require 'minitest/autorun'
 require 'chronic'
 
-require_relative '../baseball_discord/utilities.rb'
+require_relative '../baseball_discord/utilities'
 
 class TestApi < MiniTest::Test
   def test_proper_league

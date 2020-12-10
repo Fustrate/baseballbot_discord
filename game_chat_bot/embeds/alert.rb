@@ -29,7 +29,7 @@ module GameChatBot
 
       def description
         # Get rid of the "In Los Angeles:" part that's in every description
-        @description ||= @alert['description'].gsub(/\Ain [a-z\. ]+: /i, '')
+        @description ||= @alert['description'].gsub(/\Ain [a-z. ]+: /i, '')
       end
     end
   end

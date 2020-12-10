@@ -12,11 +12,9 @@ module BaseballDiscord
       # Prints some basic info to the log file
       class PlayerCommand < Command
         def look_up_player
-          unless user.id == BaseballDiscord::Bot::ADMIN_ID
-            return react_to_message '🔒'
-          end
+          return react_to_message('🔒') unless user.id == BaseballDiscord::Bot::ADMIN_ID
 
-          BaseballDiscord::Utilities.look_up_player(args.join(' ')).inspect
+          BaseballDiscord::Utilities.look_up_player(raw_args).inspect
         end
       end
     end

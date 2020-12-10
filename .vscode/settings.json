@@ -1,0 +1,18 @@
+{
+    "[markdown]": {
+        "editor.rulers": [100],
+        "editor.tabSize": 2,
+    },
+    "[ruby]": {
+        "editor.rulers": [100],
+        "editor.tabSize": 2,
+    },
+    "[yaml]": {
+        "editor.rulers": [100],
+        "editor.tabSize": 2,
+    },
+    "files.insertFinalNewline": true,
+    "files.trimTrailingWhitespace": true,
+    "ruby.intellisense": false,
+    "ruby.useLanguageServer": true,
+}

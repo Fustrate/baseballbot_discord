@@ -62,8 +62,8 @@ module BaseballDiscord
           check_member_of_baseball
 
           find_and_assign_role multiple_inputs
-        rescue UserError => error
-          send_pm error.message
+        rescue UserError => e
+          send_pm e.message
         end
 
         protected
@@ -78,8 +78,8 @@ module BaseballDiscord
         end
 
         def multiple_inputs
-          args.join(' ')
-            .split(%r{(?:[,&+\|/]|\s+and\s+)})
+          raw_args
+            .split(%r{(?:[,&+|/]|\s+and\s+)})
             .map(&:strip)
             .reject(&:empty?)
         end
@@ -117,7 +117,7 @@ module BaseballDiscord
 
           base_name = @member.display_name.gsub(/ \[.*\]\z/, '')
 
-          @member.nick = "#{base_name} #{abbrs.join('')}"
+          @member.nick = "#{base_name} #{abbrs.join}"
         rescue Discordrb::Errors::NoPermission
           bot.logger.info "Couldn't update name for #{@member.distinct}"
         end

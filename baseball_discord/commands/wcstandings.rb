@@ -14,9 +14,10 @@ module BaseballDiscord
       end
 
       class WCStandingsCommand < Command
-        STATS_STANDINGS = \
-          'https://statsapi.mlb.com/api/v1/standings/regularSeason?' \
-          'leagueId=103,104&season=%<year>d&t=%<t>d&date=%<date>s&hydrate=team'
+        STATS_STANDINGS = 'https://statsapi.mlb.com/api/v1/standings/regularSeason?' \
+                          'leagueId=103,104&season=%<year>d&t=%<t>d&date=%<date>s&hydrate=team'
+
+        TABLE_HEADERS = %w[Team W L GB % rDiff STRK].freeze
 
         def run
           team_name, date = parse_team_and_date
@@ -35,8 +36,7 @@ module BaseballDiscord
         protected
 
         def standings_data(date, league_id)
-          load_data_from_stats_api(STATS_STANDINGS, date: date)
-            .dig('records')
+          load_data_from_stats_api(STATS_STANDINGS, date: date)['records']
             .select { |division| division.dig('league', 'id') == league_id }
             .flat_map { |division| division['teamRecords'] }
         end
@@ -53,25 +53,28 @@ module BaseballDiscord
 
         # This should be expanded upon to allow for more date formats
         def parse_team_and_date
-          input = args.join(' ').downcase
-
-          if input.empty?
-            input = bot.config.dig(server.id, 'default_team') || ''
-          end
+          input = input_or_default_team
 
           case input
           when /\A(.*)\s*(\d{4})\z/
-            team_name = Regexp.last_match[1].strip
-            date = Date.civil(Regexp.last_match[2].to_i, 12, 1)
+            [Regexp.last_match[1].strip, december_first(Regexp.last_match[2])]
           when /\A\d{4}\z/
-            team_name = nil
-            date = Date.civil(input.to_i, 12, 1)
+            [nil, december_first(input)]
           else
-            team_name = input
-            date = Time.now
+            [input, Time.now]
           end
+        end
 
-          [team_name, date]
+        def input_or_default_team
+          input = raw_args.downcase
+
+          return bot.config.dig(server.id, 'default_team') || '' if input.empty?
+
+          input
+        end
+
+        def december_first(year)
+          Date.civil(year.to_i, 12, 1)
         end
 
         def team_standings_data(team)
@@ -92,10 +95,8 @@ module BaseballDiscord
           leader_rows = leaders.map { |team| team_standings_data(team) }
           other_rows = others.map { |team| team_standings_data(team) }
 
-          table = Terminal::Table.new(
-            rows: (leader_rows + [:separator] + other_rows),
-            headings: %w[Team W L GB % rDiff STRK]
-          )
+          table = Terminal::Table
+            .new(rows: (leader_rows + [:separator] + other_rows), headings: TABLE_HEADERS)
 
           table.align_column(1, :right)
           table.align_column(2, :right)

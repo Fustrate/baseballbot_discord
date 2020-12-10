@@ -34,16 +34,15 @@ module BaseballDiscord
     def server_prefixes
       servers
         .select { |_, server| server['prefixes'] }
-        .map { |server_id, conf| [server_id, Array(conf['prefixes'])] }
-        .to_h
+        .transform_values { |conf| Array(conf['prefixes']) }
     end
 
     protected
 
     def servers
       @servers ||= YAML.safe_load(
-        File.open(File.expand_path(__dir__ + '/../config/servers.yml')).read
-      ).dig('servers')
+        File.open(File.expand_path("#{__dir__}/../config/servers.yml")).read
+      )['servers']
     end
   end
 end

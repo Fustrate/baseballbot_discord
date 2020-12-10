@@ -14,9 +14,8 @@ module BaseballDiscord
       end
 
       class ScoreboardCommand < Command
-        SCHEDULE = \
-          'https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=%<date>s&' \
-          'hydrate=game(content(summary)),linescore,flags,team&t=%<t>d'
+        SCHEDULE = 'https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=%<date>s&' \
+                   'hydrate=game(content(summary)),linescore,flags,team&t=%<t>d'
 
         PREGAME_STATUSES = /
           Preview|Warmup|Pre-Game|Delayed Start|Scheduled
@@ -25,7 +24,7 @@ module BaseballDiscord
         POSTGAME_STATUSES = /Final|Game Over|Postponed|Completed Early/.freeze
 
         def run
-          date = BaseballDiscord::Utilities.parse_date args.join(' ')
+          date = BaseballDiscord::Utilities.parse_date raw_args
 
           return react_to_message('❓') unless date
 
@@ -123,8 +122,10 @@ module BaseballDiscord
         end
 
         def game_inning(game)
-          (game.dig('linescore', 'isTopInning') ? '▲' : '▼') + ' ' +
+          [
+            game.dig('linescore', 'isTopInning') ? '▲' : '▼',
             game.dig('linescore', 'currentInning').to_s
+          ].join(' ')
         end
 
         def pre_or_post_game_status(game, status)
@@ -134,8 +135,7 @@ module BaseballDiscord
             return innings == 9 ? 'F' : "F/#{innings}"
           end
 
-          BaseballDiscord::Utilities.parse_time(game['gameDate'])
-            .strftime('%-I:%M')
+          BaseballDiscord::Utilities.parse_time(game['gameDate']).strftime('%-I:%M')
         end
       end
     end

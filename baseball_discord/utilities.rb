@@ -54,9 +54,8 @@ module BaseballDiscord
       104 => DIVISION_TEAMS[203] + DIVISION_TEAMS[204] + DIVISION_TEAMS[205]
     }.freeze
 
-    PLAYER_LOOKUP = 'http://lookup-service-prod.mlb.com/json/named.' \
-                    'search_player_all.bam?sport_code=%%27mlb%%27&' \
-                    'name_part=%%27%<name>s%%25%%27'
+    PLAYER_LOOKUP = 'http://lookup-service-prod.mlb.com/json/named.search_player_all.bam?' \
+                    'sport_code=%%27mlb%%27&name_part=%%27%<name>s%%25%%27'
 
     def self.parse_date(date)
       return Time.now if date.strip == ''
@@ -88,9 +87,7 @@ module BaseballDiscord
 
     def self.look_up_player(name)
       players = JSON.parse(
-        URI.parse(
-          format(PLAYER_LOOKUP, name: CGI.escape(name.upcase))
-        ).open.read
+        URI.parse(format(PLAYER_LOOKUP, name: CGI.escape(name.upcase))).open.read
       ).dig('search_player_all', 'queryResults', 'row')
 
       players = [players] if players.is_a? Hash
@@ -111,8 +108,7 @@ module BaseballDiscord
     # @param [String] The user-provided input that may have a date at the end
     # @return [Array<String, DateTime>] The remaining input and a date
     def self.extract_date(input)
-      match = Regexp.new("#{team_names_regexp}(?<date>.*)")
-        .match(input.downcase)
+      match = Regexp.new("#{team_names_regexp}(?<date>.*)").match(input.downcase)
 
       if match && match[:team]
         # yay we got a team
@@ -130,9 +126,7 @@ module BaseballDiscord
     end
 
     def self.team_names_regexp
-      @team_names_regexp ||= Regexp.new(
-        '\\A(?<team>' + TEAMS_BY_NAME.values.flatten.join('|') + ')'
-      )
+      @team_names_regexp ||= Regexp.new("\\A(?<team>#{TEAMS_BY_NAME.values.flatten.join('|')})")
     end
   end
 end

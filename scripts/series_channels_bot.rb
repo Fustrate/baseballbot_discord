@@ -16,9 +16,8 @@ class SeriesChannelsBot
 
   LIVE_GAME_STATUSES = %w[Live Preview].freeze
 
-  SCHEDULE = \
-    'https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=%<date>s&' \
-    'hydrate=game(content(summary)),linescore,flags,team&t=%<t>d'
+  SCHEDULE = 'https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=%<date>s&' \
+             'hydrate=game(content(summary)),linescore,flags,team&t=%<t>d'
 
   def initialize(token:)
     @token = "Bot #{token}"
@@ -75,7 +74,7 @@ class SeriesChannelsBot
     [
       game.dig('teams', 'away', 'team', 'teamName'),
       game.dig('teams', 'home', 'team', 'teamName')
-    ].join(' at ').downcase.gsub(/[^a-z]/, '-').gsub(/\-{2,}/, '-')
+    ].join(' at ').downcase.gsub(/[^a-z]/, '-').gsub(/-{2,}/, '-')
   end
 
   def update_redis(active_games)
@@ -124,15 +123,7 @@ class SeriesChannelsBot
   def create_channel(name)
     data = { name: name, type: 0, parent_id: GAME_CHATS_ID }
 
-    response = request(
-      :guilds_sid_channels,
-      SERVER_ID,
-      :post,
-      "guilds/#{SERVER_ID}/channels",
-      data
-    )
-
-    JSON.parse(response)
+    JSON.parse request(:guilds_sid_channels, SERVER_ID, :post, "guilds/#{SERVER_ID}/channels", data)
   end
 
   def remove_channel(channel_id)

@@ -40,7 +40,8 @@ module GameChatBot
 
       ready { start_loop }
 
-      register_commands
+      register_basic_commands
+      register_commands_with_arguments
 
       super attributes.merge(prefix: '!')
     end
@@ -53,18 +54,15 @@ module GameChatBot
 
     protected
 
-    def register_commands
+    def register_basic_commands
       command(:linescore) { |event| feed_for_event(event)&.send_line_score }
       command(:lineups) { |event| feed_for_event(event)&.send_lineups }
       command(:umpires) { |event| feed_for_event(event)&.send_umpires }
+    end
 
-      command(:lineup) do |event, *args|
-        feed_for_event(event)&.send_lineup(event, args.join(' '))
-      end
-
-      command(:autoupdate) do |event, *args|
-        feed_for_event(event)&.autoupdate(args.join(' '))
-      end
+    def register_commands_with_arguments
+      command(:lineup) { |event, *args| feed_for_event(event)&.send_lineup(event, args.join(' ')) }
+      command(:autoupdate) { |event, *args| feed_for_event(event)&.autoupdate(args.join(' ')) }
     end
 
     def feed_for_event(event)
@@ -85,7 +83,7 @@ module GameChatBot
 
       start_games
 
-      @games.select { |_, game| game.game_over }.keys.each do |channel_id|
+      @games.select { |_, game| game.game_over }.each_key do |channel_id|
         @games.delete channel_id
         @redis.hdel 'live_games', channel(channel_id).name
       end

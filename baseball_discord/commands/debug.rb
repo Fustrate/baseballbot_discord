@@ -13,9 +13,7 @@ module BaseballDiscord
       # Prints some basic info to the log file
       class DebugCommand < Command
         def debug
-          unless user.id == BaseballDiscord::Bot::ADMIN_ID
-            return react_to_message '🔒'
-          end
+          return react_to_message('🔒') unless user.id == BaseballDiscord::Bot::ADMIN_ID
 
           log "Server: #{server.inspect}", level: :debug
           log "Message: #{message.inspect}", level: :debug

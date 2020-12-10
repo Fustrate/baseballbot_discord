@@ -57,7 +57,7 @@ module BaseballDiscord
         end
 
         def determine_team_and_number
-          number, name = parse_input(args.join(' ').strip)
+          number, name = parse_input(raw_args)
 
           @team_id = BaseballDiscord::Utilities.find_team_by_name(
             name ? [name] : names_from_context
