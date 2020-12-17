@@ -16,19 +16,19 @@ module BaseballDiscord
 
     protected
 
-    def load_data_from_stats_api(url, interpolations = {})
-      filename = interpolate_url(url, interpolations)
+    def load_data_from_stats_api(path, interpolations = {})
+      url = "https://statsapi.mlb.com/api#{interpolate_path(path, interpolations)}"
 
-      log "[URL Load] #{filename}", level: :debug
+      log "[URL Load] #{url}", level: :debug
 
-      JSON.parse(URI.parse(filename).open.read)
+      JSON.parse(URI.parse(url).open.read)
     end
 
-    def interpolate_url(url, interpolations)
+    def interpolate_path(path, interpolations)
       date = interpolations[:date] || (Time.now - 7200)
 
       format(
-        url,
+        path,
         interpolations.merge(
           year: date.year,
           t: Time.now.to_i,

@@ -14,8 +14,8 @@ module BaseballDiscord
       end
 
       class WCStandingsCommand < Command
-        STATS_STANDINGS = 'https://statsapi.mlb.com/api/v1/standings/regularSeason?' \
-                          'leagueId=103,104&season=%<year>d&t=%<t>d&date=%<date>s&hydrate=team'
+        STATS_STANDINGS = '/v1/standings/regularSeason?leagueId=103,104&season=%<year>d&t=%<t>d&' \
+                          'date=%<date>s&hydrate=team'
 
         TABLE_HEADERS = %w[Team W L GB % rDiff STRK].freeze
 

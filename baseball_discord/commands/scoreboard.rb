@@ -14,12 +14,10 @@ module BaseballDiscord
       end
 
       class ScoreboardCommand < Command
-        SCHEDULE = 'https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=%<date>s&' \
-                   'hydrate=game(content(summary)),linescore,flags,team&t=%<t>d'
+        SCHEDULE = '/v1/schedule?sportId=1&date=%<date>s&t=%<t>d&' \
+                   'hydrate=game(content(summary)),linescore,flags,team'
 
-        PREGAME_STATUSES = /
-          Preview|Warmup|Pre-Game|Delayed Start|Scheduled
-        /x.freeze
+        PREGAME_STATUSES = /Preview|Warmup|Pre-Game|Delayed Start|Scheduled/.freeze
 
         POSTGAME_STATUSES = /Final|Game Over|Postponed|Completed Early/.freeze
 

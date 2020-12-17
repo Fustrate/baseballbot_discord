@@ -24,16 +24,11 @@ module BaseballDiscord
       class TeamCalendarCommand < Command
         attr_reader :past_or_future
 
-        SCHEDULE = \
-          'http://statsapi.mlb.com/api/v1/schedule?teamId=%<team_id>d&' \
-          'startDate=%<start_date>s&endDate=%<end_date>s&sportId=1&' \
-          'eventTypes=primary&scheduleTypes=games&hydrate=team' \
-          '(venue(timezone)),game(content(summary)),linescore,broadcasts(all)'
+        SCHEDULE = '/v1/schedule?teamId=%<team_id>d&startDate=%<start_date>s&' \
+                   'endDate=%<end_date>s&sportId=1&eventTypes=primary&scheduleTypes=games&' \
+                   'hydrate=team(venue(timezone)),game(content(summary)),linescore,broadcasts(all)'
 
-        PREGAME_STATUSES = /
-          Preview|Warmup|Pre-Game|Delayed Start|Scheduled
-        /x.freeze
-
+        PREGAME_STATUSES = /Preview|Warmup|Pre-Game|Delayed Start|Scheduled/.freeze
         POSTGAME_STATUSES = /Final|Game Over|Postponed|Completed Early/.freeze
 
         def list_games(past_or_future)

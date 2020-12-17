@@ -14,9 +14,8 @@ module BaseballDiscord
       end
 
       class StandingsCommand < Command
-        STATS_STANDINGS = \
-          'https://statsapi.mlb.com/api/v1/standings/regularSeason?' \
-          'leagueId=103,104&season=%<year>d&t=%<t>d&date=%<date>s&hydrate=team'
+        STATS_STANDINGS = '/v1/standings/regularSeason?leagueId=103,104&season=%<year>d&t=%<t>d&' \
+                          'date=%<date>s&hydrate=team'
 
         def run
           team_name, date = parse_team_and_date
@@ -40,9 +39,8 @@ module BaseballDiscord
         end
 
         def find_division_id(team_name)
-          team_id = BaseballDiscord::Utilities.find_team_by_name(
-            team_name.empty? ? names_from_context : [team_name]
-          )
+          team_id = BaseballDiscord::Utilities
+            .find_team_by_name(team_name.empty? ? names_from_context : [team_name])
 
           return unless team_id
 
