@@ -6,9 +6,10 @@ module BaseballDiscord
       extend Discordrb::Commands::CommandContainer
 
       command(
-        %i[wcstandings wildcard],
+        :wcstandings,
         description: 'Displays the wildcard standings for a team',
-        usage: 'wcstandings [team]'
+        usage: 'wcstandings [team]',
+        aliases: %i[wildcard]
       ) do |event, *args|
         WCStandingsCommand.new(event, *args).run
       end

@@ -6,9 +6,10 @@ module BaseballDiscord
       extend Discordrb::Commands::CommandContainer
 
       command(
-        %i[scoreboard scores],
+        :scores,
         description: 'Shows scores and stuff',
-        usage: 'scoreboard [today|yesterday|tomorrow|Date]'
+        usage: 'scores [today|yesterday|tomorrow|Date]',
+        aliases: %i[scoreboard]
       ) do |event, *args|
         ScoreboardCommand.new(event, *args).run
       end
