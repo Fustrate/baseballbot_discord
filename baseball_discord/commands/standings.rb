@@ -34,7 +34,9 @@ module BaseballDiscord
         protected
 
         def standings_data(date, division_id)
-          load_data_from_stats_api(STATS_STANDINGS, date: date)['records']
+          clamped_date = clamp_date_to_regular_season(date)
+
+          load_data_from_stats_api(STATS_STANDINGS, date: clamped_date)['records']
             .find { |record| record.dig('division', 'id') == division_id }['teamRecords']
         end
 
@@ -96,6 +98,23 @@ module BaseballDiscord
           table.align_column(5, :right)
 
           format_table table
+        end
+
+        def clamp_date_to_regular_season(date)
+          formatted = date.strftime('%F')
+
+          data = load_data_from_stats_api(
+            '/v1/seasons?sportId=1&season=%<season>d',
+            season: date.year
+          )
+
+          end_date = data.dig('seasons', 0, 'regularSeasonEndDate')
+          start_date = data.dig('seasons', 0, 'regularSeasonStartDate')
+
+          return Time.parse(end_date) if formatted > end_date
+          return Time.parse(start_date) if formatted < start_date
+
+          date
         end
       end
     end
