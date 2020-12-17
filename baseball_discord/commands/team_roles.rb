@@ -111,8 +111,7 @@ module BaseballDiscord
         end
 
         def update_nickname(team_ids)
-          abbrs = team_ids.map { |team_id| TEAM_ROLES.dig(team_id, 0) }
-            .map { |abbr| "[#{abbr}]" }
+          abbrs = team_ids.map { |team_id| "[#{TEAM_ROLES.dig(team_id, 0)}]" }
 
           # return unless abbrs.count > 1
 
@@ -132,9 +131,7 @@ module BaseballDiscord
         def member_verified?
           return true unless bot.config.verification_enabled?(@member.server.id)
 
-          @member.roles.map(&:id).include?(
-            bot.config.verified_role_id(@member.server.id)
-          )
+          @member.roles.map(&:id).include? bot.config.verified_role_id(@member.server.id)
         end
       end
     end

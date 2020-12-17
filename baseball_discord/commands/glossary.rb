@@ -9,7 +9,7 @@ module BaseballDiscord
       command(
         :define,
         description: 'Look up a term from FanGraphs',
-        usage: 'glossary [term]',
+        usage: 'define [term]',
         min_args: 1,
         aliases: %i[glossary]
       ) do |event, *args|
