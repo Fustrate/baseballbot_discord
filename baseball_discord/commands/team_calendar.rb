@@ -92,6 +92,7 @@ module BaseballDiscord
           games_table process_games(data)
         end
 
+        # TODO: This doesn't work in the off season.
         def calendar_dates
           # Go two hours back because of late games
           now = Time.now - 7200
@@ -103,6 +104,8 @@ module BaseballDiscord
         end
 
         def games_table(games)
+          return 'No games found.' if games.empty?
+
           table = Terminal::Table.new(
             rows: table_rows(games),
             headings: table_headings,
