@@ -96,15 +96,22 @@ module BaseballDiscord
           leader_rows = leaders.map { |team| team_standings_data(team) }
           other_rows = others.map { |team| team_standings_data(team) }
 
-          table = Terminal::Table
-            .new(rows: (leader_rows + [:separator] + other_rows), headings: TABLE_HEADERS)
+          table = Terminal::Table.new(
+            rows: (leader_rows + [:separator] + other_rows),
+            headings: TABLE_HEADERS,
+            style: { border: :unicode }
+          )
 
+          align_standings_table_columns(table)
+
+          format_table table
+        end
+
+        def align_standings_table_columns(table)
           table.align_column(1, :right)
           table.align_column(2, :right)
           table.align_column(3, :right)
           table.align_column(5, :right)
-
-          format_table table
         end
       end
     end

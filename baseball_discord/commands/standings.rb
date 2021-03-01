@@ -90,7 +90,11 @@ module BaseballDiscord
         end
 
         def standings_table(rows)
-          table = Terminal::Table.new rows: rows, headings: %w[Team W L GB % rDiff STRK]
+          table = Terminal::Table.new(
+            rows: rows,
+            headings: %w[Team W L GB % rDiff STRK],
+            style: { border: :unicode }
+          )
 
           table.align_column(1, :right)
           table.align_column(2, :right)

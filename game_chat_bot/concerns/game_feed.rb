@@ -66,7 +66,11 @@ module GameChatBot
     end
 
     def lineup_table(flag, rows)
-      table = Terminal::Table.new rows: rows, title: "#{team_name(flag)} Lineup"
+      table = Terminal::Table.new(
+        rows: rows,
+        title: "#{team_name(flag)} Lineup",
+        style: { border: :unicode }
+      )
 
       format_table table
     end

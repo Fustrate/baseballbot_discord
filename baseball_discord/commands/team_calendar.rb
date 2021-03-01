@@ -104,7 +104,8 @@ module BaseballDiscord
           table = Terminal::Table.new(
             rows: table_rows(games),
             headings: table_headings,
-            title: games.first[:team]
+            title: games.first[:team],
+            style: { border: :unicode }
           )
 
           table.align_column(0, :right)

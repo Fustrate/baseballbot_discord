@@ -39,7 +39,8 @@ module BaseballDiscord
         def scores_table(data, date)
           table = Terminal::Table.new(
             rows: scores_table_rows(data.dig('dates', 0, 'games')),
-            title: date.strftime('%B %-d, %Y')
+            title: date.strftime('%B %-d, %Y'),
+            style: { border: :unicode }
           )
 
           table.align_column(1, :right)
