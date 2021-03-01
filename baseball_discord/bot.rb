@@ -68,7 +68,7 @@ module BaseballDiscord
         (prefixes[message.channel.server&.id] || ['!']).each do |prefix|
           next unless message.content.start_with?(prefix)
 
-          return message.content[prefix.size..-1]
+          return message.content[prefix.size..]
         end
 
         nil

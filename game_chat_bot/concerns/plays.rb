@@ -47,7 +47,7 @@ module GameChatBot
 
       [
         embeds_for_play(@feed.plays['allPlays'][play_id], after: event_id),
-        embeds_for_plays(@feed.plays['allPlays'][(play_id + 1)..-1])
+        embeds_for_plays(@feed.plays['allPlays'][(play_id + 1)..])
       ].flatten.compact
     end
 
@@ -57,7 +57,7 @@ module GameChatBot
       @last_play = play
 
       [
-        interesting_events(play, play['playEvents'][(after + 1)..-1]),
+        interesting_events(play, play['playEvents'][(after + 1)..]),
         (embed_for(play) if play.dig('about', 'isComplete'))
       ].flatten.compact
     end
