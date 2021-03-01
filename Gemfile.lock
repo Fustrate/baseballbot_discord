@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/meew0/discordrb.git
-  revision: b739895505aac8bf6d0cbbda98ade1600e660abb
+  revision: 777ccef511cadd3f4363f24fc164177bc6ff5406
   specs:
     discordrb (3.3.0)
       discordrb-webhooks (~> 3.3.0)
@@ -13,7 +13,7 @@ GIT
 
 GIT
   remote: https://github.com/redis/redis-rb.git
-  revision: c449816bd9f47831cc2cdeb8f0e24636ff49f663
+  revision: 05425d4d51287e00b5187a75885c45ac7172bacb
   specs:
     redis (4.2.5)
 
@@ -24,7 +24,7 @@ GEM
       public_suffix (>= 2.0.2, < 5.0)
     chronic (0.10.2)
     climate_control (0.2.0)
-    concurrent-ruby (1.1.7)
+    concurrent-ruby (1.1.8)
     daemons (1.3.1)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
@@ -36,7 +36,7 @@ GEM
     event_emitter (0.2.6)
     eventmachine (1.2.7)
     ffi (1.14.2)
-    fugit (1.4.1)
+    fugit (1.4.2)
       et-orbi (~> 1.1, >= 1.1.8)
       raabro (~> 1.4)
     hana (1.3.7)
@@ -56,8 +56,8 @@ GEM
       multi_xml (>= 0.5.2)
     mime-types (3.3.1)
       mime-types-data (~> 3.2015)
-    mime-types-data (3.2020.1104)
-    minitest (5.14.3)
+    mime-types-data (3.2021.0225)
+    minitest (5.14.4)
     mlb_stats_api (0.2.5)
       hana (~> 1.3)
       httparty (~> 0.16)
@@ -79,7 +79,7 @@ GEM
       netrc (~> 0.8)
     rufus-scheduler (3.7.0)
       fugit (~> 1.1, >= 1.1.6)
-    terminal-table (2.0.0)
+    terminal-table (3.0.0)
       unicode-display_width (~> 1.1, >= 1.1.1)
     terrapin (0.6.0)
       climate_control (>= 0.0.3, < 1.0)
