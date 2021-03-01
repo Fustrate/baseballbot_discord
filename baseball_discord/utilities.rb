@@ -1,43 +1,9 @@
 # frozen_string_literal: true
 
+require 'yaml'
+
 module BaseballDiscord
   module Utilities
-    # rubocop:disable Metrics/LineLength
-    TEAMS_BY_NAME = {
-      # These must be in largest-to-smallest match order for the regexp to work
-      108 => ['los angeles angels of anaheim', 'los angeles angels', 'la angels', 'angels', 'anaheim', 'ana', 'laaa', 'laa'],
-      109 => ['arizona diamondbacks', 'diamondbacks', 'arizona', 'ari', 'az', 'dbacks'],
-      110 => ['baltimore orioles', 'orioles', 'baltimore', 'bal'],
-      111 => ['boston red sox', 'red sox', 'boston', 'bos', 'bosox', 'bo sox'],
-      112 => ['chicago cubs', 'cubs', 'chc'],
-      113 => ['cincinatti reds', 'cincinatti', 'reds', 'cin'],
-      114 => ['cleveland indians', 'indians', 'cleveland', 'cle'],
-      115 => ['colorado rockies', 'rockies', 'colorado', 'col', 'co'],
-      116 => ['detroit tigers', 'tigers', 'detroit', 'det', 'beisbolcats'],
-      117 => ['houston astros', 'astros', 'houston', 'hou'],
-      118 => ['kansas city royals', 'kc royals', 'royals', 'kansas city', 'kc', 'kcr', 'kansas'],
-      119 => ['los angeles dodgers', 'los angeles', 'la dodgers', 'dodgers', 'lad', 'la'],
-      120 => ['washington nationals', 'nationals', 'washington', 'wsh', 'was', 'dc', 'natinals', 'nats'],
-      121 => ['new york mets', 'mets', 'nym'],
-      133 => ['oakland athletics', 'athletics', 'oakland', 'oak', 'as', 'oakland as'],
-      134 => ['pittsburgh pirates', 'pirates', 'pittsburgh', 'pittsburg', 'buccos', 'pit'],
-      135 => ['san diego padres', 'sd padres', 'padres', 'san diego', 'sd', 'sdp'],
-      136 => ['seattle mariners', 'mariners', 'seattle', 'sea'],
-      137 => ['san francisco giants', 'sf giants', 'giants', 'san francisco', 'san fran', 'gigantes', 'sfg', 'sf'],
-      138 => ['st louis cardinals', 'cardinals', 'stl', 'st louis', 'salad eaters', 'cards'],
-      139 => ['tampa bay rays', 'devil rays', 'rays', 'tampa bay', 'tbr', 'tb'],
-      140 => ['texas rangers', 'rangers', 'texas', 'tex'],
-      141 => ['toronto blue jays', 'blue jays', 'toronto', 'tor', 'bluejays', 'jays', 'canada'],
-      142 => ['minnesota twins', 'twins', 'minnesota', 'min'],
-      143 => ['philadelphia phillies', 'phillies', 'philadelphia', 'philly', 'phils', 'phi'],
-      144 => ['atlanta braves', 'braves', 'atlanta', 'atl', 'barves'],
-      145 => ['chicago white sox', 'white sox', 'cws', 'chw', 'chisox', 'chi sox'],
-      146 => ['miami marlins', 'marlins', 'miami', 'mia', 'florida', 'fla'],
-      147 => ['new york yankees', 'yankees', 'nyy', 'bronx bombers'],
-      158 => ['milwaukee brewers', 'brewers', 'milwaukee', 'mil']
-    }.freeze
-    # rubocop:enable Metrics/LineLength
-
     DIVISION_TEAMS = {
       200 => [108, 136, 117, 140, 133], # AL West
       201 => [110, 111, 139, 141, 147], # AL East
@@ -58,9 +24,7 @@ module BaseballDiscord
                     'sport_code=%%27mlb%%27&name_part=%%27%<name>s%%25%%27'
 
     def self.parse_date(date)
-      return Time.now if date.strip == ''
-
-      Chronic.parse(date)
+      date.strip == '' ? Time.now : Chronic.parse(date)
     end
 
     def self.parse_time(utc, time_zone: 'America/New_York')
@@ -69,15 +33,14 @@ module BaseballDiscord
       utc = Time.parse(utc).utc unless utc.is_a? Time
 
       period = time_zone.period_for_utc(utc)
-      with_offset = utc + period.utc_total_offset
 
-      Time.parse "#{with_offset.strftime('%FT%T')} #{period.zone_identifier}"
+      Time.parse "#{(utc + period.utc_total_offset).strftime('%FT%T')} #{period.zone_identifier}"
     end
 
     def self.find_team_by_name(names)
       Array(names).map { |name| name.downcase.gsub(/[^a-z ]/, '') }
         .each do |name|
-          TEAMS_BY_NAME.each do |id, potential_names|
+          teams_by_name.each do |id, potential_names|
             return id if potential_names.include?(name)
           end
         end
@@ -126,7 +89,12 @@ module BaseballDiscord
     end
 
     def self.team_names_regexp
-      @team_names_regexp ||= Regexp.new("\\A(?<team>#{TEAMS_BY_NAME.values.flatten.join('|')})")
+      @team_names_regexp ||= Regexp.new("\\A(?<team>#{teams_by_name.values.flatten.join('|')})")
+    end
+
+    def self.teams_by_name
+      @teams_by_name ||= ::YAML
+        .safe_load(File.open(File.expand_path("#{__dir__}/../config/team_names.yml")).read)
     end
   end
 end

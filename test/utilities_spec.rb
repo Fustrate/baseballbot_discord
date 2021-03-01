@@ -17,17 +17,21 @@ class TestApi < MiniTest::Test
   end
 
   def test_find_team_by_name
-    BaseballDiscord::Utilities::TEAMS_BY_NAME.each do |team_id, names|
+    BaseballDiscord::Utilities.teams_by_name.each do |team_id, names|
       names.each do |name|
         assert_equal team_id, BaseballDiscord::Utilities.find_team_by_name(name)
       end
     end
+
+    assert_equal 110, BaseballDiscord::Utilities.find_team_by_name('orioles')
+    assert_equal 120, BaseballDiscord::Utilities.find_team_by_name('dc')
+    assert_equal 145, BaseballDiscord::Utilities.find_team_by_name('cws')
   end
 
   def test_extract_date
-    team, date = BaseballDiscord::Utilities.extract_date('dodgers 4/4/57')
+    team, date = BaseballDiscord::Utilities.extract_date('dodgers 4/4/85')
 
     assert_equal 'dodgers', team
-    assert_equal Date.new(1957, 4, 4), date
+    assert_equal Date.new(1985, 4, 4), date
   end
 end
