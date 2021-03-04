@@ -30,7 +30,7 @@ require_relative 'embeds/video'
 module GameChatBot
   # The master bot that controls all of the game channels
   class Bot < Discordrb::Commands::CommandBot
-    attr_reader :client, :redis, :scheduler
+    attr_reader :client, :logger, :redis, :scheduler
 
     INTENTS = %i[server_messages].freeze
 
@@ -39,6 +39,7 @@ module GameChatBot
 
       @client = MLBStatsAPI::Client.new
       @redis = Redis.new
+      @logger = Logger.new($stdout)
 
       ready { start_loop }
 
@@ -81,6 +82,8 @@ module GameChatBot
     end
 
     def update_games
+      @bot.logger.info 'Updating game threads...'
+
       @games.each_value(&:update)
 
       start_games
