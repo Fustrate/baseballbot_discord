@@ -27,6 +27,9 @@ gem 'rufus-scheduler'
 gem 'terminal-table'
 gem 'terrapin'
 
+# ERROR -- : cannot load such file -- concurrent/concurrent_ruby_ext (LoadError)
+gem 'concurrent-ruby-ext'
+
 group :development do
   gem 'minitest'
 end
