@@ -10,11 +10,11 @@ gem 'rake'
 
 # Local services
 gem 'em-hiredis'
-gem 'redis', git: 'https://github.com/redis/redis-rb.git'
+gem 'redis'
 # gem 'pg'
 
 # Outside services
-gem 'discordrb', git: 'https://github.com/meew0/discordrb.git'
+gem 'discordrb', github: 'shardlab/discordrb', branch: 'main'
 gem 'mlb_stats_api', '>= 0.2.3'
 gem 'redd'
 

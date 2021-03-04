@@ -1,21 +1,16 @@
 GIT
-  remote: https://github.com/meew0/discordrb.git
-  revision: 777ccef511cadd3f4363f24fc164177bc6ff5406
+  remote: https://github.com/shardlab/discordrb.git
+  revision: 75d3e6a8fd2cda78a1e3c8e4585b33372b5800e4
+  branch: main
   specs:
-    discordrb (3.3.0)
-      discordrb-webhooks (~> 3.3.0)
+    discordrb (3.4.2)
+      discordrb-webhooks (~> 3.4.2)
       ffi (>= 1.9.24)
       opus-ruby
       rest-client (>= 2.0.0)
       websocket-client-simple (>= 0.3.0)
-    discordrb-webhooks (3.3.0)
+    discordrb-webhooks (3.4.2)
       rest-client (>= 2.0.0)
-
-GIT
-  remote: https://github.com/redis/redis-rb.git
-  revision: 05425d4d51287e00b5187a75885c45ac7172bacb
-  specs:
-    redis (4.2.5)
 
 GEM
   remote: https://rubygems.org/
@@ -72,6 +67,7 @@ GEM
     rake (13.0.3)
     redd (0.8.8)
       http (~> 2.2)
+    redis (4.2.5)
     rest-client (2.1.0)
       http-accept (>= 1.7.0, < 2.0)
       http-cookie (>= 1.0.2, < 2.0)
@@ -106,7 +102,7 @@ DEPENDENCIES
   mlb_stats_api (>= 0.2.3)
   rake
   redd
-  redis!
+  redis
   rufus-scheduler
   terminal-table
   terrapin
