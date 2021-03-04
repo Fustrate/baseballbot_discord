@@ -82,7 +82,7 @@ module GameChatBot
     end
 
     def update_games
-      @bot.logger.info 'Updating game threads...'
+      logger.info 'Updating game threads...'
 
       @games.each_value(&:update)
 
