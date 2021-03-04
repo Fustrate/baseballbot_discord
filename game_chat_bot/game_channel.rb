@@ -34,7 +34,7 @@ module GameChatBot
 
       @game_over = false
 
-      bot.redis.get("#{redis_key}_unmuted") { |unmuted| @unmuted = unmuted }
+      @unmuted = bot.redis.get("#{redis_key}_unmuted")
     end
 
     def send_message(text: '', embed: nil, at: nil, force: false)

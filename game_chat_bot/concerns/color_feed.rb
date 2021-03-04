@@ -4,10 +4,7 @@ module GameChatBot
   module ColorFeed
     def process_color_feed
       color_feed_items.each do |item|
-        @bot.redis.sadd(
-          "#{redis_key}_color",
-          item.dig('data', 'mediaPlaybackId') || item['guid']
-        )
+        @bot.redis.sadd "#{redis_key}_color", item.dig('data', 'mediaPlaybackId') || item['guid']
 
         embed = color_feed_embed_for(item)
 
@@ -20,17 +17,12 @@ module GameChatBot
     def color_feed_items
       return [] unless @color_feed.items
 
-      @color_feed.items
-        .first(5)
-        .reject { |item| posted_color_feed_item?(item) }
+      @color_feed.items.first(5).reject { |item| posted_color_feed_item?(item) }
     end
 
     def posted_color_feed_item?(item)
       # Non-play videos have a guid of "video_undefined"
-      @bot.redis.sismember(
-        "#{redis_key}_color",
-        item.dig('data', 'mediaPlaybackId') || item['guid']
-      )
+      @bot.redis.sismember "#{redis_key}_color", item.dig('data', 'mediaPlaybackId') || item['guid']
     end
 
     def color_feed_embed_for(item)
