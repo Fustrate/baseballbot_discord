@@ -57,6 +57,10 @@ module GameChatBot
 
     protected
 
+    def baseball
+      @baseball ||= server 400516567735074817
+    end
+
     def register_basic_commands
       command(:linescore) { |event| feed_for_event(event)&.send_line_score }
       command(:lineups) { |event| feed_for_event(event)&.send_lineups }
@@ -76,6 +80,9 @@ module GameChatBot
       @scheduler = Rufus::Scheduler.new
 
       @scheduler.every('20s') { update_games }
+
+      # Make sure we've cached the list of channels in this server
+      baseball.channels
 
       # Start right away
       update_games
@@ -97,6 +104,8 @@ module GameChatBot
     def start_games
       @redis.hgetall('live_games').each do |channel_name, game_pk|
         channel = find_channel(channel_name).first
+
+        logger.info "Channel for #{channel_name}: #{channel&.id}"
 
         next unless channel && @games[channel.id]&.game_pk != game_pk
 
