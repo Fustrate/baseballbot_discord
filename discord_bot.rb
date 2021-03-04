@@ -8,6 +8,8 @@ require_relative 'baseball_discord/bot'
 )
 
 trap('TERM') do
+  @discord_bot.logger.debug '[TERM] Term signal received.'
+
   # No sync because we're in a trap context
   @discord_bot.stop(true)
 
