@@ -51,8 +51,12 @@ module GameChatBot
     protected
 
     def output_team_lineup_table(flag)
-      return if bot.redis.get("#{redis_key}_#{flag}_lineup_posted")
+      bot.redis.get("#{redis_key}_#{flag}_lineup_posted") do |posted|
+        output_team_lineup!(flag) unless posted
+      end
+    end
 
+    def output_team_lineup!(flag)
       rows = lineup_data(flag)
 
       return unless rows&.any?

@@ -3,17 +3,17 @@
 module GameChatBot
   module Plays
     def output_plays
-      @next_event = @bot.redis.get "#{redis_key}_next_event"
+      @bot.redis.get("#{redis_key}_next_event") do |event|
+        plays_starting_with(event).each do |embed|
+          embed_hash = embed.to_h
 
-      plays_starting_with(@next_event).each do |embed|
-        embed_hash = embed.to_h
+          @bot.home_run_alert(embed_hash) if embed.is_a?(Embeds::HomeRun)
 
-        @bot.home_run_alert(embed_hash) if embed.is_a?(Embeds::HomeRun)
+          send_message embed: embed_hash, at: embed.post_at
+        end
 
-        send_message embed: embed_hash, at: embed.post_at
+        update_next_event(event)
       end
-
-      update_next_event
     end
 
     protected
@@ -24,10 +24,10 @@ module GameChatBot
       embeds_for_plays @feed.plays['allPlays']
     end
 
-    def update_next_event
+    def update_next_event(next_event)
       value = last_play_key
 
-      return if !value || value == @next_event
+      return if !value || value == next_event
 
       @bot.redis.set "#{redis_key}_next_event", value
     end
