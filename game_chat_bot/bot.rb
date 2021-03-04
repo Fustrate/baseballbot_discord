@@ -32,6 +32,8 @@ module GameChatBot
   class Bot < Discordrb::Commands::CommandBot
     attr_reader :client, :redis, :scheduler
 
+    INTENTS = %i[server_messages].freeze
+
     def initialize(attributes = {})
       @games = {}
 
@@ -43,7 +45,7 @@ module GameChatBot
       register_basic_commands
       register_commands_with_arguments
 
-      super attributes.merge(prefix: '!')
+      super attributes.merge(prefix: '!', intents: INTENTS)
     end
 
     def home_run_alert(embed)
