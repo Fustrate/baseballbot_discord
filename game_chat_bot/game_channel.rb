@@ -60,6 +60,8 @@ module GameChatBot
     def update
       return unless ready_to_update? && @feed.update!
 
+      @bot.logger.info "[Channel] Updating #{redis_key}..."
+
       output_plays
       output_alerts
       output_lineups
@@ -73,14 +75,20 @@ module GameChatBot
     end
 
     def send_line_score
+      @bot.logger.info "[Channel] Sending line score #{redis_key}..."
+
       send_message text: line_score_block
     end
 
     def send_lineups
+      @bot.logger.info "[Channel] Sending lineups for #{redis_key}..."
+
       send_message text: lineups
     end
 
     def send_lineup(event, input)
+      @bot.logger.info "[Channel] Sending lineup for #{redis_key}..."
+
       lineup = team_lineup(input)
 
       return event.message.react('❓') unless lineup
@@ -89,6 +97,8 @@ module GameChatBot
     end
 
     def send_umpires
+      @bot.logger.info "[Channel] Sending umpires #{redis_key}..."
+
       send_embed embed: { fields: fields_for_umpires }
     end
 
@@ -112,6 +122,8 @@ module GameChatBot
     end
 
     def mute!
+      @bot.logger.info "[Channel] Muting #{redis_key}..."
+
       @unmuted = false
 
       bot.redis.del "#{redis_key}_unmuted"
@@ -120,6 +132,8 @@ module GameChatBot
     end
 
     def unmute!
+      @bot.logger.info "[Channel] Unmuting #{redis_key}..."
+
       @unmuted = true
 
       bot.redis.set "#{redis_key}_unmuted", 1
