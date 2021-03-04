@@ -2,6 +2,6 @@
 
 require_relative 'series_channels_bot'
 
-bot = SeriesChannelsBot.new token: ENV['DISCORD_TOKEN']
+bot = SeriesChannelsBot.new token: ENV['DISCORD_GAMETHREAD_TOKEN']
 
 bot.update_channels
