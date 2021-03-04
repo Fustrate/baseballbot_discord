@@ -98,9 +98,7 @@ module BaseballDiscord
         def member_verified?(member)
           return true unless bot.config.verification_enabled?(member.server.id)
 
-          member.roles.map(&:id).include?(
-            bot.config.verified_role_id(member.server.id)
-          )
+          member.roles.map(&:id).include? bot.config.verified_role_id(member.server.id)
         end
 
         def auth_url(guild = nil)

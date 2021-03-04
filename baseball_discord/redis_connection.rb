@@ -119,13 +119,15 @@ module BaseballDiscord
     def process_member_verification(member, data, reddit_username)
       return unless member
 
-      @bot.logger.debug(
-        "[Verified] #{member.distinct} verified as #{reddit_username}"
-      )
+      @bot.logger.debug "[Verified] #{member.distinct} verified as #{reddit_username}"
 
       member.add_role data['role'].to_i
 
+      @bot.logger.debug "[Role] Added role #{data['role'].to_i} to #{member.distinct}"
+
       update_member_name(member, reddit_username)
+
+      @bot.logger.debug "[Name] Updated name for #{member.distinct} to #{reddit_username}"
 
       send_verified_message(member)
     end
@@ -141,8 +143,7 @@ module BaseballDiscord
 
       member.nick = reddit_username
     rescue Discordrb::Errors::NoPermission
-      @bot.logger.info "Couldn't update name for #{member.distinct} " \
-                       "to #{reddit_username}"
+      @bot.logger.info "Couldn't update name for #{member.distinct} to #{reddit_username}"
     end
   end
 end
