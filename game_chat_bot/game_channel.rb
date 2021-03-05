@@ -60,7 +60,7 @@ module GameChatBot
     def update
       return unless ready_to_update? && @feed.update!
 
-      @bot.logger.info "[Channel] Updating #{redis_key}..."
+      @bot.logger.info "[#{redis_key}] Updating"
 
       output_plays
       output_alerts
@@ -75,19 +75,19 @@ module GameChatBot
     end
 
     def send_line_score
-      @bot.logger.info "[Channel] Sending line score #{redis_key}..."
+      @bot.logger.info "[#{redis_key}] Sending line score"
 
       send_message text: line_score_block
     end
 
     def send_lineups
-      @bot.logger.info "[Channel] Sending lineups for #{redis_key}..."
+      @bot.logger.info "[#{redis_key}] Sending lineups"
 
       send_message text: lineups
     end
 
     def send_lineup(event, input)
-      @bot.logger.info "[Channel] Sending lineup for #{redis_key}..."
+      @bot.logger.info "[#{redis_key}] Sending lineup"
 
       lineup = team_lineup(input)
 
@@ -97,7 +97,7 @@ module GameChatBot
     end
 
     def send_umpires
-      @bot.logger.info "[Channel] Sending umpires #{redis_key}..."
+      @bot.logger.info "[#{redis_key}] Sending umpires"
 
       send_embed embed: { fields: fields_for_umpires }
     end
@@ -128,27 +128,31 @@ module GameChatBot
     end
 
     def mute!
-      @bot.logger.info "[Channel] Muting #{redis_key}..."
+      @bot.logger.info "[#{redis_key}] Muting"
 
       @unmuted = false
 
-      bot.redis.del "#{redis_key}_unmuted"
+      @bot.redis.del "#{redis_key}_unmuted"
 
       'Autoupdates are off. Use `!autoupdate on` to unmute.'
     end
 
     def unmute!
-      @bot.logger.info "[Channel] Unmuting #{redis_key}..."
+      @bot.logger.info "[#{redis_key}] Unmuting"
 
       @unmuted = true
 
-      bot.redis.set "#{redis_key}_unmuted", 1
+      @bot.redis.set "#{redis_key}_unmuted", 1
 
       'Autoupdates are on. Use `!autoupdate off` to mute.'
     end
 
     def update_channel_topic
-      @channel.topic = line_score_state
+      new_topic = line_score_state
+
+      @bot.logger.info "[#{redis_key}] Updating topic: #{new_topic}"
+
+      @channel.topic = new_topic
     end
   end
 end
