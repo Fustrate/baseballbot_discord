@@ -150,6 +150,9 @@ module GameChatBot
     def update_channel_topic
       new_topic = line_score_state
 
+      # We don't need to keep updating the same thing
+      return if new_topic == @channel.topic
+
       @bot.logger.info "[#{redis_key}] Updating topic: #{new_topic}"
 
       @channel.topic = new_topic
