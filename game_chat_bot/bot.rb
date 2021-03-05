@@ -32,7 +32,7 @@ module GameChatBot
   class Bot < Discordrb::Commands::CommandBot
     attr_reader :client, :logger, :redis, :scheduler
 
-    INTENTS = %i[servers server_messages].freeze
+    INTENTS = %i[servers server_messages server_message_reactions].freeze
 
     def initialize(attributes = {})
       @games = {}
