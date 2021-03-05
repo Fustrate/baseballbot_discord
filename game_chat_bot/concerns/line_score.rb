@@ -20,15 +20,15 @@ module GameChatBot
         rows[3][inning['num']] = inning.dig('home', 'runs')
       end
 
-      prettify_table Terminal::Table.new(rows: rows)
+      Terminal::Table.new(rows: rows)
     end
 
     def base_line_score
       [
         [''] + (1..innings).to_a + %w[R H E],
         :separator,
-        team_line_score(away_team_name, innings, away_rhe),
-        team_line_score(home_team_name, innings, home_rhe)
+        team_line_score(team_name('away'), innings, away_rhe),
+        team_line_score(team_name('home'), innings, home_rhe)
       ]
     end
 
@@ -45,7 +45,7 @@ module GameChatBot
     end
 
     def rhe_table
-      prettify_table Terminal::Table.new(
+      Terminal::Table.new(
         rows: [
           ['', 'R', 'H', 'E'],
           :separator,
