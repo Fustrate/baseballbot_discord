@@ -67,7 +67,8 @@ module GameChatBot
       output_lineups
       process_color_feed
 
-      @bot.scheduler.in('15s') { update_channel_topic }
+      # This randomly errors out.
+      # @bot.scheduler.in('15s') { update_channel_topic }
 
       @game_over = true if game_ended?
     rescue Net::OpenTimeout, SocketError, RestClient::NotFound
@@ -93,13 +94,13 @@ module GameChatBot
 
       return event.message.react('❓') unless lineup
 
-      send_message(text: lineup)
+      send_message text: lineup
     end
 
     def send_umpires
       @bot.logger.info "[#{redis_key}] Sending umpires"
 
-      send_embed embed: { fields: fields_for_umpires }
+      send_message embed: { fields: fields_for_umpires }
     end
 
     protected
