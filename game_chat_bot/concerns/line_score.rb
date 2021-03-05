@@ -27,8 +27,8 @@ module GameChatBot
       [
         [''] + (1..innings).to_a + %w[R H E],
         :separator,
-        team_line_score(team_name('away'), innings, away_rhe),
-        team_line_score(team_name('home'), innings, home_rhe)
+        team_line_score(team_name('away'), innings, team_rhe('away')),
+        team_line_score(team_name('home'), innings, team_rhe('home'))
       ]
     end
 
@@ -112,13 +112,11 @@ module GameChatBot
     end
 
     def game_over?
-      POSTGAME_STATUSES
-        .match?(@feed.game_data.dig('status', 'abstractGameState'))
+      POSTGAME_STATUSES.match?(@feed.game_data.dig('status', 'abstractGameState'))
     end
 
     def game_started?
-      !PREGAME_STATUSES
-        .match?(@feed.game_data.dig('status', 'abstractGameState'))
+      !PREGAME_STATUSES.match?(@feed.game_data.dig('status', 'abstractGameState'))
     end
   end
 end
