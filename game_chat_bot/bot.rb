@@ -89,7 +89,7 @@ module GameChatBot
     end
 
     def update_games
-      logger.info "Updating game threads (#{@games.keys.join(', ')})..."
+      logger.info 'Updating game threads'
 
       @games.each_value(&:update)
 
@@ -104,8 +104,6 @@ module GameChatBot
     def start_games
       @redis.hgetall('live_games').each do |channel_name, game_pk|
         channel = find_channel(channel_name).first
-
-        logger.info "Channel for #{channel_name}: #{channel&.id}"
 
         next unless channel && @games[channel.id]&.game_pk != game_pk
 

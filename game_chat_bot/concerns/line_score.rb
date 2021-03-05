@@ -91,9 +91,9 @@ module GameChatBot
 
     def line_score_block
       <<~LINESCORE
-        #{@line_score.line_score_state}
+        #{line_score_state}
 
-        ```#{@line_score.line_score}```
+        ```#{line_score}```
       LINESCORE
     end
 
