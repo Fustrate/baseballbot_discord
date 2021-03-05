@@ -15,7 +15,7 @@ module GameChatBot
     end
 
     def color_feed_items
-      return [] unless @color_feed.items
+      return [] unless @color_feed&.items
 
       @color_feed.items.first(5).reject { |item| posted_color_feed_item?(item) }
     end

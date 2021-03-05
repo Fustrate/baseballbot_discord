@@ -27,7 +27,7 @@ module GameChatBot
       @game_pk = game_pk
       @channel = channel
       @feed = @bot.client.live_feed(game_pk)
-      @color_feed = @bot.client.color_feed(game_pk)
+      @color_feed = load_color_feed
 
       @starts_at = Time.parse @feed.game_data.dig('datetime', 'dateTime')
       @last_update = Time.now - 3600 # So we can at least do one update
@@ -103,6 +103,12 @@ module GameChatBot
     end
 
     protected
+
+    def load_color_feed
+      @bot.client.color_feed(game_pk)
+    rescue MLBStatsAPI::NotFoundError
+      # No color feed
+    end
 
     def redis_key
       @redis_key ||= "#{@channel.id}_#{@game_pk}"
