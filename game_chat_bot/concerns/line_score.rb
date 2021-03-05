@@ -20,7 +20,7 @@ module GameChatBot
         rows[3][inning['num']] = inning.dig('home', 'runs')
       end
 
-      Terminal::Table.new(rows: rows)
+      Terminal::Table.new(rows: rows, style: { border: :unicode })
     end
 
     def base_line_score
@@ -51,7 +51,8 @@ module GameChatBot
           :separator,
           [team_name('away')] + team_rhe('away'),
           [team_name('home')] + team_rhe('home')
-        ]
+        ],
+        style: { border: :unicode }
       )
     end
 
