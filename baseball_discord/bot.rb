@@ -32,7 +32,7 @@ module BaseballDiscord
     # ID of the user allowed to administrate the bot
     ADMIN_ID = 429364871121993728
 
-    INTENTS = %i[server_members direct_messages direct_message_reactions].freeze
+    INTENTS = %i[servers server_members direct_messages direct_message_reactions].freeze
 
     def initialize(attributes = {})
       @config = Config.new
