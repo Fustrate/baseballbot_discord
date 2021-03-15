@@ -14,8 +14,8 @@ glossary:
   AB:
     title: At Bats
     description: >
-      Number of trips to the plate in which the batter does not walk, get hit by
-      a pitch, sacrifice (fly or bunt), or reach on interference.
+      Number of trips to the plate in which the batter does not walk, get hit by a pitch, sacrifice (fly or bunt), or
+      reach on interference.
 
   AVG:
     title: Batting Average
@@ -27,8 +27,7 @@ glossary:
   BABIP:
     title: Batting Average on Balls in Play
     description: >
-      The rate at which the batter gets a hit when he puts the ball in play,
-      calculated as (H-HR)/(AB-K-HR+SF).
+      The rate at which the batter gets a hit when he puts the ball in play, calculated as (H-HR)/(AB-K-HR+SF).
     link: http://www.fangraphs.com/library/offense/babip/
     see_also:
       - H
@@ -43,9 +42,7 @@ glossary:
 
   BB%:
     title: Walk Percentage
-    description: >
-      Frequency with which the batter has walked, calculated as walks divided by
-      plate appearances.
+    description: Frequency with which the batter has walked, calculated as walks divided by plate appearances.
     link: http://www.fangraphs.com/library/offense/rate-stats/
 
   BB/K:
@@ -55,9 +52,8 @@ glossary:
   BsR:
     title: Base Running Runs Above Average
     description: >
-      Number of runs above or below average a player has been worth on the
-      bases, based on stolen bases, caught stealing, extra bases taken, outs on
-      the bases, and avoiding double plays. It is the combination of wSB, UBR,
+      Number of runs above or below average a player has been worth on the bases, based on stolen bases, caught
+      stealing, extra bases taken, outs on the bases, and avoiding double plays. It is the combination of wSB, UBR,
       and wGDP.
     link: http://www.fangraphs.com/library/offense/bsr/
     see_also:
@@ -71,8 +67,7 @@ glossary:
 
   BUH%:
     title: Bunt Hit Percentage
-    description: >
-      Percentage of bunts that go for hits, calculated as Bunt Hits/Bunts.
+    description: Percentage of bunts that go for hits, calculated as Bunt Hits/Bunts.
 
   Cent%:
     title: Center Percentage
@@ -84,8 +79,7 @@ glossary:
 
   Clutch:
     title: Clutch Score
-    description: >
-      The difference between a player's total WPA/pLI and their WPA/LI.
+    description: The difference between a player's total WPA/pLI and their WPA/LI.
     link: http://www.fangraphs.com/library/misc/clutch/
     see_also:
       - WPA/pLI
@@ -104,18 +98,15 @@ glossary:
   Def:
     title: Defensive Runs Above Average
     description: >
-      Number of runs above or below average a player has been worth on defense,
-      combining Fielding Runs (Total Zone before 2002, UZR after) and the
-      positional adjustment.
+      Number of runs above or below average a player has been worth on defense, combining Fielding Runs (Total Zone
+      before 2002, UZR after) and the positional adjustment.
     link: http://www.fangraphs.com/library/defense/def/
     see_also:
       - "Off"
 
   FB%:
     title: Fly Ball Percentage
-    description: >
-      The percentage of a batter's balls in play that are fly balls, calculated
-      as FB/BIP.
+    description: The percentage of a batter's balls in play that are fly balls, calculated as FB/BIP.
     link: http://www.fangraphs.com/library/offense/batted-ball/
 
   F-Strike%:
@@ -129,14 +120,11 @@ glossary:
 
   GB/FB:
     title: Ground Ball to Fly Ball Ratio
-    description: >
-      The ratio of ground balls a batter hits to fly balls, calculated as GB/FB.
+    description: The ratio of ground balls a batter hits to fly balls, calculated as GB/FB.
 
   GB%:
     title: Ground Ball Percentage
-    description: >
-      The percentage of a batter's balls in play that are ground balls,
-      calculated as GB/BIP.
+    description: The percentage of a batter's balls in play that are ground balls, calculated as GB/BIP.
     link: http://www.fangraphs.com/library/offense/batted-ball/
 
   GDP:
@@ -166,8 +154,8 @@ glossary:
   HR/FB:
     title: Home Run to Fly Ball Rate
     description: >
-      Percentage of a batter's fly balls that go for home runs, calculated as
-      HB/FB (even though some HR are line drives).
+      Percentage of a batter's fly balls that go for home runs, calculated as HB/FB (even though some HR are line
+      drives).
     see_also:
       - HR
       - FB
@@ -178,9 +166,7 @@ glossary:
 
   IFFB%:
     title: Infield Fly Ball Percentage
-    description: >
-      Percentage of a batter's fly balls that were infield fly balls, calculated
-      as IFFB/FB.
+    description: Percentage of a batter's fly balls that were infield fly balls, calculated as IFFB/FB.
     see_also:
       - IFFB
       - FB
@@ -191,24 +177,20 @@ glossary:
 
   IFH%:
     title: Infield Hit Percentage
-    description: >
-      Percentage of ground balls that are infield hits, calculated as IFH/GB.
+    description: Percentage of ground balls that are infield hits, calculated as IFH/GB.
     see_also:
       - IFH
       - GB
 
   ISO:
     title: Isolated Power
-    description: >
-      Average number of extra bases per at bat, calculated several ways such as
-      SLG minus AVG.
+    description: Average number of extra bases per at bat, calculated several ways such as SLG minus AVG.
     link: http://www.fangraphs.com/library/offense/iso/
 
   K%:
     title: Strikeout Percentage
     description: >
-      Frequency with which the batter has struck out, calculated as strikeouts
-      divided by plate appearances.
+      Frequency with which the batter has struck out, calculated as strikeouts divided by plate appearances.
     link: http://www.fangraphs.com/library/offense/rate-stats/
     see_also:
       - K
@@ -216,9 +198,7 @@ glossary:
 
   LD%:
     title: Line Drive Percentage
-    description: >
-      The percentage of a batter's balls in play that are line drives,
-      calculated as LD/BIP.
+    description: The percentage of a batter's balls in play that are line drives, calculated as LD/BIP.
     link: http://www.fangraphs.com/library/offense/batted-ball/
     see_also:
       - LD
@@ -230,8 +210,7 @@ glossary:
 
   Maddux:
     title: Maddux
-    description: >
-      When a pitcher throws a complete-game shutout in less than 100 pitches.
+    description: When a pitcher throws a complete-game shutout in less than 100 pitches.
 
   Med%:
     title: Medium Contact Percentage
@@ -243,9 +222,7 @@ glossary:
 
   OBP:
     title: On Base Percentage
-    description: >
-      Rate at which the batter reaches base, calculated as
-      (H+BB+HBP)/(AB+BB+HBP+SF).
+    description: Rate at which the batter reaches base, calculated as (H+BB+HBP)/(AB+BB+HBP+SF).
     link: http://www.fangraphs.com/library/offense/obp/
     see_also:
       - H
@@ -256,15 +233,13 @@ glossary:
 
   O-Contact%:
     title: Outside the Zone Contact Percentage
-    description: >
-      Contact made outside the zone divided by swings outside the zone.
+    description: Contact made outside the zone divided by swings outside the zone.
     link: http://www.fangraphs.com/library/offense/plate-discipline/
 
   "Off":
     title: Offensive Runs Above Average
     description: >
-      Number of runs above or below average a player has been worth offensively,
-      combining Batting Runs and BsR.
+      Number of runs above or below average a player has been worth offensively, combining Batting Runs and BsR.
     link: http://www.fangraphs.com/library/offense/off/
     see_also:
       - Def
@@ -283,8 +258,7 @@ glossary:
 
   O-Swing%:
     title: Outside the Zone Swing Percentage
-    description: >
-      Swings at pitches outside the zone divided by pitches outside the zone.
+    description: Swings at pitches outside the zone divided by pitches outside the zone.
     link: http://www.fangraphs.com/library/offense/plate-discipline/
 
   PA:
@@ -297,9 +271,7 @@ glossary:
 
   phLI:
     title: Average Leverage Index while Pinch Hitting
-    description: >
-      The average leverage index of each batter's plate appearances while pinch
-      hitting.
+    description: The average leverage index of each batter's plate appearances while pinch hitting.
     link: http://www.fangraphs.com/library/misc/li/
 
   pLI:
@@ -322,15 +294,14 @@ glossary:
   RBI:
     title: Runs Batted In
     description: >
-      Number of times a run scores as a result of a batter's plate appearance,
-      not counting situations in which an error caused the run to score or the
-      batter hit into a double play.
+      Number of times a run scores as a result of a batter's plate appearance, not counting situations in which an error
+      caused the run to score or the batter hit into a double play.
 
   RE24:
     title: Run Expectancy 24 Base Out State
     description: >
-      The total impact a batter's plate appearances (or SB/CS) have on his
-      team's run expectancy relative to league average.
+      The total impact a batter's plate appearances (or SB/CS) have on his team's run expectancy relative to league
+      average.
     link: http://www.fangraphs.com/library/misc/re24/
     see_also:
       - REW
@@ -348,19 +319,17 @@ glossary:
 
   SF:
     title: Sacrifice Flies
-    description: >
-      Number of times a batter's fly out allowed a runner to tag up and score.
+    description: Number of times a batter's fly out allowed a runner to tag up and score.
 
   SH:
     title: Sacrifice Bunts
     description: >
-      Any bunt in which there was a runner on base and less than two outs in
-      which the batter was put out and at least one runner advanced.
+      Any bunt in which there was a runner on base and less than two outs in which the batter was put out and at least
+      one runner advanced.
 
   SLG:
     title: Slugging Percentage
-    description: >
-      Average number of total bases per at bat, calculated as Total Bases/AB.
+    description: Average number of total bases per at bat, calculated as Total Bases/AB.
 
   SO:
     title: Strikeouts
@@ -376,9 +345,7 @@ glossary:
 
   Spd:
     title: Speed Score
-    description: >
-      A slightly outdated statistic that attempts to measure a player's running
-      ability.
+    description: A slightly outdated statistic that attempts to measure a player's running ability.
 
   Swing%:
     title: Swing Percentage
@@ -401,40 +368,34 @@ glossary:
   UBR:
     title: Ultimate Base Running
     description: >
-      The number of runs above or below average added by a player on all
-      non-SB/CS base running players.
+      The number of runs above or below average added by a player on all non-SB/CS base running players.
 
   WAR:
     title: Wins Above Replacement
     description: >
-      A comprehensive statistic that estimates the number of wins a player has
-      been worth to his team compared to a freely available player such as a
-      minor league free agent.
+      A comprehensive statistic that estimates the number of wins a player has been worth to his team compared to a
+      freely available player such as a minor league free agent.
     link: http://www.fangraphs.com/library/misc/war/
 
   wGDP:
     title: Weighted Grounded Into Double Play Runs
-    description: >
-      The number of runs above or below average added by a player by staying out
-      of double plays.
+    description: The number of runs above or below average added by a player by staying out of double plays.
     see_also:
       - gdp
 
   wOBA:
     title: Weighted On Base Average
     description: >
-      Combines all the different aspects of hitting into one metric, weighting
-      each of them in proportion to their actual run value. While batting
-      average, on-base percentage, and slugging percentage fall short in
-      accuracy and scope, wOBA measures and captures offensive value more
-      accurately and comprehensively.
+      Combines all the different aspects of hitting into one metric, weighting each of them in proportion to their
+      actual run value. While batting average, on-base percentage, and slugging percentage fall short in accuracy and
+      scope, wOBA measures and captures offensive value more accurately and comprehensively.
     link: http://www.fangraphs.com/library/offense/woba/
 
   WPA:
     title: Win Probability Added
     description: >
-      The total impact a batter's plate appearances (or SB/CS) have on his
-      team's win expectancy relative to league average.
+      The total impact a batter's plate appearances (or SB/CS) have on his team's win expectancy relative to league
+      average.
     link: http://www.fangraphs.com/library/misc/wpa/
     see_also:
       - -WPA
@@ -463,8 +424,7 @@ glossary:
   WPA/LI:
     title: Situational Wins
     description: >
-      A player's WPA controlling for leverage index, calculated as the sum of
-      each event's WPA/LI, not total WPA/LI.
+      A player's WPA controlling for leverage index, calculated as the sum of each event's WPA/LI, not total WPA/LI.
     link: http://www.fangraphs.com/library/misc/wpa-li/
     see_also:
       - WPA
@@ -473,14 +433,11 @@ glossary:
 
   wRAA:
     title: Weighted Runs Above Average
-    description: >
-      Number of runs above or below average a player has added as a hitter.
+    description: Number of runs above or below average a player has added as a hitter.
 
   wRC:
     title: Weighted Runs Created
-    description: >
-      Number of runs a player has generated for his team as a result of his wOBA
-      and playing time.
+    description: Number of runs a player has generated for his team as a result of his wOBA and playing time.
     link: http://www.fangraphs.com/library/offense/wrc/
     see_also:
       - wRC+
@@ -488,18 +445,15 @@ glossary:
   wRC+:
     title: Weighted Runs Created Plus
     description: >
-      The most comprehensive rate statistic used to measure hitting performance
-      because it takes into account the varying weights of each offensive action
-      (like wOBA) and then adjusts them for the park and league context in which
-      they took place.
+      The most comprehensive rate statistic used to measure hitting performance because it takes into account the
+      varying weights of each offensive action (like wOBA) and then adjusts them for the park and league context in
+      which they took place.
     link: http://www.fangraphs.com/library/offense/wrc/
     see_also: wRC
 
   wSB:
     title: Weighted Stolen Base Runs Above Average
-    description: >
-      Number of runs above or below average added by a player on stolen base
-      attempts.
+    description: Number of runs above or below average added by a player on stolen base attempts.
 
   Z-Contact%:
     title: Inside the Zone Contact Percentage
@@ -508,8 +462,7 @@ glossary:
 
   Z-Swing%:
     title: Inside the Zone Swing Percentage
-    description: >
-      Swings at pitches inside the zone divided by pitches inside the zone.
+    description: Swings at pitches inside the zone divided by pitches inside the zone.
     link: http://www.fangraphs.com/library/offense/plate-discipline/
 
   Zone%:
