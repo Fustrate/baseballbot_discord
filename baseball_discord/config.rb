@@ -40,9 +40,7 @@ module BaseballDiscord
     protected
 
     def servers
-      @servers ||= YAML.safe_load(
-        File.open(File.expand_path("#{__dir__}/../config/servers.yml")).read
-      )['servers']
+      @servers ||= YAML.safe_load(File.open(File.expand_path("#{__dir__}/../config/servers.yml")).read)['servers']
     end
   end
 end

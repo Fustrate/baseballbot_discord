@@ -14,8 +14,7 @@ module BaseballDiscord
       end
 
       class StandingsCommand < Command
-        STATS_STANDINGS = '/v1/standings/regularSeason?leagueId=103,104&season=%<year>d&t=%<t>d&' \
-                          'date=%<date>s&hydrate=team'
+        STANDINGS = '/v1/standings/regularSeason?leagueId=103,104&season=%<year>d&t=%<t>d&date=%<date>s&hydrate=team'
 
         def run
           team_name, date = parse_team_and_date
@@ -36,7 +35,7 @@ module BaseballDiscord
         def standings_data(date, division_id)
           clamped_date = clamp_date_to_regular_season(date)
 
-          load_data_from_stats_api(STATS_STANDINGS, date: clamped_date)['records']
+          load_data_from_stats_api(STANDINGS, date: clamped_date)['records']
             .find { |record| record.dig('division', 'id') == division_id }['teamRecords']
         end
 

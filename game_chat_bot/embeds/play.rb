@@ -69,17 +69,11 @@ module GameChatBot
       def count
         the_count = @play['count'].values_at('balls', 'strikes')
 
-        # The API likes to show 4 balls or 3 strikes. HBP on a 3-ball count also
-        # shows as Ball 4.
+        # The API likes to show 4 balls or 3 strikes. HBP on a 3-ball count also shows as Ball 4.
         the_count[0] = 3 if type == 'Walk' || the_count[0] == 4
         the_count[1] = 2 if type == 'Strikeout' || the_count[1] == 3
 
         the_count.join('-')
-      end
-
-      def pitcher
-        "#{@play.dig('matchup', 'pitchHand', 'code')}HP " +
-          @play.dig('matchup', 'pitcher', 'fullName')
       end
 
       def resulting_context
@@ -88,7 +82,7 @@ module GameChatBot
         text = [
           "#{outs} #{outs == 1 ? 'Out' : 'Outs'}",
           (runners unless outs == 3),
-          pitcher
+          "#{@play.dig('matchup', 'pitchHand', 'code')}HP #{@play.dig('matchup', 'pitcher', 'fullName')}"
         ].compact.join('  |  ')
 
         { text: text }

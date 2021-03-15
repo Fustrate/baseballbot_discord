@@ -5,28 +5,20 @@ module BaseballDiscord
     module TeamCalendar
       extend Discordrb::Commands::CommandContainer
 
-      command(
-        :next,
-        description: 'Display the next N games for a team',
-        usage: 'next [N=10] [team]'
-      ) do |event, *args|
+      command(:next, description: 'Display the next N games for a team', usage: 'next [N=10] [team]') do |event, *args|
         TeamCalendarCommand.new(event, *args).list_games(:future)
       end
 
-      command(
-        :last,
-        description: 'Display the last N games for a team',
-        usage: 'last [N=10] [team]'
-      ) do |event, *args|
+      command(:last, description: 'Display the last N games for a team', usage: 'last [N=10] [team]') do |event, *args|
         TeamCalendarCommand.new(event, *args).list_games(:past)
       end
 
       class TeamCalendarCommand < Command
         attr_reader :past_or_future
 
-        SCHEDULE = '/v1/schedule?teamId=%<team_id>d&startDate=%<start_date>s&' \
-                   'endDate=%<end_date>s&sportId=1&eventTypes=primary&scheduleTypes=games&' \
-                   'hydrate=team(venue(timezone)),game(content(summary)),linescore,broadcasts(all)'
+        SCHEDULE = '/v1/schedule?teamId=%<team_id>d&startDate=%<start_date>s&endDate=%<end_date>s&sportId=1&' \
+                   'hydrate=team(venue(timezone)),game(content(summary)),linescore,broadcasts(all)&' \
+                   'eventTypes=primary&scheduleTypes=games'
 
         PREGAME_STATUSES = /Preview|Warmup|Pre-Game|Delayed Start|Scheduled/.freeze
         POSTGAME_STATUSES = /Final|Game Over|Postponed|Completed Early/.freeze
@@ -54,9 +46,7 @@ module BaseballDiscord
         def determine_team_and_number
           number, name = parse_input(raw_args)
 
-          @team_id = BaseballDiscord::Utilities.find_team_by_name(
-            name ? [name] : names_from_context
-          )
+          @team_id = BaseballDiscord::Utilities.find_team_by_name(name ? [name] : names_from_context)
 
           @number = number.clamp(1, 15)
         end
@@ -194,9 +184,7 @@ module BaseballDiscord
         end
 
         def include_game?(game)
-          status = game.dig('status', 'abstractGameState')
-
-          (past? ? POSTGAME_STATUSES : PREGAME_STATUSES).match?(status)
+          (past? ? POSTGAME_STATUSES : PREGAME_STATUSES).match?(game.dig('status', 'abstractGameState'))
         end
 
         def game_data(game)
@@ -220,9 +208,7 @@ module BaseballDiscord
           opp_score = game.dig('teams', (home_team ? 'away' : 'home'), 'score')
 
           # This is stupid and I love it.
-          indicator = 'TWL'[our_score <=> opp_score]
-
-          data[:outcome] = "#{indicator} #{our_score}-#{opp_score}"
+          data[:outcome] = "#{'TWL'[our_score <=> opp_score]} #{our_score}-#{opp_score}"
         end
 
         def basic_data(game, home_team)
@@ -239,10 +225,7 @@ module BaseballDiscord
         # Always parse the time in the current team's time zone - fans want to
         # see *their* time zone, not always the home team's.
         def game_date(game, team_venue)
-          BaseballDiscord::Utilities.parse_time(
-            game['gameDate'],
-            time_zone: team_venue.dig('timeZone', 'id')
-          )
+          BaseballDiscord::Utilities.parse_time game['gameDate'], time_zone: team_venue.dig('timeZone', 'id')
         end
       end
     end

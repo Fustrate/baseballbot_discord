@@ -27,14 +27,7 @@ module BaseballDiscord
     def interpolate_path(path, interpolations)
       date = interpolations[:date] || (Time.now - 7200)
 
-      format(
-        path,
-        interpolations.merge(
-          year: date.year,
-          t: Time.now.to_i,
-          date: date.strftime('%m/%d/%Y')
-        )
-      )
+      format path, interpolations.merge(year: date.year, t: Time.now.to_i, date: date.strftime('%m/%d/%Y'))
     end
 
     def log(str, level: :info)
@@ -47,9 +40,7 @@ module BaseballDiscord
 
     # Try the channel first, then roles, then the server
     def names_from_context
-      search = [team_name_from_channel_name] + team_names_from_roles
-
-      (search + [bot.config.dig(server.id, 'default_team')]).compact
+      ([team_name_from_channel_name] + team_names_from_roles + [bot.config.dig(server.id, 'default_team')]).compact
     end
 
     def team_name_from_channel_name

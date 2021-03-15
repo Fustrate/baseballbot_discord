@@ -79,9 +79,8 @@ module GameChatBot
 
     def time_in_time_zone(utc, time_zone)
       period = time_zone.period_for_utc(utc)
-      with_offset = utc + period.utc_total_offset
 
-      Time.parse "#{with_offset.strftime('%FT%T')} #{period.zone_identifier}"
+      Time.parse "#{(utc + period.utc_total_offset).strftime('%FT%T')} #{period.zone_identifier}"
     end
 
     def line_score_outs

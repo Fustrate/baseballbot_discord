@@ -15,8 +15,7 @@ module BaseballDiscord
       end
 
       class ScoreboardCommand < Command
-        SCHEDULE = '/v1/schedule?sportId=1&date=%<date>s&t=%<t>d&' \
-                   'hydrate=game(content(summary)),linescore,flags,team'
+        SCHEDULE = '/v1/schedule?sportId=1&date=%<date>s&t=%<t>d&hydrate=game(content(summary)),linescore,flags,team'
 
         PREGAME_STATUSES = /Preview|Warmup|Pre-Game|Delayed Start|Scheduled/.freeze
 

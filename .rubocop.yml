@@ -13,10 +13,6 @@ Layout/MultilineMethodCallIndentation:
 Layout/MultilineMethodCallBraceLayout:
   EnforcedStyle: new_line
 
-# Rubocop defaults to 120 now - that's a bit too wide for me.
-Layout/LineLength:
-  Max: 100
-
 # Disabled cops
 
 Style/Documentation:

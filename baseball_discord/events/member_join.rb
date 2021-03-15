@@ -6,8 +6,7 @@ module BaseballDiscord
       extend Discordrb::EventContainer
 
       member_join do |event|
-        BaseballDiscord::Commands::Verify::RedditAuthCommand.new(event)
-          .send_welcome_pm
+        BaseballDiscord::Commands::Verify::RedditAuthCommand.new(event).send_welcome_pm
 
         nil
       end

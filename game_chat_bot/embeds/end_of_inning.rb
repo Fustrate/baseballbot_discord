@@ -19,8 +19,7 @@ module GameChatBot
       protected
 
       def due_up_next_inning
-        players = @channel.feed.linescore['offense']
-          .values_at('batter', 'onDeck', 'inHole')
+        players = @channel.feed.linescore['offense'].values_at('batter', 'onDeck', 'inHole')
 
         [
           { name: 'At Bat', value: players[0]['fullName'], inline: true },

@@ -15,8 +15,7 @@ module BaseballDiscord
       end
 
       class WCStandingsCommand < Command
-        STATS_STANDINGS = '/v1/standings/regularSeason?leagueId=103,104&season=%<year>d&t=%<t>d&' \
-                          'date=%<date>s&hydrate=team'
+        STANDINGS = '/v1/standings/regularSeason?leagueId=103,104&season=%<year>d&t=%<t>d&date=%<date>s&hydrate=team'
 
         TABLE_HEADERS = %w[Team W L GB % rDiff STRK].freeze
 
@@ -37,7 +36,7 @@ module BaseballDiscord
         protected
 
         def standings_data(date, league_id)
-          load_data_from_stats_api(STATS_STANDINGS, date: date)['records']
+          load_data_from_stats_api(STANDINGS, date: date)['records']
             .select { |division| division.dig('league', 'id') == league_id }
             .flat_map { |division| division['teamRecords'] }
         end

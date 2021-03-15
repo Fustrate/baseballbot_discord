@@ -60,9 +60,7 @@ module BaseballDiscord
         def start_verification_for_server(guild, welcome: false)
           return unless guild
 
-          unless bot.config.verification_enabled?(guild.id)
-            raise UserError, VERIFICATION_NOT_ENABLED
-          end
+          raise UserError, VERIFICATION_NOT_ENABLED unless bot.config.verification_enabled?(guild.id)
 
           member = guild.member(user.id)
 

@@ -22,8 +22,7 @@ module GameChatBot
       end
 
       def description
-        @item.dig('data', 'details', 'description_tracking')
-          .gsub(%r{<b>(.*?)</b>}, '**\1**')
+        @item.dig('data', 'details', 'description_tracking').gsub(%r{<b>(.*?)</b>}, '**\1**')
       end
 
       def image
