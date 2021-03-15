@@ -11,21 +11,13 @@ module GameChatBot
         {
           title: "#{team_emoji} #{type} (#{count})",
           description: description,
-          fields: home_run_fields,
+          fields: hit_data_fields.append({ name: 'Pitch', value: pitch_type, inline: true }),
           color: color,
           footer: resulting_context
         }
       end
 
       protected
-
-      def home_run_fields
-        fields = hit_data_fields
-
-        fields << { name: 'Pitch', value: pitch_type, inline: true }
-
-        fields
-      end
 
       def event
         @event ||= @play['playEvents'].last

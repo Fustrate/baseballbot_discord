@@ -25,7 +25,7 @@ module GameChatBot
         {
           title: "#{team_emoji} #{type} (#{count})",
           description: description,
-          color: color,
+          color: color.to_i(16),
           footer: resulting_context
         }
       end
@@ -35,11 +35,11 @@ module GameChatBot
       end
 
       def color
-        return '3a9910'.to_i(16) if @play.dig('about', 'isScoringPlay')
+        return '3a9910' if @play.dig('about', 'isScoringPlay')
 
-        return '991010'.to_i(16) if @play.dig('about', 'hasOut')
+        return '991010' if @play.dig('about', 'hasOut')
 
-        '106499'.to_i(16)
+        '106499'
       end
 
       def team_flag

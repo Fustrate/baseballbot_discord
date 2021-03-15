@@ -38,12 +38,13 @@ module BaseballDiscord
     end
 
     def self.find_team_by_name(names)
-      Array(names).map { |name| name.downcase.gsub(/[^a-z ]/, '') }
-        .each do |name|
-          teams_by_name.each do |id, potential_names|
-            return id if potential_names.include?(name)
-          end
+      Array(names).each do |name|
+        standardized = name.downcase.gsub(/[^a-z ]/, '')
+
+        teams_by_name.each do |id, potential_names|
+          return id if potential_names.include?(standardized)
         end
+      end
 
       nil
     end
