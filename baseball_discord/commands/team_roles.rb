@@ -115,7 +115,7 @@ module BaseballDiscord
 
           # return unless abbrs.count > 1
 
-          base_name = @member.display_name.gsub(/ \[.*\]\z/, '')
+          base_name = @member.display_name.gsub(/\s*\[.*\]\z/, '')
 
           @member.nick = "#{base_name} #{abbrs.join}"
         rescue Discordrb::Errors::NoPermission
