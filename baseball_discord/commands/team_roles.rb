@@ -90,9 +90,7 @@ module BaseballDiscord
             BaseballDiscord::Utilities.find_team_by_name [input]
           end.compact.uniq.first(2)
 
-          return react_to_message('❓') unless team_ids.any?
-
-          update_member(team_ids)
+          team_ids.any? ? update_member(team_ids) : react_to_message('❓')
         end
 
         # IDs passed to this message are known to be good
