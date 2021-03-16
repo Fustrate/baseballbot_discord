@@ -71,10 +71,10 @@ class SeriesChannelsBot
   end
 
   def channel_name_for_game(game)
-    [
-      game.dig('teams', 'away', 'team', 'teamName'),
-      game.dig('teams', 'home', 'team', 'teamName')
-    ].join(' at ').downcase.gsub(/[^a-z]/, '-').gsub(/-{2,}/, '-')
+    "#{game.dig('teams', 'away', 'team', 'teamName')}-at-#{game.dig('teams', 'home', 'team', 'teamName')}"
+      .downcase
+      .gsub(/[^a-z]/, '-')
+      .gsub(/-{2,}/, '-')
   end
 
   def update_redis(active_games)

@@ -55,9 +55,7 @@ module GameChatBot
       end
 
       def pitch_type
-        speed = event.dig('pitchData', 'startSpeed')
-
-        "#{speed} mph #{event.dig('details', 'type', 'description')}"
+        "#{event.dig('pitchData', 'startSpeed')} mph #{event.dig('details', 'type', 'description')}"
       end
     end
   end
