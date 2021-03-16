@@ -16,6 +16,8 @@ class SeriesChannelsBot
 
   LIVE_GAME_STATUSES = %w[Live Preview].freeze
 
+  DEFAULT_TOPIC = 'Use `!autoupdate` to activate the game thread bot.'
+
   SCHEDULE = 'https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=%<date>s&' \
              'hydrate=game(content(summary)),linescore,flags,team&t=%<t>d'
 
@@ -121,7 +123,7 @@ class SeriesChannelsBot
   end
 
   def create_channel(name)
-    data = { name: name, type: 0, parent_id: GAME_CHATS_ID }
+    data = { name: name, type: 0, parent_id: GAME_CHATS_ID, topic: DEFAULT_TOPIC }
 
     JSON.parse request(:guilds_sid_channels, SERVER_ID, :post, "guilds/#{SERVER_ID}/channels", data)
   end
