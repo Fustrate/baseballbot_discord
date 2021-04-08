@@ -21,9 +21,7 @@ require_relative 'redis_connection'
 require_relative 'utilities'
 
 # Require all commands and events
-Dir.glob("#{__dir__}/{commands,events}/*").sort.each do |path|
-  require_relative path
-end
+Dir.glob("#{__dir__}/{commands,events}/*").each { |path| require_relative path }
 
 module BaseballDiscord
   class Bot < Discordrb::Commands::CommandBot
