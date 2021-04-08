@@ -51,7 +51,7 @@ module GameChatBot
 
     def autoupdate(new_state)
       # Allow the bare `!autoupdate` command to turn on updates
-      return unmute! if !new_state || %w[1 yes on true].include?(new_state.downcase.strip)
+      return unmute! if new_state.empty? || %w[1 yes on true].include?(new_state.downcase.strip)
 
       return mute! if %w[0 no off false].include?(new_state.downcase.strip)
 
