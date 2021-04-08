@@ -112,7 +112,7 @@ DEPENDENCIES
   tzinfo
 
 RUBY VERSION
-   ruby 2.7.2p137
+   ruby 2.7.3p183
 
 BUNDLED WITH
    2.2.15
