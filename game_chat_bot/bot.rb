@@ -69,7 +69,7 @@ module GameChatBot
 
     def register_commands_with_arguments
       command(:lineup) { |event, *args| feed_for_event(event)&.send_lineup(event, args.join(' ')) }
-      command(:autoupdate) { |event, *args| feed_for_event(event)&.autoupdate(args.join(' ')) }
+      command(:autoupdate, aliases: %i[update]) { |event, *args| feed_for_event(event)&.autoupdate(args.join(' ')) }
     end
 
     def feed_for_event(event)
