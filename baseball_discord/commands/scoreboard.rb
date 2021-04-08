@@ -17,9 +17,8 @@ module BaseballDiscord
       class ScoreboardCommand < Command
         SCHEDULE = '/v1/schedule?sportId=1&date=%<date>s&t=%<t>d&hydrate=game(content(summary)),linescore,flags,team'
 
-        PREGAME_STATUSES = /Preview|Warmup|Pre-Game|Delayed Start|Scheduled/
-
-        POSTGAME_STATUSES = /Final|Game Over|Postponed|Completed Early/
+        PREGAME_STATUSES = /Preview|Warmup|Pre-Game|Delayed Start|Scheduled/.freeze
+        POSTGAME_STATUSES = /Final|Game Over|Postponed|Completed Early/.freeze
 
         def run
           date = BaseballDiscord::Utilities.parse_date raw_args

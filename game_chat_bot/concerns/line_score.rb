@@ -2,8 +2,8 @@
 
 module GameChatBot
   module LineScore
-    PREGAME_STATUSES = /Preview|Pre-Game|Warmup|Delayed Start|Scheduled/
-    POSTGAME_STATUSES = /Final|Game Over|Postponed|Completed Early/
+    PREGAME_STATUSES = /Preview|Pre-Game|Warmup|Delayed Start|Scheduled/.freeze
+    POSTGAME_STATUSES = /Final|Game Over|Postponed|Completed Early/.freeze
 
     TIMEZONES = {
       ET: 'America/New_York',

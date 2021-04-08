@@ -5,7 +5,7 @@ module GameChatBot
     class HomeRun < Play
       MINIMUM_DISTANCE = 420
       MINIMUM_SPEED = 110
-      BORING_LAUNCH_ANGLE = 18..42
+      BORING_LAUNCH_ANGLE = (18..42).freeze
 
       def to_h
         {

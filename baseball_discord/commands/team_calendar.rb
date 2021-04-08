@@ -20,8 +20,8 @@ module BaseballDiscord
                    'hydrate=team(venue(timezone)),game(content(summary)),linescore,broadcasts(all)&' \
                    'eventTypes=primary&scheduleTypes=games'
 
-        PREGAME_STATUSES = /Preview|Warmup|Pre-Game|Delayed Start|Scheduled/
-        POSTGAME_STATUSES = /Final|Game Over|Postponed|Completed Early/
+        PREGAME_STATUSES = /Preview|Warmup|Pre-Game|Delayed Start|Scheduled/.freeze
+        POSTGAME_STATUSES = /Final|Game Over|Postponed|Completed Early/.freeze
 
         def list_games(past_or_future)
           @past_or_future = past_or_future
