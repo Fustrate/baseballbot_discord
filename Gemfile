@@ -32,4 +32,8 @@ gem 'concurrent-ruby-ext'
 
 group :development do
   gem 'minitest'
+
+  # Linters
+  gem 'rubocop'
+  gem 'rubocop-performance', require: false
 end
