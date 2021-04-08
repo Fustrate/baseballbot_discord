@@ -79,10 +79,12 @@ module GameChatBot
     end
 
     def embed_for(play)
-      case play.dig('result', 'event')
-      when 'Walk', 'Strikeout'
+      @bot.logger.info "[#{redis_key}] Play ##{play['atBatIndex']}, #{play.dig('result', 'description')}"
+
+      case play.dig('result', 'eventType')
+      when 'walk', 'strikeout'
         Embeds::StrikeoutOrWalk.new(play, self)
-      when 'Home Run'
+      when 'home_run'
         Embeds::HomeRun.new(play, self)
       else
         Embeds::Play.new(play, self)
