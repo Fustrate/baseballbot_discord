@@ -49,7 +49,7 @@ module GameChatBot
       super attributes.merge(prefix: '!', intents: INTENTS)
     end
 
-    def home_run_alert(embed)
+    def send_to_home_runs_channel(embed)
       @scheduler.in('15s') do
         channel(457653686118907936).send_embed '', embed
       end
@@ -86,6 +86,8 @@ module GameChatBot
 
       # Start right away
       update_games
+
+      @scheduler.join
     end
 
     def update_games

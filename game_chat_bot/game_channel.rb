@@ -68,8 +68,7 @@ module GameChatBot
       output_lineups
       process_color_feed
 
-      # This randomly errors out.
-      # @bot.scheduler.in('15s') { update_channel_topic }
+      @bot.scheduler.in('15s') { update_channel_topic }
 
       @game_over = true if game_ended?
     rescue Net::OpenTimeout, SocketError, RestClient::NotFound

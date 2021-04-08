@@ -8,7 +8,7 @@ module GameChatBot
       plays_starting_with(event).each do |embed|
         embed_hash = embed.to_h
 
-        @bot.home_run_alert(embed_hash) if embed.is_a?(Embeds::HomeRun)
+        @bot.send_to_home_runs_channel(embed_hash) if embed.is_a?(Embeds::HomeRun)
 
         send_message embed: embed_hash, at: embed.post_at
       end
