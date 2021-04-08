@@ -27,9 +27,7 @@ module GameChatBot
     def update_next_event(next_event)
       value = last_play_key
 
-      return if !value || value == next_event
-
-      @bot.redis.set "#{redis_key}_next_event", value
+      @bot.redis.set("#{redis_key}_next_event", value) if value && value != next_event
     end
 
     def last_play_key
@@ -75,12 +73,9 @@ module GameChatBot
     def interesting_events(play, events)
       return unless events&.any?
 
-      actions = events.select { |event| event['type'] == 'action' }
-        .map { |action| action.dig('details', 'description') }
+      actions = events.filter_map { |event| event.dig('details', 'description') if event['type'] == 'action' }
 
-      return if actions.none?
-
-      Embeds::Interesting.new(play, self, actions.join("\n"))
+      Embeds::Interesting.new(play, self, actions.join("\n")) if actions.any?
     end
 
     def embed_for(play)

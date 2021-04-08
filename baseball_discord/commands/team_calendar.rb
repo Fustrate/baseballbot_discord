@@ -222,8 +222,8 @@ module BaseballDiscord
           }
         end
 
-        # Always parse the time in the current team's time zone - fans want to
-        # see *their* time zone, not always the home team's.
+        # Always parse the time in the current team's time zone - fans want to see *their* time zone, not always the
+        # home team's.
         def game_date(game, team_venue)
           BaseballDiscord::Utilities.parse_time game['gameDate'], time_zone: team_venue.dig('timeZone', 'id')
         end
