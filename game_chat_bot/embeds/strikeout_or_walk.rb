@@ -7,7 +7,7 @@ module GameChatBot
         {
           title: "#{team_emoji} #{type} (#{count})",
           description: description,
-          color: color,
+          color: color.to_i(16),
           footer: resulting_context
         }
       end

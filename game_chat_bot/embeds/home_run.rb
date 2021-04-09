@@ -12,7 +12,7 @@ module GameChatBot
           title: "#{team_emoji} #{type} (#{count})",
           description: description,
           fields: hit_data_fields.append({ name: 'Pitch', value: pitch_type, inline: true }),
-          color: color,
+          color: color.to_i(16),
           footer: resulting_context
         }
       end
