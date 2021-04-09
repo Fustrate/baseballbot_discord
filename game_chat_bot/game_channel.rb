@@ -68,7 +68,7 @@ module GameChatBot
       output_lineups
       process_color_feed
 
-      @bot.scheduler.in('15s') { update_channel_topic }
+      # @bot.scheduler.in('15s') { update_channel_topic }
 
       @game_over = true if game_ended?
     rescue Net::OpenTimeout, SocketError, RestClient::NotFound
@@ -157,7 +157,7 @@ module GameChatBot
       @bot.logger.info "[#{redis_key}] Updating topic: #{new_topic}"
 
       # This causes an API error and I can't for the life of me figure out WHAT THE DAMN ERROR IS
-      # @channel.topic = new_topic
+      @channel.topic = new_topic
     end
   end
 end
