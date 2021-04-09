@@ -8,81 +8,6 @@ require_relative 'concerns/plays'
 
 require_relative 'output_helpers'
 
-# rubocop:disable all
-module Discordrb::API
-  # Make an API request, including rate limit handling.
-  def request(key, major_parameter, type, *attributes)
-    # Add a custom user agent
-    attributes.last[:user_agent] = user_agent if attributes.last.is_a? Hash
-
-    # The most recent Discord rate limit requirements require the support of major parameters, where a particular route
-    # and major parameter combination (*not* the HTTP method) uniquely identifies a RL bucket.
-    key = [key, major_parameter].freeze
-
-    begin
-      mutex = @mutexes[key] ||= Mutex.new
-
-      # Lock and unlock, i.e. wait for the mutex to unlock and don't do anything with it afterwards
-      mutex_wait(mutex)
-
-      # If the global mutex happens to be locked right now, wait for that as well.
-      mutex_wait(@global_mutex) if @global_mutex.locked?
-
-      response = nil
-      begin
-        response = raw_request(type, attributes)
-      rescue RestClient::Exception => e
-        response = e.response
-
-        if response.body
-          puts response.body
-
-          data = JSON.parse(response.body)
-          err_klass = Discordrb::Errors.error_class_for(data['code'] || 0)
-          e = err_klass.new(data['message'], data['errors'])
-
-          Discordrb::LOGGER.error(e.full_message)
-        end
-
-        raise e
-      rescue Discordrb::Errors::NoPermission => e
-        if e.respond_to?(:_rc_response)
-          response = e._rc_response
-        else
-          Discordrb::LOGGER.warn("NoPermission doesn't respond_to? _rc_response!")
-        end
-
-        raise e
-      ensure
-        if response
-          handle_preemptive_rl(response.headers, mutex, key) if response.headers[:x_ratelimit_remaining] == '0' && !mutex.locked?
-        else
-          Discordrb::LOGGER.ratelimit('Response was nil before trying to preemptively rate limit!')
-        end
-      end
-    rescue RestClient::TooManyRequests => e
-      # If the 429 is from the global RL, then we have to use the global mutex instead.
-      mutex = @global_mutex if e.response.headers[:x_ratelimit_global] == 'true'
-
-      unless mutex.locked?
-        response = JSON.parse(e.response)
-        wait_seconds = response['retry_after'].to_i / 1000.0
-        Discordrb::LOGGER.ratelimit("Locking RL mutex (key: #{key}) for #{wait_seconds} seconds due to Discord rate limiting")
-        trace("429 #{key.join(' ')}")
-
-        # Wait the required time synchronized by the mutex (so other incoming requests have to wait) but only do it if
-        # the mutex isn't locked already so it will only ever wait once
-        sync_wait(wait_seconds, mutex)
-      end
-
-      retry
-    end
-
-    response
-  end
-end
-# rubocop:enable all
-
 module GameChatBot
   # Handles everything related to having a channel for a specific game.
   class GameChannel
@@ -231,7 +156,8 @@ module GameChatBot
 
       @bot.logger.info "[#{redis_key}] Updating topic: #{new_topic}"
 
-      @channel.topic = new_topic
+      # This causes an API error and I can't for the life of me figure out WHAT THE DAMN ERROR IS
+      # @channel.topic = new_topic
     end
   end
 end
