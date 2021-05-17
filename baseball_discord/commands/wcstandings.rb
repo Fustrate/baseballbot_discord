@@ -19,7 +19,11 @@ module BaseballDiscord
 
         TABLE_HEADERS = %w[Team W L GB % rDiff STRK].freeze
 
+        IGNORE_CHANNELS = [452550329700188160].freeze
+
         def run
+          return if IGNORE_CHANNELS.include?(channel.id)
+
           team_name, date = parse_team_and_date
 
           league_id = find_league_id(team_name)

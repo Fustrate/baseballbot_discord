@@ -23,7 +23,11 @@ module BaseballDiscord
         PREGAME_STATUSES = /Preview|Warmup|Pre-Game|Delayed Start|Scheduled/.freeze
         POSTGAME_STATUSES = /Final|Game Over|Postponed|Completed Early/.freeze
 
+        IGNORE_CHANNELS = [452550329700188160].freeze
+
         def list_games(past_or_future)
+          return if IGNORE_CHANNELS.include?(channel.id)
+
           @past_or_future = past_or_future
 
           determine_team_and_number

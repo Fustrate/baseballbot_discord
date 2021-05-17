@@ -20,7 +20,11 @@ module BaseballDiscord
         PREGAME_STATUSES = /Preview|Warmup|Pre-Game|Delayed Start|Scheduled/.freeze
         POSTGAME_STATUSES = /Final|Game Over|Postponed|Completed Early/.freeze
 
+        IGNORE_CHANNELS = [452550329700188160].freeze
+
         def run
+          return if IGNORE_CHANNELS.include?(channel.id)
+
           date = BaseballDiscord::Utilities.parse_date raw_args
 
           return react_to_message('❓') unless date

@@ -16,7 +16,11 @@ module BaseballDiscord
       class StandingsCommand < Command
         STANDINGS = '/v1/standings/regularSeason?leagueId=103,104&season=%<year>d&t=%<t>d&date=%<date>s&hydrate=team'
 
+        IGNORE_CHANNELS = [452550329700188160].freeze
+
         def run
+          return if IGNORE_CHANNELS.include?(channel.id)
+
           team_name, date = parse_team_and_date
 
           division_id = find_division_id(team_name)
