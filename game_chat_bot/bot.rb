@@ -30,23 +30,23 @@ require_relative 'embeds/video'
 module GameChatBot
   # The master bot that controls all of the game channels
   class Bot < Discordrb::Commands::CommandBot
-    attr_reader :client, :logger, :redis, :scheduler
+    attr_reader :scheduler
 
     INTENTS = %i[servers server_messages server_message_reactions].freeze
 
-    def initialize(**attributes)
+    def initialize
       @games = {}
-
-      @client = MLBStatsAPI::Client.new
-      @redis = Redis.new
-      @logger = Logger.new($stdout)
 
       ready { start_loop }
 
       register_basic_commands
       register_commands_with_arguments
 
-      super(**attributes.merge(prefix: '!', intents: INTENTS))
+      super(
+        client_id: ENV['DISCORD_GAMETHREAD_CLIENT_ID'],
+        token: ENV['DISCORD_GAMETHREAD_TOKEN'],
+        command_doesnt_exist_message: nil, help_command: false, prefix: '!', intents: INTENTS
+      )
     end
 
     def send_to_home_runs_channel(embed)
@@ -54,6 +54,12 @@ module GameChatBot
         channel(457653686118907936).send_embed '', embed
       end
     end
+
+    def logger() = (@logger ||= Logger.new($stdout))
+
+    def redis() = (@redis ||= Redis.new)
+
+    def client() = (@client ||= MLBStatsAPI::Client.new(logger: logger, cache: Redis.new))
 
     protected
 

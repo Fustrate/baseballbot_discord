@@ -25,8 +25,6 @@ Dir.glob("#{__dir__}/{commands,events}/*").each { |path| require_relative path }
 
 module BaseballDiscord
   class Bot < Discordrb::Commands::CommandBot
-    attr_reader :mlb, :redis, :logger, :config
-
     # ID of the user allowed to administrate the bot
     ADMIN_ID = 429364871121993728
 
@@ -34,15 +32,13 @@ module BaseballDiscord
       servers server_members server_messages server_message_reactions direct_messages direct_message_reactions
     ].freeze
 
-    def initialize(**attributes)
-      @config = Config.new
-
-      super(**attributes.merge(prefix: prefix_proc(@config.server_prefixes), intents: INTENTS))
-
-      @logger = Logger.new($stdout)
-      @redis = RedisConnection.new(self)
-
-      @mlb = MLBStatsAPI::Client.new(logger: @logger, cache: Redis.new)
+    def initialize
+      super(
+        client_id: ENV['DISCORD_CLIENT_ID'],
+        token: ENV['DISCORD_TOKEN'],
+        prefix: prefix_proc(config.server_prefixes),
+        intents: INTENTS
+      )
 
       load_commands
     end
@@ -76,6 +72,14 @@ module BaseballDiscord
         nil
       end
     end
+
+    def logger() = (@logger ||= Logger.new($stdout))
+
+    def redis() = (@redis ||= RedisConnection.new(self))
+
+    def mlb() = (@mlb ||= MLBStatsAPI::Client.new(logger: logger, cache: Redis.new))
+
+    def config() = (@config ||= Config.new)
   end
 
   class UserError < RuntimeError
