@@ -23,7 +23,7 @@ module BaseballDiscord
         IGNORE_CHANNELS = [452550329700188160].freeze
 
         def run
-          return if IGNORE_CHANNELS.include?(channel.id)
+          return react_to_message('🚫') if IGNORE_CHANNELS.include?(channel.id)
 
           date = BaseballDiscord::Utilities.parse_date raw_args
 
