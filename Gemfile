@@ -31,6 +31,11 @@ gem 'terrapin'
 gem 'concurrent-ruby-ext'
 
 group :development do
+  # Deploy with Capistrano
+  gem 'capistrano', '~> 3.15', require: false
+  gem 'capistrano-bundler', require: false
+  gem 'capistrano-rbenv', '~> 2.1', require: false
+
   gem 'minitest'
 
   # Linters
