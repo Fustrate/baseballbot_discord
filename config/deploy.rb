@@ -10,7 +10,7 @@ set :repo_url, 'git@github.com:Fustrate/baseballbot_discord.git'
 set :branch, ENV['REVISION'] || :master
 
 append :linked_dirs, 'log'
-# append :linked_files, 'config/honeybadger.yml'
+append :linked_files, 'config/servers.yml'
 
 set :default_env, { path: '/opt/ruby/bin:$PATH' }
 
