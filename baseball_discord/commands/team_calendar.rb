@@ -188,7 +188,7 @@ module BaseballDiscord
 
         protected
 
-        def basic_data(game)
+        def basic_data
           team_key, opp_key = @home ? %w[home away] : %w[away home]
 
           {
