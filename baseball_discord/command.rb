@@ -16,7 +16,7 @@ module BaseballDiscord
 
     protected
 
-    def load_data_from_stats_api(path, interpolations = {})
+    def load_data_from_stats_api(path, **interpolations)
       url = "https://statsapi.mlb.com/api#{interpolate_path(path, interpolations)}"
 
       log "[URL Load] #{url}", level: :debug

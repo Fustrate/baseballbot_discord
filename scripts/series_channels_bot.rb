@@ -136,7 +136,7 @@ class SeriesChannelsBot
     request :channels_cid, channel_id, :patch, "channels/#{channel_id}", data
   end
 
-  def request(key, major_parameter, method, endpoint, data = {})
+  def request(key, major_parameter, method, endpoint, data)
     Discordrb::API.request(
       key,
       major_parameter,
