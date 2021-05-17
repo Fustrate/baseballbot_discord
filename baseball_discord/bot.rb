@@ -34,10 +34,10 @@ module BaseballDiscord
       servers server_members server_messages server_message_reactions direct_messages direct_message_reactions
     ].freeze
 
-    def initialize(attributes = {})
+    def initialize(**attributes)
       @config = Config.new
 
-      super attributes.merge(prefix: prefix_proc(@config.server_prefixes), intents: INTENTS)
+      super(**attributes.merge(prefix: prefix_proc(@config.server_prefixes), intents: INTENTS))
 
       @logger = Logger.new($stdout)
       @redis = RedisConnection.new(self)

@@ -34,7 +34,7 @@ module GameChatBot
 
     INTENTS = %i[servers server_messages server_message_reactions].freeze
 
-    def initialize(attributes = {})
+    def initialize(**attributes)
       @games = {}
 
       @client = MLBStatsAPI::Client.new
@@ -46,7 +46,7 @@ module GameChatBot
       register_basic_commands
       register_commands_with_arguments
 
-      super attributes.merge(prefix: '!', intents: INTENTS)
+      super(**attributes.merge(prefix: '!', intents: INTENTS))
     end
 
     def send_to_home_runs_channel(embed)
