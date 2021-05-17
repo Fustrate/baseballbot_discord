@@ -5,9 +5,7 @@ module BaseballDiscord
     module Players
       extend Discordrb::Commands::CommandContainer
 
-      command(:player, help_available: false) do |event, *args|
-        PlayerCommand.new(event, *args).look_up_player
-      end
+      command(:player, help_available: false) { |event, *args| PlayerCommand.new(event, *args).look_up_player }
 
       # Prints some basic info to the log file
       class PlayerCommand < Command

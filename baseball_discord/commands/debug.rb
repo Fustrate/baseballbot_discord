@@ -6,9 +6,7 @@ module BaseballDiscord
     module Debug
       extend Discordrb::Commands::CommandContainer
 
-      command(:debug, help_available: false) do |event, *args|
-        DebugCommand.new(event, *args).debug
-      end
+      command(:debug, help_available: false) { |event, *args| DebugCommand.new(event, *args).debug }
 
       # Prints some basic info to the log file
       class DebugCommand < Command

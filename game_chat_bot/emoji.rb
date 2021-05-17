@@ -38,8 +38,6 @@ module GameChatBot
       'wsh' => ':was:452529607468646402'
     }.freeze
 
-    def self.team_emoji(abbreviation)
-      "<#{TEAM_EMOJI[abbreviation.downcase]}>"
-    end
+    def self.team_emoji(abbreviation) = "<#{TEAM_EMOJI[abbreviation.downcase]}>"
   end
 end

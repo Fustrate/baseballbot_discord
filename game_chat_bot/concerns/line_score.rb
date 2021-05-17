@@ -2,8 +2,8 @@
 
 module GameChatBot
   module LineScore
-    PREGAME_STATUSES = /Preview|Pre-Game|Warmup|Delayed Start|Scheduled/.freeze
-    POSTGAME_STATUSES = /Final|Game Over|Postponed|Completed Early/.freeze
+    PREGAME_STATUSES = /Preview|Pre-Game|Warmup|Delayed Start|Scheduled/
+    POSTGAME_STATUSES = /Final|Game Over|Postponed|Completed Early/
 
     TIMEZONES = {
       ET: 'America/New_York',
@@ -32,9 +32,7 @@ module GameChatBot
       ]
     end
 
-    def team_line_score(name, innings, rhe)
-      [name] + [''] * innings + rhe
-    end
+    def team_line_score(name, innings, rhe) = ([name] + [''] * innings + rhe)
 
     def line_score_inning
       format(
@@ -99,24 +97,14 @@ module GameChatBot
 
     protected
 
-    def innings
-      [@feed.linescore['innings'].count, 9].max
-    end
+    def innings() = [@feed.linescore['innings'].count, 9].max
 
-    def team_rhe(flag)
-      @feed.linescore.dig('teams', flag).values_at('runs', 'hits', 'errors')
-    end
+    def team_rhe(flag) = @feed.linescore.dig('teams', flag).values_at('runs', 'hits', 'errors')
 
-    def team_name(flag)
-      @feed.game_data.dig('teams', flag, 'abbreviation')
-    end
+    def team_name(flag) = @feed.game_data.dig('teams', flag, 'abbreviation')
 
-    def game_over?
-      POSTGAME_STATUSES.match?(@feed.game_data.dig('status', 'abstractGameState'))
-    end
+    def game_over?() = POSTGAME_STATUSES.match?(@feed.game_data.dig('status', 'abstractGameState'))
 
-    def game_started?
-      !PREGAME_STATUSES.match?(@feed.game_data.dig('status', 'abstractGameState'))
-    end
+    def game_started?() = !PREGAME_STATUSES.match?(@feed.game_data.dig('status', 'abstractGameState'))
   end
 end

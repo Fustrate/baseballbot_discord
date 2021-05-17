@@ -128,9 +128,7 @@ class SeriesChannelsBot
     JSON.parse request(:guilds_sid_channels, SERVER_ID, :post, "guilds/#{SERVER_ID}/channels", data)
   end
 
-  def remove_channel(channel_id)
-    Discordrb::API::Channel.delete(@token, channel_id)
-  end
+  def remove_channel(channel_id) = Discordrb::API::Channel.delete(@token, channel_id)
 
   def move_channel(channel_id, parent_id)
     data = { parent_id: parent_id }

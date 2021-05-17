@@ -11,9 +11,7 @@ module GameChatBot
         @title = title
       end
 
-      def id
-        @alert['alertId']
-      end
+      def id() = @alert['alertId']
 
       def to_h
         {
@@ -23,14 +21,10 @@ module GameChatBot
         }
       end
 
-      def post_at
-        Time.now + 15
-      end
+      def post_at() = (Time.now + 15)
 
-      def description
-        # Get rid of the "In Los Angeles:" part that's in every description
-        @description ||= @alert['description'].gsub(/\Ain [a-z. ]+: /i, '')
-      end
+      # Get rid of the "In Los Angeles:" part that's in every description
+      def description() = @alert['description'].gsub(/\Ain [a-z. ]+: /i, '')
     end
   end
 end

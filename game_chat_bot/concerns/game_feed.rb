@@ -36,9 +36,7 @@ module GameChatBot
       end
     end
 
-    def game_ended?
-      @feed.game_data.dig('status', 'abstractGameState') == 'Final'
-    end
+    def game_ended?() = (@feed.game_data.dig('status', 'abstractGameState') == 'Final')
 
     def output_lineups
       # Once the game has started, don't bother
@@ -81,9 +79,7 @@ module GameChatBot
       lineup_positions(flag, ids).zip(lineup_names(ids))
     end
 
-    def lineup_names(ids)
-      @feed.game_data['players'].values_at(*ids).map { |player| player['lastName'] }
-    end
+    def lineup_names(ids) = @feed.game_data['players'].values_at(*ids).map { |player| player['lastName'] }
 
     def lineup_positions(flag, ids)
       @feed.boxscore.dig('teams', flag, 'players')

@@ -5,7 +5,7 @@ module GameChatBot
     class HomeRun < Play
       MINIMUM_DISTANCE = 420
       MINIMUM_SPEED = 110
-      BORING_LAUNCH_ANGLE = (18..42).freeze
+      BORING_LAUNCH_ANGLE = 18..42
 
       def to_h
         {
@@ -19,9 +19,7 @@ module GameChatBot
 
       protected
 
-      def event
-        @event ||= @play['playEvents'].last
-      end
+      def event() = (@event ||= @play['playEvents'].last)
 
       def hit_data_fields
         # Rarely, a home run has no hit data
@@ -54,9 +52,7 @@ module GameChatBot
         BORING_LAUNCH_ANGLE.cover?(angle) ? "#{angle} deg" : ":star2: **#{angle} deg** :star2:"
       end
 
-      def pitch_type
-        "#{event.dig('pitchData', 'startSpeed')} mph #{event.dig('details', 'type', 'description')}"
-      end
+      def pitch_type() = "#{event.dig('pitchData', 'startSpeed')} mph #{event.dig('details', 'type', 'description')}"
     end
   end
 end

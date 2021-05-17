@@ -5,6 +5,9 @@ module BaseballDiscord
     module TeamCalendar
       extend Discordrb::Commands::CommandContainer
 
+      PREGAME_STATUSES = /Preview|Warmup|Pre-Game|Delayed Start|Scheduled/
+      POSTGAME_STATUSES = /Final|Game Over|Postponed|Completed Early/
+
       command(:next, description: 'Display the next N games for a team', usage: 'next [N=10] [team]') do |event, *args|
         TeamCalendarCommand.new(event, *args).list_games(:future)
       end
@@ -20,9 +23,6 @@ module BaseballDiscord
                    'hydrate=team(venue(timezone)),game(content(summary)),linescore,broadcasts(all)&' \
                    'eventTypes=primary&scheduleTypes=games'
 
-        PREGAME_STATUSES = /Preview|Warmup|Pre-Game|Delayed Start|Scheduled/.freeze
-        POSTGAME_STATUSES = /Final|Game Over|Postponed|Completed Early/.freeze
-
         IGNORE_CHANNELS = [452550329700188160].freeze
 
         def list_games(past_or_future)
@@ -37,13 +37,9 @@ module BaseballDiscord
 
         protected
 
-        def past?
-          @past_or_future == :past
-        end
+        def past?() = (@past_or_future == :past)
 
-        def future?
-          @past_or_future == :future
-        end
+        def future?() = (@past_or_future == :future)
 
         def determine_team_and_number
           number, name = parse_input(raw_args)
@@ -162,45 +158,54 @@ module BaseballDiscord
           (past? ? POSTGAME_STATUSES : PREGAME_STATUSES).match?(game.dig('status', 'abstractGameState'))
         end
 
-        def game_data(game)
-          home_team = game.dig('teams', 'home', 'team', 'id') == @team_id
+        def game_data(game) = CalendarGame.new(game, @team_id, past?).to_h
 
-          data = basic_data(game, home_team)
+        # Always parse the time in the current team's time zone - fans want to see *their* time zone, not always the
+        # home team's.
+        def game_date(game, team_venue)
+          BaseballDiscord::Utilities.parse_time game['gameDate'], time_zone: team_venue.dig('timeZone', 'id')
+        end
+      end
 
-          if past?
-            if game.dig('status', 'detailedState') == 'Postponed'
-              data[:outcome] = 'PPD'
-            else
-              mark_winning_team(game, data, home_team)
-            end
-          end
+      class CalendarGame
+        attr_reader :game
+
+        def initialize(game, team_id)
+          @game = game
+          @team_id = team_id
+
+          @home = game.dig('teams', 'home', 'team', 'id') == team_id
+        end
+
+        def to_h
+          data = basic_data
+
+          data[:outcome] = (game.dig('status', 'detailedState') == 'Postponed' ? 'PPD' : outcome) if past?
 
           data
         end
 
-        def mark_winning_team(game, data, home_team)
-          our_score = game.dig('teams', (home_team ? 'home' : 'away'), 'score')
-          opp_score = game.dig('teams', (home_team ? 'away' : 'home'), 'score')
+        protected
 
-          # This is stupid and I love it.
-          data[:outcome] = "#{'TWL'[our_score <=> opp_score]} #{our_score}-#{opp_score}"
-        end
+        def past?() = POSTGAME_STATUSES.match?(game.dig('status', 'abstractGameState'))
 
-        def basic_data(game, home_team)
-          team_key, opp_key = home_team ? %w[home away] : %w[away home]
+        def basic_data(game)
+          team_key, opp_key = @home ? %w[home away] : %w[away home]
 
           {
-            home: home_team,
+            home: @home,
             opponent: game.dig('teams', opp_key, 'team', 'teamName'),
             team: game.dig('teams', team_key, 'team', 'name'),
             date: game_date(game, game.dig('teams', team_key, 'team', 'venue'))
           }
         end
 
-        # Always parse the time in the current team's time zone - fans want to see *their* time zone, not always the
-        # home team's.
-        def game_date(game, team_venue)
-          BaseballDiscord::Utilities.parse_time game['gameDate'], time_zone: team_venue.dig('timeZone', 'id')
+        def outcome
+          our_score = game.dig('teams', (@home ? 'home' : 'away'), 'score')
+          opp_score = game.dig('teams', (@home ? 'away' : 'home'), 'score')
+
+          # This is stupid and I love it.
+          "#{'TWL'[our_score <=> opp_score]} #{our_score}-#{opp_score}"
         end
       end
     end

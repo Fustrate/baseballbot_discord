@@ -57,9 +57,7 @@ module GameChatBot
 
     protected
 
-    def baseball
-      @baseball ||= server 400516567735074817
-    end
+    def baseball() = (@baseball ||= server 400516567735074817)
 
     def register_basic_commands
       command(:linescore) { |event| feed_for_event(event)&.send_line_score }
@@ -72,9 +70,7 @@ module GameChatBot
       command(:autoupdate, aliases: %i[update]) { |event, *args| feed_for_event(event)&.autoupdate(args.join(' ')) }
     end
 
-    def feed_for_event(event)
-      @games[event.channel&.id]
-    end
+    def feed_for_event(event) = @games[event.channel&.id]
 
     def start_loop
       @scheduler = Rufus::Scheduler.new

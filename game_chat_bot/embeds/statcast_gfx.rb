@@ -21,9 +21,7 @@ module GameChatBot
         }
       end
 
-      def description
-        @item.dig('data', 'details', 'description_tracking').gsub(%r{<b>(.*?)</b>}, '**\1**')
-      end
+      def description() = @item.dig('data', 'details', 'description_tracking').gsub(%r{<b>(.*?)</b>}, '**\1**')
 
       def image
         width, height = STATCAST_IMAGE_DIMENSIONS[@item['id']] || [640, 640]

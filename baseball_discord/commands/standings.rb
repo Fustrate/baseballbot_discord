@@ -74,9 +74,7 @@ module BaseballDiscord
           input
         end
 
-        def december_first(year)
-          Date.civil(year.to_i, 12, 1)
-        end
+        def december_first(year) = Date.civil(year.to_i, 12, 1)
 
         def team_standings_data(team)
           r_diff_sign = team['runDifferential'].negative? ? '' : '+'

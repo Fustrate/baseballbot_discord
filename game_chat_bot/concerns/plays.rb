@@ -33,11 +33,9 @@ module GameChatBot
     def last_play_key
       return unless @last_play
 
-      if @last_play.dig('about', 'isComplete')
-        [@last_play['atBatIndex'] + 1, 0].join(',')
-      else
-        [@last_play['atBatIndex'], @last_play['playEvents'].length].join(',')
-      end
+      return "#{@last_play['atBatIndex'] + 1},0" if @last_play.dig('about', 'isComplete')
+
+      "#{@last_play['atBatIndex']},#{@last_play['playEvents'].length}"
     end
 
     def next_play_embeds(next_event)

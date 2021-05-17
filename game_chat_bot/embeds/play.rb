@@ -23,16 +23,14 @@ module GameChatBot
 
       def to_h
         {
-          title: "#{team_emoji} #{type} (#{count})",
+          title: "#{team_emoji} #{@play.dig('result', 'event')} (#{count})",
           description: description,
           color: color.to_i(16),
           footer: resulting_context
         }
       end
 
-      def post_at
-        Time.parse(@play['playEndTime']) + 15
-      end
+      def post_at() = (Time.parse(@play['playEndTime']) + 15)
 
       def color
         return '3a9910' if @play.dig('about', 'isScoringPlay')
@@ -42,21 +40,11 @@ module GameChatBot
         '106499'
       end
 
-      def team_flag
-        @play.dig('about', 'halfInning') == 'top' ? 'away' : 'home'
-      end
+      def team_flag() = @play.dig('about', 'halfInning') == 'top' ? 'away' : 'home'
 
-      def team_abbreviation
-        @channel.feed.game_data.dig('teams', team_flag, 'abbreviation')
-      end
+      def team_abbreviation() = @channel.feed.game_data.dig('teams', team_flag, 'abbreviation')
 
-      def team_emoji
-        GameChatBot::Emoji.team_emoji(team_abbreviation)
-      end
-
-      def type
-        @type ||= @play.dig('result', 'event')
-      end
+      def team_emoji() = GameChatBot::Emoji.team_emoji(team_abbreviation)
 
       def description
         description = squish @play.dig('result', 'description')
@@ -70,10 +58,7 @@ module GameChatBot
         the_count = @play['count'].values_at('balls', 'strikes')
 
         # The API likes to show 4 balls or 3 strikes. HBP on a 3-ball count also shows as Ball 4.
-        the_count[0] = 3 if type == 'Walk' || the_count[0] == 4
-        the_count[1] = 2 if type == 'Strikeout' || the_count[1] == 3
-
-        the_count.join('-')
+        "#{the_count[0].clamp(0, 3)}-#{the_count[1].clamp(0, 2)}"
       end
 
       def resulting_context

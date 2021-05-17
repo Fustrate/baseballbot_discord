@@ -3,33 +3,19 @@
 module BaseballDiscord
   # Servers can be added
   class Config
-    def short_name_to_server_id(short_name)
-      servers.find { |_, server| server['short_name'] == short_name }&.first
-    end
+    def short_name_to_server_id(short_name) = servers.find { |_, server| server['short_name'] == short_name }&.first
 
-    def verified_role_id(server_id)
-      servers.dig(server_id, 'verified_role')
-    end
+    def verified_role_id(server_id) = servers.dig(server_id, 'verified_role')
 
-    def verification_enabled?(server_id)
-      servers.dig(server_id, 'verification')
-    end
+    def verification_enabled?(server_id) = servers.dig(server_id, 'verification')
 
-    def server(server_id)
-      servers[server_id]
-    end
+    def server(server_id) = servers[server_id]
 
-    def non_team_channels(server_id)
-      servers.dig(server_id, 'non_team_channels') || []
-    end
+    def non_team_channels(server_id) = (servers.dig(server_id, 'non_team_channels') || [])
 
-    def non_team_roles(server_id)
-      servers.dig(server_id, 'non_team_roles') || []
-    end
+    def non_team_roles(server_id) = (servers.dig(server_id, 'non_team_roles') || [])
 
-    def dig(*keys)
-      servers.dig(*keys)
-    end
+    def dig(*path) = servers.dig(*path)
 
     def server_prefixes
       servers
@@ -39,8 +25,8 @@ module BaseballDiscord
 
     protected
 
-    def servers
-      @servers ||= YAML.safe_load(File.open(File.expand_path("#{__dir__}/../config/servers.yml")).read)['servers']
-    end
+    def servers() = (@servers ||= YAML.safe_load(File.open(servers_yml_path).read)['servers'])
+
+    def servers_yml_path() = File.expand_path("#{__dir__}/../config/servers.yml")
   end
 end

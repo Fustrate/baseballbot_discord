@@ -23,9 +23,7 @@ module BaseballDiscord
     PLAYER_LOOKUP = 'http://lookup-service-prod.mlb.com/json/named.search_player_all.bam?' \
                     'sport_code=%%27mlb%%27&name_part=%%27%<name>s%%25%%27'
 
-    def self.parse_date(date)
-      date.strip == '' ? Time.now : Chronic.parse(date)
-    end
+    def self.parse_date(date) = (date.strip == '' ? Time.now : Chronic.parse(date))
 
     def self.parse_time(utc, time_zone: 'America/New_York')
       time_zone = TZInfo::Timezone.get(time_zone) if time_zone.is_a? String
@@ -50,9 +48,8 @@ module BaseballDiscord
     end
 
     def self.look_up_player(name)
-      players = JSON.parse(
-        URI.parse(format(PLAYER_LOOKUP, name: CGI.escape(name.upcase))).open.read
-      ).dig('search_player_all', 'queryResults', 'row')
+      players = JSON.parse(URI.parse(format(PLAYER_LOOKUP, name: CGI.escape(name.upcase))).open.read)
+        .dig('search_player_all', 'queryResults', 'row')
 
       players = [players] if players.is_a? Hash
 
@@ -61,13 +58,9 @@ module BaseballDiscord
       end
     end
 
-    def self.division_for_team(team_id)
-      DIVISION_TEAMS.find { |_, team_ids| team_ids.include?(team_id) }&.first
-    end
+    def self.division_for_team(team_id) = DIVISION_TEAMS.find { |_, team_ids| team_ids.include?(team_id) }&.first
 
-    def self.league_for_team(team_id)
-      LEAGUE_TEAMS.find { |_, team_ids| team_ids.include?(team_id) }&.first
-    end
+    def self.league_for_team(team_id) = LEAGUE_TEAMS.find { |_, team_ids| team_ids.include?(team_id) }&.first
 
     # @param [String] The user-provided input that may have a date at the end
     # @return [Array<String, DateTime>] The remaining input and a date

@@ -17,8 +17,8 @@ module BaseballDiscord
       class ScoreboardCommand < Command
         SCHEDULE = '/v1/schedule?sportId=1&date=%<date>s&t=%<t>d&hydrate=game(content(summary)),linescore,flags,team'
 
-        PREGAME_STATUSES = /Preview|Warmup|Pre-Game|Delayed Start|Scheduled/.freeze
-        POSTGAME_STATUSES = /Final|Game Over|Postponed|Completed Early/.freeze
+        PREGAME_STATUSES = /Preview|Warmup|Pre-Game|Delayed Start|Scheduled/
+        POSTGAME_STATUSES = /Final|Game Over|Postponed|Completed Early/
 
         IGNORE_CHANNELS = [452550329700188160].freeze
 
@@ -119,16 +119,13 @@ module BaseballDiscord
           end
         end
 
-        def delay_type(game)
-          game.dig('status', 'reason') == 'Rain' ? '☂' : 'Delay'
-        end
+        def linescore(game) = game['linescore']
 
-        def game_inning(game)
-          [
-            game.dig('linescore', 'isTopInning') ? '▲' : '▼',
-            game.dig('linescore', 'currentInning').to_s
-          ].join(' ')
-        end
+        def delay_type(game) = (game.dig('status', 'reason') == 'Rain' ? '☂' : 'Delay')
+
+        def game_inning(game) = "#{top_of_inning?(game) ? '▲' : '▼'} #{game.dig('linescore', 'currentInning')}"
+
+        def top_of_inning?(game) = game.dig('linescore', 'isTopInning')
 
         def pre_or_post_game_status(game, status)
           if POSTGAME_STATUSES.match?(status)
