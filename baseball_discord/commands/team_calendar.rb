@@ -170,9 +170,10 @@ module BaseballDiscord
       class CalendarGame
         attr_reader :game
 
-        def initialize(game, team_id)
+        def initialize(game, team_id, past)
           @game = game
           @team_id = team_id
+          @past = past
 
           @home = game.dig('teams', 'home', 'team', 'id') == team_id
         end
@@ -180,14 +181,12 @@ module BaseballDiscord
         def to_h
           data = basic_data
 
-          data[:outcome] = (game.dig('status', 'detailedState') == 'Postponed' ? 'PPD' : outcome) if past?
+          data[:outcome] = (game.dig('status', 'detailedState') == 'Postponed' ? 'PPD' : outcome) if @past
 
           data
         end
 
         protected
-
-        def past?() = POSTGAME_STATUSES.match?(game.dig('status', 'abstractGameState'))
 
         def basic_data(game)
           team_key, opp_key = @home ? %w[home away] : %w[away home]
