@@ -86,9 +86,9 @@ module BaseballDiscord
         end
 
         def find_and_assign_role(inputs)
-          team_ids = inputs.map do |input|
-            BaseballDiscord::Utilities.find_team_by_name [input]
-          end.compact.uniq.first(2)
+          team_ids = inputs
+            .filter_map { |input| BaseballDiscord::Utilities.find_team_by_name [input] }
+            .uniq
 
           team_ids.any? ? update_member(team_ids) : react_to_message('❓')
         end
@@ -109,7 +109,7 @@ module BaseballDiscord
         end
 
         def update_nickname(team_ids)
-          abbrs = team_ids.map { |team_id| "[#{TEAM_ROLES.dig(team_id, 0)}]" }
+          abbrs = team_ids.first(2).map { |team_id| "[#{TEAM_ROLES.dig(team_id, 0)}]" }
 
           # return unless abbrs.count > 1
 

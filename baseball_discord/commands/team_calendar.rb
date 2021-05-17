@@ -32,9 +32,7 @@ module BaseballDiscord
 
           determine_team_and_number
 
-          return react_to_message('❓') unless @team_id
-
-          glorious_table_of_games
+          @team_id ? glorious_table_of_games : react_to_message('❓')
         end
 
         protected
@@ -57,12 +55,9 @@ module BaseballDiscord
 
         def parse_input(input)
           case input
-          when /\A(\d+)\s+(.+)\z/
-            [Regexp.last_match[1].to_i, Regexp.last_match[2]]
-          when /\A(\D+)\z/
-            [10, Regexp.last_match[1]]
-          when /\A(\d+)\z/
-            [Regexp.last_match[1].to_i, nil]
+          when /\A(\d+)\s+(.+)\z/ then [Regexp.last_match[1].to_i, Regexp.last_match[2]]
+          when /\A(\D+)\z/        then [10,                        Regexp.last_match[1]]
+          when /\A(\d+)\z/        then [Regexp.last_match[1].to_i, nil]
           else
             [10, nil]
           end
@@ -97,7 +92,7 @@ module BaseballDiscord
 
           table = Terminal::Table.new(
             rows: table_rows(games),
-            headings: table_headings,
+            headings: ['Date', '', 'Team', past? ? 'Result' : 'Time'],
             title: games.first[:team],
             style: { border: :unicode }
           )
@@ -108,25 +103,11 @@ module BaseballDiscord
           format_table table
         end
 
-        def table_headings
-          return ['Date', '', 'Team', 'Result'] if past?
-
-          ['Date', '', 'Team', 'Time']
-        end
-
         def table_rows(games)
           rows = []
 
           separate_games_into_series(games).each do |series|
-            first_game = true
-
-            series.each do |game|
-              rows << game_row(game, first_game)
-
-              first_game = false
-            end
-
-            rows << :separator
+            rows.concat(series.map.with_index { |game, index| game_row(game, index.zero?) }, [:separator])
           end
 
           # The last row is a separator
@@ -164,27 +145,17 @@ module BaseballDiscord
         def process_games(data)
           games = []
 
-          properly_ordered_dates(data).each do |date|
+          order = past? ? :reverse : :itself
+
+          data['dates'].send(order).each do |date|
             next unless date['totalGames'].positive?
 
-            properly_ordered_games(date).each do |game|
-              next unless include_game?(game)
-
-              games << game_data(game)
-            end
+            games.concat(date['games'].send(order).filter_map { |game| game_data(game) if include_game?(game) })
 
             break if games.length >= @number
           end
 
           games.first @number
-        end
-
-        def properly_ordered_dates(data)
-          past? ? data['dates'].reverse : data['dates']
-        end
-
-        def properly_ordered_games(date)
-          past? ? date['games'].reverse : date['games']
         end
 
         def include_game?(game)
