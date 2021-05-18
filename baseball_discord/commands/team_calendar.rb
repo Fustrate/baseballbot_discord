@@ -191,7 +191,7 @@ module BaseballDiscord
             home: @home,
             opponent: game.dig('teams', opp_key, 'team', 'teamName'),
             team: game.dig('teams', team_key, 'team', 'name'),
-            date: game_date(game, game.dig('teams', team_key, 'team', 'venue'))
+            date: game_date
           }
         end
 
