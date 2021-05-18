@@ -101,12 +101,12 @@ module GameChatBot
 
       @games.select { |_, game| game.game_over }.each_key do |channel_id|
         @games.delete channel_id
-        @redis.hdel 'live_games', channel(channel_id).name
+        redis.hdel 'live_games', channel(channel_id).name
       end
     end
 
     def start_games
-      @redis.hgetall('live_games').each do |channel_name, game_pk|
+      redis.hgetall('live_games').each do |channel_name, game_pk|
         channel = find_channel(channel_name).first
 
         next unless channel && @games[channel.id]&.game_pk != game_pk
