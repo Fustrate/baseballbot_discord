@@ -179,18 +179,14 @@ module BaseballDiscord
         end
 
         def to_h
-          data = basic_data
-
-          data[:outcome] = (game.dig('status', 'detailedState') == 'Postponed' ? 'PPD' : outcome) if @past
-
-          data
+          basic_data.tap do |data|
+            data[:outcome] = (game.dig('status', 'detailedState') == 'Postponed' ? 'PPD' : outcome) if @past
+          end
         end
 
         protected
 
         def basic_data
-          team_key, opp_key = @home ? %w[home away] : %w[away home]
-
           {
             home: @home,
             opponent: game.dig('teams', opp_key, 'team', 'teamName'),
@@ -200,12 +196,25 @@ module BaseballDiscord
         end
 
         def outcome
-          our_score = game.dig('teams', (@home ? 'home' : 'away'), 'score')
-          opp_score = game.dig('teams', (@home ? 'away' : 'home'), 'score')
+          our_score = game.dig('teams', team_key, 'score')
+          opp_score = game.dig('teams', opp_key, 'score')
 
           # This is stupid and I love it.
           "#{'TWL'[our_score <=> opp_score]} #{our_score}-#{opp_score}"
         end
+
+        # Always parse the time in the current team's time zone - fans want to see *their* time zone, not always the
+        # home team's.
+        def game_date
+          BaseballDiscord::Utilities.parse_time(
+            game['gameDate'],
+            time_zone: game.dig('teams', team_key, 'team', 'venue', 'timeZone', 'id')
+          )
+        end
+
+        def team_key() = (@home ? 'home' : 'away')
+
+        def opp_key() = (@home ? 'away' : 'home')
       end
     end
   end
