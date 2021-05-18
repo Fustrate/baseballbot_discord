@@ -9,7 +9,7 @@ module GameChatBot
 
       def to_h
         {
-          title: "#{team_emoji} #{type} (#{count})",
+          title: "#{team_emoji} #{@play.dig('result', 'event')} (#{count})",
           description: description,
           fields: hit_data_fields.append({ name: 'Pitch', value: pitch_type, inline: true }),
           color: color.to_i(16),

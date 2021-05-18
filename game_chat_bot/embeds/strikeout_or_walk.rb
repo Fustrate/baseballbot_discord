@@ -5,7 +5,7 @@ module GameChatBot
     class StrikeoutOrWalk < Play
       def to_h
         {
-          title: "#{team_emoji} #{type} (#{count})",
+          title: "#{team_emoji} #{@play.dig('result', 'event')} (#{count})",
           description: description,
           color: color.to_i(16),
           footer: resulting_context
