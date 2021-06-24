@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/shardlab/discordrb.git
-  revision: 359326e8743c6eaa8add263de9edbb6c945ff95d
+  revision: 79fe7eeba79780164bbc4155cba32e778efc8f99
   branch: main
   specs:
     discordrb (3.4.2)
@@ -32,9 +32,9 @@ GEM
       sshkit (~> 1.3)
     chronic (0.10.2)
     climate_control (0.2.0)
-    concurrent-ruby (1.1.8)
-    concurrent-ruby-ext (1.1.8)
-      concurrent-ruby (= 1.1.8)
+    concurrent-ruby (1.1.9)
+    concurrent-ruby-ext (1.1.9)
+      concurrent-ruby (= 1.1.9)
     daemons (1.4.0)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
@@ -45,8 +45,8 @@ GEM
       tzinfo
     event_emitter (0.2.6)
     eventmachine (1.2.7)
-    ffi (1.15.0)
-    fugit (1.4.5)
+    ffi (1.15.3)
+    fugit (1.5.0)
       et-orbi (~> 1.1, >= 1.1.8)
       raabro (~> 1.4)
     hana (1.3.7)
@@ -57,7 +57,7 @@ GEM
       http-form_data (~> 1.0.1)
       http_parser.rb (~> 0.6.0)
     http-accept (1.7.0)
-    http-cookie (1.0.3)
+    http-cookie (1.0.4)
       domain_name (~> 0.5)
     http-form_data (1.0.3)
     http_parser.rb (0.6.0)
@@ -91,7 +91,7 @@ GEM
     rake (13.0.3)
     redd (0.8.8)
       http (~> 2.2)
-    redis (4.2.5)
+    redis (4.3.1)
     regexp_parser (2.1.1)
     rest-client (2.1.0)
       http-accept (>= 1.7.0, < 2.0)
@@ -99,16 +99,16 @@ GEM
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
     rexml (3.2.5)
-    rubocop (1.15.0)
+    rubocop (1.17.0)
       parallel (~> 1.10)
       parser (>= 3.0.0.0)
       rainbow (>= 2.2.2, < 4.0)
       regexp_parser (>= 1.8, < 3.0)
       rexml
-      rubocop-ast (>= 1.5.0, < 2.0)
+      rubocop-ast (>= 1.7.0, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 3.0)
-    rubocop-ast (1.5.0)
+    rubocop-ast (1.7.0)
       parser (>= 3.0.1.1)
     rubocop-performance (1.11.3)
       rubocop (>= 1.7.0, < 2.0)
