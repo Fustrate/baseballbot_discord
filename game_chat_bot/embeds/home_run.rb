@@ -7,7 +7,7 @@ module GameChatBot
       MINIMUM_SPEED = 110
       BORING_LAUNCH_ANGLE = 18..42
 
-      COPYPASTA = <<~COPYPASTA
+      COPYPASTA = <<~COPYPASTA.gsub(/\s/, ' ')
         I get physically angry watching Max Muncy hit. This man just doesn't chase. You can almost hear him sneering
         "that's 0.16cm outside" as he takes a ball 1. Two-strike counts don't faze him. Then he'll whip out a
         hellacious dong on the 9th pitch. He's suffocating. He's Max Muncy.
