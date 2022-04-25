@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-lock '~> 3.15'
+lock '~> 3.17'
 
 set :application, 'discord_bot'
 set :user, 'baseballbot'
