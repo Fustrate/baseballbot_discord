@@ -2,3 +2,6 @@
 *.pid
 config/servers.yml
 log/*
+
+.DS_Store
+Thumbs.db
