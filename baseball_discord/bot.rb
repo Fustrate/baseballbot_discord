@@ -21,7 +21,7 @@ require_relative 'redis_connection'
 require_relative 'utilities'
 
 # Require all commands and events
-Dir.glob("#{__dir__}/{commands,events}/*").each { |path| require_relative path }
+Dir.glob("#{__dir__}/{commands,events}/*").each { require_relative _1 }
 
 module BaseballDiscord
   class Bot < Discordrb::Commands::CommandBot
@@ -34,8 +34,8 @@ module BaseballDiscord
 
     def initialize
       super(
-        client_id: ENV['DISCORD_CLIENT_ID'],
-        token: ENV['DISCORD_TOKEN'],
+        client_id: ENV.fetch('DISCORD_CLIENT_ID'),
+        token: ENV.fetch('DISCORD_TOKEN'),
         prefix: prefix_proc(config.server_prefixes),
         intents: INTENTS
       )
@@ -73,13 +73,13 @@ module BaseballDiscord
       end
     end
 
-    def logger() = (@logger ||= Logger.new($stdout))
+    def logger = (@logger ||= Logger.new($stdout))
 
-    def redis() = (@redis ||= RedisConnection.new(self))
+    def redis = (@redis ||= RedisConnection.new(self))
 
-    def mlb() = (@mlb ||= MLBStatsAPI::Client.new(logger: logger, cache: Redis.new))
+    def mlb = (@mlb ||= MLBStatsAPI::Client.new(logger:, cache: Redis.new))
 
-    def config() = (@config ||= Config.new)
+    def config = (@config ||= Config.new)
   end
 
   class UserError < RuntimeError

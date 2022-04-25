@@ -87,7 +87,7 @@ module BaseballDiscord
 
         def find_and_assign_role(inputs)
           team_ids = inputs
-            .filter_map { |input| BaseballDiscord::Utilities.find_team_by_name [input] }
+            .filter_map { BaseballDiscord::Utilities.find_team_by_name [_1] }
             .uniq
 
           team_ids.any? ? update_member(team_ids) : react_to_message('❓')
@@ -98,7 +98,7 @@ module BaseballDiscord
           # Only one role is actually assigned
           role_id = TEAM_ROLES.dig(team_ids.first, 1)
 
-          add = @baseball.roles.select { |role| role_id == role.id }
+          add = @baseball.roles.select { role_id == _1.id }
 
           # Add the proper team role(s), remove all others
           @member.modify_roles add, all_team_roles_on_server
@@ -109,7 +109,7 @@ module BaseballDiscord
         end
 
         def update_nickname(team_ids)
-          abbrs = team_ids.first(2).map { |team_id| "[#{TEAM_ROLES.dig(team_id, 0)}]" }
+          abbrs = team_ids.first(2).map { "[#{TEAM_ROLES.dig(_1, 0)}]" }
 
           # return unless abbrs.count > 1
 
@@ -123,7 +123,7 @@ module BaseballDiscord
         def all_team_roles_on_server
           all_snowflakes = TEAM_ROLES.map { |_, data| data[1] }
 
-          @baseball.roles.select { |role| all_snowflakes.include?(role.id) }
+          @baseball.roles.select { all_snowflakes.include?(_1.id) }
         end
 
         def member_verified?

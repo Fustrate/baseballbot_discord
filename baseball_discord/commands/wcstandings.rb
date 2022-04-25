@@ -31,8 +31,8 @@ module BaseballDiscord
           return react_to_message('❓') unless league_id
 
           leaders, others = standings_data(date, league_id)
-            .sort_by { |team| team['wildCardRank'].to_i }
-            .partition { |team| team['divisionRank'] == '1' }
+            .sort_by { _1['wildCardRank'].to_i }
+            .partition { _1['divisionRank'] == '1' }
 
           standings_table(leaders, others)
         end
@@ -40,9 +40,9 @@ module BaseballDiscord
         protected
 
         def standings_data(date, league_id)
-          load_data_from_stats_api(STANDINGS, date: date)['records']
-            .select { |division| division.dig('league', 'id') == league_id }
-            .flat_map { |division| division['teamRecords'] }
+          load_data_from_stats_api(STANDINGS, date:)['records']
+            .select { _1.dig('league', 'id') == league_id }
+            .flat_map { _1['teamRecords'] }
         end
 
         def find_league_id(team_name)
@@ -96,8 +96,8 @@ module BaseballDiscord
         end
 
         def standings_table(leaders, others)
-          leader_rows = leaders.map { |team| team_standings_data(team) }
-          other_rows = others.map { |team| team_standings_data(team) }
+          leader_rows = leaders.map { team_standings_data(_1) }
+          other_rows = others.map { team_standings_data(_1) }
 
           table = Terminal::Table.new(
             rows: (leader_rows + [:separator] + other_rows),

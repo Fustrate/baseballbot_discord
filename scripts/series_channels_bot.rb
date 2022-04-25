@@ -33,7 +33,7 @@ class SeriesChannelsBot
     to_create = goal - existing.map { |_, channel| channel['name'] }
     to_remove = existing.reject { |_, channel| goal.include?(channel['name']) }
 
-    to_create.each { |name| create_channel(name) }
+    to_create.each { create_channel(_1) }
     to_remove.each { |channel_id, _channel| remove_channel(channel_id) }
   end
 
@@ -118,12 +118,12 @@ class SeriesChannelsBot
     @all_channels ||= begin
       response = Discordrb::API::Server.channels(@token, SERVER_ID)
 
-      JSON.parse(response).map { |channel| [channel['id'].to_i, channel] }.to_h
+      JSON.parse(response).to_h { [_1['id'].to_i, _1] }
     end
   end
 
   def create_channel(name)
-    data = { name: name, type: 0, parent_id: GAME_CHATS_ID, topic: DEFAULT_TOPIC }
+    data = { name:, type: 0, parent_id: GAME_CHATS_ID, topic: DEFAULT_TOPIC }
 
     JSON.parse request(:guilds_sid_channels, SERVER_ID, :post, "guilds/#{SERVER_ID}/channels", data)
   end
@@ -131,7 +131,7 @@ class SeriesChannelsBot
   def remove_channel(channel_id) = Discordrb::API::Channel.delete(@token, channel_id)
 
   def move_channel(channel_id, parent_id)
-    data = { parent_id: parent_id }
+    data = { parent_id: }
 
     request :channels_cid, channel_id, :patch, "channels/#{channel_id}", data
   end

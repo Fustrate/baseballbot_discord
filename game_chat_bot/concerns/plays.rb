@@ -63,15 +63,15 @@ module GameChatBot
 
       # If we missed some things, oh well
       plays
-        .select { |play| play['playEvents'].any? }
+        .select { _1['playEvents'].any? }
         .last(3)
-        .flat_map { |play| embeds_for_play(play) }
+        .flat_map { embeds_for_play(_1) }
     end
 
     def interesting_events(play, events)
       return unless events&.any?
 
-      actions = events.filter_map { |event| event.dig('details', 'description') if event['type'] == 'action' }
+      actions = events.filter_map { _1.dig('details', 'description') if _1['type'] == 'action' }
 
       Embeds::Interesting.new(play, self, actions.join("\n")) if actions.any?
     end

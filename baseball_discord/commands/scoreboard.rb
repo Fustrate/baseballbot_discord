@@ -29,7 +29,7 @@ module BaseballDiscord
 
           return react_to_message('❓') unless date
 
-          data = load_data_from_stats_api(SCHEDULE, date: date)
+          data = load_data_from_stats_api(SCHEDULE, date:)
 
           return react_to_message('👎') if data['totalGames'].zero?
 
@@ -54,7 +54,7 @@ module BaseballDiscord
         def scores_table_rows(games)
           rows = []
 
-          games.map { |game| process_game(game) }.each_slice(2) do |pair|
+          games.map { process_game(_1) }.each_slice(2) do |pair|
             append_game_rows(rows, pair)
 
             rows << :separator

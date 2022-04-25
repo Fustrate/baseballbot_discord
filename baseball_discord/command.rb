@@ -43,9 +43,9 @@ module BaseballDiscord
       ([team_name_from_channel_name] + team_names_from_roles + [bot.config.dig(server.id, 'default_team')]).compact
     end
 
-    def team_name_from_channel_name() = channel.name.downcase.tr('-', ' ')
+    def team_name_from_channel_name = channel.name.downcase.tr('-', ' ')
 
-    def team_names_from_roles() = user.roles.map(&:name).map(&:downcase)
+    def team_names_from_roles = user.roles.map(&:name).map(&:downcase)
 
     def react_to_message(reaction)
       message.react reaction
@@ -61,14 +61,14 @@ module BaseballDiscord
 
     def format_table(table) = "```\n#{table}\n```"
 
-    def bot() = event.bot
+    def bot = event.bot
 
-    def channel() = event.channel
+    def channel = event.channel
 
-    def message() = event.message
+    def message = event.message
 
-    def server() = event.server
+    def server = event.server
 
-    def user() = event.user
+    def user = event.user
   end
 end

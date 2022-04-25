@@ -10,8 +10,8 @@ module GameChatBot
         {
           title: @item.dig('data', 'headline'),
           description: @item.dig('data', 'url', 0, '_'),
-          video: video,
-          thumbnail: thumbnail,
+          video:,
+          thumbnail:,
           color: '999999'.to_i(16)
         }
       end
@@ -26,7 +26,7 @@ module GameChatBot
 
       def thumbnail
         thumbnail_url = @item.dig('data', 'thumbnails', 'thumb')
-          .find { |thumb| thumb['type'] == 13 }
+          .find { _1['type'] == 13 }
           &.dig('_')
 
         {

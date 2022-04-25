@@ -43,8 +43,8 @@ module GameChatBot
       register_commands_with_arguments
 
       super(
-        client_id: ENV['DISCORD_GAMETHREAD_CLIENT_ID'],
-        token: ENV['DISCORD_GAMETHREAD_TOKEN'],
+        client_id: ENV.fetch('DISCORD_GAMETHREAD_CLIENT_ID'),
+        token: ENV.fetch('DISCORD_GAMETHREAD_TOKEN'),
         command_doesnt_exist_message: nil, help_command: false, prefix: '!', intents: INTENTS
       )
     end
@@ -55,20 +55,20 @@ module GameChatBot
       end
     end
 
-    def logger() = (@logger ||= Logger.new($stdout))
+    def logger = (@logger ||= Logger.new($stdout))
 
-    def redis() = (@redis ||= Redis.new)
+    def redis = (@redis ||= Redis.new)
 
-    def client() = (@client ||= MLBStatsAPI::Client.new(logger: logger, cache: Redis.new))
+    def client = (@client ||= MLBStatsAPI::Client.new(logger:, cache: Redis.new))
 
     protected
 
-    def baseball() = (@baseball ||= server 400516567735074817)
+    def baseball = (@baseball ||= server 400516567735074817)
 
     def register_basic_commands
-      command(:linescore) { |event| feed_for_event(event)&.send_line_score }
-      command(:lineups) { |event| feed_for_event(event)&.send_lineups }
-      command(:umpires) { |event| feed_for_event(event)&.send_umpires }
+      command(:linescore) { feed_for_event(_1)&.send_line_score }
+      command(:lineups) { feed_for_event(_1)&.send_lineups }
+      command(:umpires) { feed_for_event(_1)&.send_umpires }
     end
 
     def register_commands_with_arguments

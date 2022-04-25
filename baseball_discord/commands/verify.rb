@@ -101,7 +101,7 @@ module BaseballDiscord
 
         def auth_url(guild = nil)
           Redd.url(
-            client_id: ENV['DISCORD_REDDIT_CLIENT_ID'],
+            client_id: ENV.fetch('DISCORD_REDDIT_CLIENT_ID'),
             redirect_uri: 'https://baseballbot.io/discord/reddit-callback',
             response_type: 'code',
             state: generate_state_data(guild || server),

@@ -28,8 +28,8 @@ module BaseballDiscord
           return react_to_message('❓') unless division_id
 
           rows = standings_data(date, division_id)
-            .sort_by { |team| team['divisionRank'] }
-            .map { |team| team_standings_data(team) }
+            .sort_by { _1['divisionRank'] }
+            .map { team_standings_data(_1) }
 
           standings_table(rows)
         end
@@ -40,7 +40,7 @@ module BaseballDiscord
           clamped_date = clamp_date_to_regular_season(date)
 
           load_data_from_stats_api(STANDINGS, date: clamped_date)['records']
-            .find { |record| record.dig('division', 'id') == division_id }['teamRecords']
+            .find { _1.dig('division', 'id') == division_id }['teamRecords']
         end
 
         def find_division_id(team_name)
@@ -92,7 +92,7 @@ module BaseballDiscord
 
         def standings_table(rows)
           table = Terminal::Table.new(
-            rows: rows,
+            rows:,
             headings: %w[Team W L GB % rDiff STRK],
             style: { border: :unicode }
           )

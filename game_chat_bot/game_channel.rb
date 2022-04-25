@@ -111,7 +111,7 @@ module GameChatBot
       # No color feed
     end
 
-    def redis_key() = (@redis_key ||= "#{@channel.id}_#{@game_pk}")
+    def redis_key = (@redis_key ||= "#{@channel.id}_#{@game_pk}")
 
     def ready_to_update?
       return false if @game_over

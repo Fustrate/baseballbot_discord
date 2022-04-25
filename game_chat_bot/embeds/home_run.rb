@@ -16,7 +16,7 @@ module GameChatBot
       def to_h
         {
           title: "#{team_emoji} #{@play.dig('result', 'event')} (#{count})",
-          description: description,
+          description:,
           fields: [*hit_data_fields, { name: 'Pitch', value: pitch_type, inline: true }, copypasta].compact,
           color: color.to_i(16),
           footer: resulting_context
@@ -25,7 +25,7 @@ module GameChatBot
 
       protected
 
-      def event() = (@event ||= @play['playEvents'].last)
+      def event = (@event ||= @play['playEvents'].last)
 
       def hit_data_fields
         # Rarely, a home run has no hit data
@@ -58,7 +58,7 @@ module GameChatBot
         BORING_LAUNCH_ANGLE.cover?(angle) ? "#{angle} deg" : ":star2: **#{angle} deg** :star2:"
       end
 
-      def pitch_type() = "#{event.dig('pitchData', 'startSpeed')} mph #{event.dig('details', 'type', 'description')}"
+      def pitch_type = "#{event.dig('pitchData', 'startSpeed')} mph #{event.dig('details', 'type', 'description')}"
 
       def copypasta
         return unless @play.dig('matchup', 'batter', 'id') == 571970

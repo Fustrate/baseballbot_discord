@@ -74,10 +74,10 @@ module BaseballDiscord
       end
     end
 
-    def subscribe(channel, &block)
+    def subscribe(channel, &)
       ensure_redis
 
-      @redis.pubsub.subscribe channel, &block
+      @redis.pubsub.subscribe(channel, &)
     end
 
     protected

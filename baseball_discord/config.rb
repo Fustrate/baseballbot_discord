@@ -20,13 +20,13 @@ module BaseballDiscord
     def server_prefixes
       servers
         .select { |_, server| server['prefixes'] }
-        .transform_values { |conf| Array(conf['prefixes']) }
+        .transform_values { Array(_1['prefixes']) }
     end
 
     protected
 
-    def servers() = (@servers ||= YAML.safe_load(File.open(servers_yml_path).read)['servers'])
+    def servers = (@servers ||= YAML.safe_load(File.read(servers_yml_path))['servers'])
 
-    def servers_yml_path() = File.expand_path("#{__dir__}/../config/servers.yml")
+    def servers_yml_path = File.expand_path("#{__dir__}/../config/servers.yml")
   end
 end

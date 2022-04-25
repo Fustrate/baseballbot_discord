@@ -87,7 +87,7 @@ module BaseballDiscord
     end
 
     def self.teams_by_name
-      @teams_by_name ||= ::YAML.safe_load(File.open(File.expand_path("#{__dir__}/../config/team_names.yml")).read)
+      @teams_by_name ||= ::YAML.safe_load(File.read(File.expand_path("#{__dir__}/../config/team_names.yml")))
     end
   end
 end

@@ -19,7 +19,7 @@ module GameChatBot
     def alerts
       return [] unless @feed.game_data
 
-      @feed.game_data['alerts'].select { |alert| post_alert?(alert) }
+      @feed.game_data['alerts'].select { post_alert?(_1) }
     end
 
     def post_alert?(alert)

@@ -55,10 +55,10 @@ module BaseballDiscord
 
         def terms
           @terms ||= YAML.safe_load(
-            File.open(File.expand_path("#{__dir__}/../../config/glossary.yml")).read
-          )['glossary'].map do |abbr, data|
+            File.read(File.expand_path("#{__dir__}/../../config/glossary.yml"))
+          )['glossary'].to_h do |abbr, data|
             [abbr.downcase, data.merge('abbr' => abbr)]
-          end.to_h
+          end
         end
       end
     end

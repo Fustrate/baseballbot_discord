@@ -24,13 +24,13 @@ module GameChatBot
       def to_h
         {
           title: "#{team_emoji} #{@play.dig('result', 'event')} (#{count})",
-          description: description,
+          description:,
           color: color.to_i(16),
           footer: resulting_context
         }
       end
 
-      def post_at() = (Time.parse(@play['playEndTime']) + 15)
+      def post_at = (Time.parse(@play['playEndTime']) + 15)
 
       def color
         return '3a9910' if @play.dig('about', 'isScoringPlay')
@@ -40,11 +40,11 @@ module GameChatBot
         '106499'
       end
 
-      def team_flag() = @play.dig('about', 'halfInning') == 'top' ? 'away' : 'home'
+      def team_flag = @play.dig('about', 'halfInning') == 'top' ? 'away' : 'home'
 
-      def team_abbreviation() = @channel.feed.game_data.dig('teams', team_flag, 'abbreviation')
+      def team_abbreviation = @channel.feed.game_data.dig('teams', team_flag, 'abbreviation')
 
-      def team_emoji() = GameChatBot::Emoji.team_emoji(team_abbreviation)
+      def team_emoji = GameChatBot::Emoji.team_emoji(team_abbreviation)
 
       def description
         description = squish @play.dig('result', 'description')
@@ -70,7 +70,7 @@ module GameChatBot
           "#{@play.dig('matchup', 'pitchHand', 'code')}HP #{@play.dig('matchup', 'pitcher', 'fullName')}"
         ].compact.join('  |  ')
 
-        { text: text }
+        { text: }
       end
 
       def runners

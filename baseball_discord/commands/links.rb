@@ -12,9 +12,9 @@ module BaseballDiscord
 
       # Prints some basic info to the log file
       class LinksCommand < Command
-        def bbref() = "https://www.baseball-reference.com/search/search.fcgi?search=#{CGI.escape raw_args}"
+        def bbref = "https://www.baseball-reference.com/search/search.fcgi?search=#{CGI.escape raw_args}"
 
-        def fangraphs() = "https://www.fangraphs.com/players.aspx?new=y&lastname=#{CGI.escape raw_args}"
+        def fangraphs = "https://www.fangraphs.com/players.aspx?new=y&lastname=#{CGI.escape raw_args}"
       end
     end
   end

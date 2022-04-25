@@ -20,7 +20,7 @@ module GameChatBot
         rows[3][inning['num']] = inning.dig('home', 'runs')
       end
 
-      Terminal::Table.new(rows: rows, style: { border: :unicode })
+      Terminal::Table.new(rows:, style: { border: :unicode })
     end
 
     def base_line_score
@@ -32,7 +32,7 @@ module GameChatBot
       ]
     end
 
-    def team_line_score(name, innings, rhe) = ([name] + [''] * innings + rhe)
+    def team_line_score(name, innings, rhe) = ([name] + ([''] * innings) + rhe)
 
     def line_score_inning
       format(
@@ -97,14 +97,14 @@ module GameChatBot
 
     protected
 
-    def innings() = [@feed.linescore['innings'].count, 9].max
+    def innings = [@feed.linescore['innings'].count, 9].max
 
     def team_rhe(flag) = @feed.linescore.dig('teams', flag).values_at('runs', 'hits', 'errors')
 
     def team_name(flag) = @feed.game_data.dig('teams', flag, 'abbreviation')
 
-    def game_over?() = POSTGAME_STATUSES.match?(@feed.game_data.dig('status', 'abstractGameState'))
+    def game_over? = POSTGAME_STATUSES.match?(@feed.game_data.dig('status', 'abstractGameState'))
 
-    def game_started?() = !PREGAME_STATUSES.match?(@feed.game_data.dig('status', 'abstractGameState'))
+    def game_started? = !PREGAME_STATUSES.match?(@feed.game_data.dig('status', 'abstractGameState'))
   end
 end

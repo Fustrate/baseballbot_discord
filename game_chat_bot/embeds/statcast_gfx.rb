@@ -16,20 +16,20 @@ module GameChatBot
       def to_h
         {
           title: @item.dig('data', 'details', 'des'),
-          description: description,
-          image: image
+          description:,
+          image:
         }
       end
 
-      def description() = @item.dig('data', 'details', 'description_tracking').gsub(%r{<b>(.*?)</b>}, '**\1**')
+      def description = @item.dig('data', 'details', 'description_tracking').gsub(%r{<b>(.*?)</b>}, '**\1**')
 
       def image
         width, height = STATCAST_IMAGE_DIMENSIONS[@item['id']] || [640, 640]
 
         {
           url: @item.dig('data', 'url'),
-          height: height,
-          width: width
+          height:,
+          width:
         }
       end
     end

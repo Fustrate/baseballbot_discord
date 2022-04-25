@@ -37,9 +37,9 @@ module BaseballDiscord
 
         protected
 
-        def past?() = (@past_or_future == :past)
+        def past? = (@past_or_future == :past)
 
-        def future?() = (@past_or_future == :future)
+        def future? = (@past_or_future == :future)
 
         def determine_team_and_number
           number, name = parse_input(raw_args)
@@ -80,7 +80,7 @@ module BaseballDiscord
           # Account for up to 5 off days
           days = (past? ? -1 : 1) * (@number + 5)
 
-          [now, now + days * 24 * 3600].sort
+          [now, now + (days * 24 * 3600)].sort
         end
 
         def games_table(games)
@@ -146,7 +146,7 @@ module BaseballDiscord
           data['dates'].send(order).each do |date|
             next unless date['totalGames'].positive?
 
-            games.concat(date['games'].send(order).filter_map { |game| game_data(game) if include_game?(game) })
+            games.concat(date['games'].send(order).filter_map { game_data(_1) if include_game?(_1) })
 
             break if games.length >= @number
           end
@@ -212,9 +212,9 @@ module BaseballDiscord
           )
         end
 
-        def team_key() = (@home ? 'home' : 'away')
+        def team_key = (@home ? 'home' : 'away')
 
-        def opp_key() = (@home ? 'away' : 'home')
+        def opp_key = (@home ? 'away' : 'home')
       end
     end
   end
