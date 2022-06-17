@@ -5,40 +5,40 @@ source 'https://rubygems.org'
 ruby '3.1.2'
 
 # Run the script as a daemon
-gem 'daemons'
-gem 'rake'
+gem 'daemons', '~> 1.4'
+gem 'rake', '~> 13.0'
 
 # Local services
-gem 'em-hiredis'
-gem 'redis'
+gem 'em-hiredis', '~> 0.3'
+gem 'redis', '~> 4.6'
 # gem 'pg'
 
 # Outside services
 gem 'discordrb', github: 'shardlab/discordrb', branch: 'main'
-gem 'mlb_stats_api', '>= 0.2.3'
-gem 'redd'
+gem 'mlb_stats_api', '>= 0.2.5'
+gem 'redd', '~> 0.8'
 
 # Parse dates and times
-gem 'chronic'
-gem 'tzinfo'
+gem 'chronic', '~> 0.10'
+gem 'tzinfo', '~> 2.0'
 
 # Utilities
-gem 'rufus-scheduler'
-gem 'terminal-table'
-gem 'terrapin'
+gem 'rufus-scheduler', '~> 3.8'
+gem 'terminal-table', '~> 3.0'
+gem 'terrapin', '~> 0.6'
 
 # ERROR -- : cannot load such file -- concurrent/concurrent_ruby_ext (LoadError)
-gem 'concurrent-ruby-ext'
+gem 'concurrent-ruby-ext', '~> 1.1'
 
 group :development do
   # Deploy with Capistrano
-  gem 'capistrano', '~> 3.15', require: false
-  gem 'capistrano-bundler', require: false
+  gem 'capistrano', '~> 3.17', require: false
+  gem 'capistrano-bundler', '~> 2.1', require: false
   gem 'capistrano-rbenv', '~> 2.1', require: false
 
-  gem 'minitest'
+  gem 'minitest', '~> 5.16'
 
   # Linters
-  gem 'rubocop'
-  gem 'rubocop-performance', require: false
+  gem 'rubocop', '~> 1.30'
+  gem 'rubocop-performance', '~> 1.14', require: false
 end

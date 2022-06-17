@@ -138,25 +138,25 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  capistrano (~> 3.15)
-  capistrano-bundler
+  capistrano (~> 3.17)
+  capistrano-bundler (~> 2.1)
   capistrano-rbenv (~> 2.1)
-  chronic
-  concurrent-ruby-ext
-  daemons
+  chronic (~> 0.10)
+  concurrent-ruby-ext (~> 1.1)
+  daemons (~> 1.4)
   discordrb!
-  em-hiredis
-  minitest
-  mlb_stats_api (>= 0.2.3)
-  rake
-  redd
-  redis
-  rubocop
-  rubocop-performance
-  rufus-scheduler
-  terminal-table
-  terrapin
-  tzinfo
+  em-hiredis (~> 0.3)
+  minitest (~> 5.16)
+  mlb_stats_api (>= 0.2.5)
+  rake (~> 13.0)
+  redd (~> 0.8)
+  redis (~> 4.6)
+  rubocop (~> 1.30)
+  rubocop-performance (~> 1.14)
+  rufus-scheduler (~> 3.8)
+  terminal-table (~> 3.0)
+  terrapin (~> 0.6)
+  tzinfo (~> 2.0)
 
 RUBY VERSION
    ruby 3.1.2p20
