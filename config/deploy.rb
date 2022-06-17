@@ -7,7 +7,7 @@ set :user, 'baseballbot'
 set :deploy_to, "/home/#{fetch :user}/apps/#{fetch :application}"
 
 set :repo_url, 'git@github.com:Fustrate/baseballbot_discord.git'
-set :branch, ENV('REVISION', :master)
+set :branch, ENV.fetch('REVISION', 'master')
 
 append :linked_dirs, 'log', 'tmp'
 append :linked_files, 'config/servers.yml'
@@ -19,6 +19,7 @@ set :rbenv_prefix, "RBENV_ROOT=#{fetch :rbenv_path} #{fetch :rbenv_path}/bin/rbe
 set :rbenv_map_bins, %w[bundle gem honeybadger rake ruby]
 
 namespace :deploy do
-  after :finished, 'game_chat_bot:restart', 'discord_bot:restart'
+  after :finished, 'game_chat_bot:restart'
+  after :finished, 'discord_bot:restart'
   after :finishing, :cleanup
 end
