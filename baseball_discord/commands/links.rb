@@ -4,17 +4,18 @@ module BaseballDiscord
   module Commands
     # Basic debug commands that should log to the output file
     module Links
-      extend Discordrb::Commands::CommandContainer
+      BBREF = 'https://www.baseball-reference.com/search/search.fcgi?search=%<query>s'
 
-      command(:bbref, help_available: false) { |event, *args| LinksCommand.new(event, *args).bbref }
+      FANGRAPHS = 'https://www.fangraphs.com/players.aspx?new=y&lastname=%<query>s'
 
-      command(:fangraphs, help_available: false) { |event, *args| LinksCommand.new(event, *args).fangraphs }
+      included do |bot|
+        bot.application_command(:bbref) do |event|
+          event.send_message content: format(BBREF, query: CGI.escape(event.options['query']))
+        end
 
-      # Prints some basic info to the log file
-      class LinksCommand < Command
-        def bbref = "https://www.baseball-reference.com/search/search.fcgi?search=#{CGI.escape raw_args}"
-
-        def fangraphs = "https://www.fangraphs.com/players.aspx?new=y&lastname=#{CGI.escape raw_args}"
+        bot.application_command(:fangraphs) do |event|
+          event.send_message content: format(FANGRAPHS, query: CGI.escape(event.options['query']))
+        end
       end
     end
   end
