@@ -76,18 +76,14 @@ module BaseballDiscord
       end
     end
 
-    def self.date_for_match(date)
-      return Time.now unless date && !date.strip.empty?
-
-      Chronic.parse(date, context: :past).to_date
-    end
+    def self.date_for_match(date) = date && !date.strip.empty? ? Chronic.parse(date, context: :past).to_date : Time.now
 
     def self.team_names_regexp
       @team_names_regexp ||= Regexp.new("\\A(?<team>#{teams_by_name.values.flatten.join('|')})")
     end
 
     def self.teams_by_name
-      @teams_by_name ||= ::YAML.safe_load(File.read(File.expand_path("#{__dir__}/../config/team_names.yml")))
+      @teams_by_name ||= ::YAML.safe_load_file(File.expand_path("#{__dir__}/../config/team_names.yml"))
     end
   end
 end

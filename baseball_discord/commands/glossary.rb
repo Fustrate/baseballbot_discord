@@ -4,34 +4,25 @@ module BaseballDiscord
   module Commands
     # Output definitions along with a link
     module Glossary
-      extend Discordrb::Commands::CommandContainer
+      FANGRAPHS = {
+        name: 'FanGraphs',
+        url: 'https://www.fangraphs.com/',
+        icon_url: 'https://cdn.fangraphs.com/blogs/wp-content/uploads/2016/04/flat_fg_green.png'
+      }.freeze
 
-      command(
-        :define,
-        description: 'Look up a term from FanGraphs',
-        usage: 'define [term]',
-        min_args: 1,
-        aliases: %i[glossary]
-      ) do |event, *args|
-        GlossaryCommand.new(event, *args).define_term
+      def self.register(bot)
+        bot.application_command(:define) { DefineCommand.new(_1).define_term }
       end
 
-      # Prints some basic info to the log file
-      class GlossaryCommand < Command
-        FANGRAPHS = {
-          name: 'FanGraphs',
-          url: 'https://www.fangraphs.com/',
-          icon_url: 'https://cdn.fangraphs.com/blogs/wp-content/uploads/2016/04/flat_fg_green.png'
-        }.freeze
-
+      class DefineCommand < SlashCommand
         def define_term
-          definition = terms[raw_args.downcase]
+          definition = terms[options['term'].downcase]
 
-          return react_to_message '❓' unless definition
-
-          bot.send_message(channel, nil, false, embed_for_term(definition))
-
-          nil
+          if definition
+            event.respond(embeds: [embed_for_term(definition)])
+          else
+            event.respond content: "Unknown term: #{options['term']}", ephemeral: true
+          end
         end
 
         protected
@@ -54,9 +45,8 @@ module BaseballDiscord
         end
 
         def terms
-          @terms ||= YAML.safe_load(
-            File.read(File.expand_path("#{__dir__}/../../config/glossary.yml"))
-          )['glossary'].to_h { |abbr, data| [abbr.downcase, data.merge('abbr' => abbr)] }
+          @terms ||= YAML.safe_load_file(File.expand_path("#{__dir__}/../../config/glossary.yml"))['glossary']
+            .to_h { |abbr, data| [abbr.downcase, data.merge('abbr' => abbr)] }
         end
       end
     end

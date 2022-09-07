@@ -9,9 +9,9 @@ require_relative 'baseball_discord/bot'
   cmd.string('type', 'Thing to debug', choices: %w[channel emoji pm server user].to_h { [_1, _1] })
 end
 
-# @discord_bot.register_application_command(:define, 'Look up a term from FanGraphs') do |cmd|
-#   cmd.string 'term'
-# end
+@discord_bot.register_application_command(:define, 'Look up a term from FanGraphs') do |cmd|
+  cmd.string 'term', 'a term to search for', required: true
+end
 
 # @discord_bot.register_application_command(:invite_url, '')
 

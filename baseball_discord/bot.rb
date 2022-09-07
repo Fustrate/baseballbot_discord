@@ -47,7 +47,7 @@ module BaseballDiscord
     # rubocop:disable Metrics/MethodLength
     def load_commands
       BaseballDiscord::Commands::Debug.register self
-      include! BaseballDiscord::Commands::Glossary
+      BaseballDiscord::Commands::Glossary.register self
       include! BaseballDiscord::Commands::Invite
       BaseballDiscord::Commands::Links.register self
       include! BaseballDiscord::Commands::Players
