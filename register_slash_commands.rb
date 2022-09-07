@@ -13,11 +13,11 @@ require_relative 'baseball_discord/bot'
 # @discord_bot.register_application_command(:invite_url, '')
 
 @discord_bot.register_application_command(:bbref, 'Search Baseball Reference') do |cmd|
-  cmd.string 'query'
+  cmd.string 'query', 'a term to search for', required: true
 end
 
 @discord_bot.register_application_command(:fangraphs, 'Search FanGraphs') do |cmd|
-  cmd.string 'query'
+  cmd.string 'query', 'a term to search for', required: true
 end
 
 # @discord_bot.register_application_command(:player, '')

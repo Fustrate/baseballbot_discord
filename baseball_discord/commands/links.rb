@@ -8,13 +8,13 @@ module BaseballDiscord
 
       FANGRAPHS = 'https://www.fangraphs.com/players.aspx?new=y&lastname=%<query>s'
 
-      included do |bot|
+      def register(bot)
         bot.application_command(:bbref) do |event|
-          event.send_message content: format(BBREF, query: CGI.escape(event.options['query']))
+          event.respond content: format(BBREF, query: CGI.escape(event.options['query']))
         end
 
         bot.application_command(:fangraphs) do |event|
-          event.send_message content: format(FANGRAPHS, query: CGI.escape(event.options['query']))
+          event.respond content: format(FANGRAPHS, query: CGI.escape(event.options['query']))
         end
       end
     end

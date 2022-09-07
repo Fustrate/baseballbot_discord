@@ -48,7 +48,7 @@ module BaseballDiscord
       include! BaseballDiscord::Commands::Debug
       include! BaseballDiscord::Commands::Glossary
       include! BaseballDiscord::Commands::Invite
-      include! BaseballDiscord::Commands::Links
+      BaseballDiscord::Commands::Links.register self
       include! BaseballDiscord::Commands::Players
       include! BaseballDiscord::Commands::Scoreboard
       include! BaseballDiscord::Commands::Standings
