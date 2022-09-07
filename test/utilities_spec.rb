@@ -18,9 +18,7 @@ class TestApi < MiniTest::Test
 
   def test_find_team_by_name
     BaseballDiscord::Utilities.teams_by_name.each do |team_id, names|
-      names.each do |name|
-        assert_equal team_id, BaseballDiscord::Utilities.find_team_by_name(name)
-      end
+      names.each { assert_equal team_id, BaseballDiscord::Utilities.find_team_by_name(_1) }
     end
 
     assert_equal 110, BaseballDiscord::Utilities.find_team_by_name('orioles')

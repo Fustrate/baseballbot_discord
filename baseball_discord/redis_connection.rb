@@ -85,12 +85,12 @@ module BaseballDiscord
     def check_verification_queue
       ensure_redis
 
-      @redis.lpop('discord.verification_queue') do |message|
-        process_verification_message(message) if message
-      end
+      @redis.lpop('discord.verification_queue') { process_verification_message(_1) }
     end
 
     def process_verification_message(message)
+      return unless message
+
       @bot.logger.debug "[Redis] Queue has content: #{message}"
 
       data = JSON.parse(message)
@@ -101,9 +101,7 @@ module BaseballDiscord
     end
 
     def user_verified_on_reddit!(state_token, reddit_username)
-      @redis.get("discord.verification.#{state_token}") do |state_data|
-        process_verification_data(state_data, reddit_username)
-      end
+      @redis.get("discord.verification.#{state_token}") { process_verification_data(_1, reddit_username) }
     end
 
     def process_verification_data(state_data, reddit_username)

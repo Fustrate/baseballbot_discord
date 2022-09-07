@@ -64,9 +64,7 @@ module BaseballDiscord
     def prefix_proc(prefixes)
       lambda do |message|
         (prefixes[message.channel.server&.id] || ['!']).each do |prefix|
-          next unless message.content.start_with?(prefix)
-
-          return message.content[prefix.size..]
+          return message.content[prefix.size..] if message.content.start_with?(prefix)
         end
 
         nil
@@ -82,6 +80,5 @@ module BaseballDiscord
     def config = (@config ||= Config.new)
   end
 
-  class UserError < RuntimeError
-  end
+  class UserError < RuntimeError; end
 end
