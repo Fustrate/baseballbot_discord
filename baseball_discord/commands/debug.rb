@@ -9,7 +9,7 @@ module BaseballDiscord
       end
 
       class DebugCommand < SlashCommand
-        TYPES = %w[channel emoji message pm react server user].freeze
+        TYPES = %w[channel emoji pm server target user].freeze
 
         def run
           if TYPES.include?(event.options['type'])
@@ -19,7 +19,11 @@ module BaseballDiscord
           end
         end
 
-        def debug_channel = event.respond(content: event.channel.inspect, ephemeral: true)
+        def debug_channel
+          log event.channel.inspect
+
+          event.respond(content: 'Check the logs!', ephemeral: true)
+        end
 
         def debug_emoji
           emojis = YAML.safe_load_file(File.expand_path("#{__dir__}/../../config/emoji.yml")).values.map { "<#{_1}>" }
@@ -27,15 +31,25 @@ module BaseballDiscord
           event.respond content: emojis.join(' '), ephemeral: true
         end
 
-        def debug_message = event.respond(content: event.message.inspect, ephemeral: true)
-
         def debug_pm = send_pm('Hello!')
 
-        def debug_react = react_to_message('✅')
+        def debug_server
+          log event.server.inspect
 
-        def debug_server = event.respond(content: event.server.inspect, ephemeral: true)
+          event.respond(content: 'Check the logs!', ephemeral: true)
+        end
 
-        def debug_user = event.respond(content: event.user.inspect, ephemeral: true)
+        def debug_target
+          log event.target.inspect
+
+          event.respond(content: 'Check the logs!', ephemeral: true)
+        end
+
+        def debug_user
+          log event.user.inspect
+
+          event.respond(content: 'Check the logs!', ephemeral: true)
+        end
       end
     end
   end

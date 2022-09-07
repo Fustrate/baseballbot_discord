@@ -9,7 +9,7 @@ module BaseballDiscord
     def initialize(event)
       @event = event
 
-      log event.message.content if event.respond_to?(:message)
+      # log event.message.content if event.respond_to?(:message)
     end
 
     protected
@@ -29,7 +29,7 @@ module BaseballDiscord
     end
 
     def log(str, level: :info)
-      @log_tags ||= "[#{message.id}] [#{user.distinct}]"
+      @log_tags ||= "[#{target.id}] [#{user.distinct}]"
 
       str.lines.map(&:strip).each do |line|
         bot.logger.add LOG_LEVELS.index(level), "#{@log_tags} #{line}"
@@ -45,12 +45,6 @@ module BaseballDiscord
 
     def team_names_from_roles = user.roles.map(&:name).map(&:downcase)
 
-    def react_to_message(reaction)
-      message.react reaction
-
-      nil
-    end
-
     def send_pm(message)
       user.pm message
 
@@ -63,7 +57,7 @@ module BaseballDiscord
 
     def channel = event.channel
 
-    def message = event.message
+    def target = event.target
 
     def server = event.server
 
