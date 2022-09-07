@@ -5,8 +5,8 @@ require_relative 'baseball_discord/bot'
 @discord_bot = BaseballDiscord::Bot.new
 
 # TODO: Limit to admins
-@discord_bot.register_application_command(:debug, 'Show all known team emojis') do |cmd|
-  cmd.string('type', 'Thing to debug', choices: { emoji: 'emoji' })
+@discord_bot.register_application_command(:debug, 'Debug different parts of the bot') do |cmd|
+  cmd.string('type', 'Thing to debug', choices: %w[channel emoji message pm react server user].to_h { [_1, _1] })
 end
 
 # @discord_bot.register_application_command(:define, 'Look up a term from FanGraphs') do |cmd|
