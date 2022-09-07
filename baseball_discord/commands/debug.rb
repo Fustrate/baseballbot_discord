@@ -7,7 +7,7 @@ module BaseballDiscord
       def self.register(bot)
         bot.application_command(:debug) do |event|
           if event.options['type'] == 'emoji'
-            emojis = YAML.safe_load_file(File.expand_path("#{__dir__}/../config/emoji.yml")).values.map { "<#{_1}>" }
+            emojis = YAML.safe_load_file(File.expand_path("#{__dir__}/../../config/emoji.yml")).values.map { "<#{_1}>" }
 
             event.respond content: emojis.join(' ')
           else
