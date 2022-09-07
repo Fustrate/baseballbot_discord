@@ -9,7 +9,7 @@ module BaseballDiscord
       end
 
       class DebugCommand < SlashCommand
-        TYPES = %w[channel emoji pm server target user].freeze
+        TYPES = %w[channel emoji pm server user].freeze
 
         def run
           if TYPES.include?(event.options['type'])
@@ -35,12 +35,6 @@ module BaseballDiscord
 
         def debug_server
           log event.server.inspect
-
-          event.respond(content: 'Check the logs!', ephemeral: true)
-        end
-
-        def debug_target
-          log event.target.inspect
 
           event.respond(content: 'Check the logs!', ephemeral: true)
         end

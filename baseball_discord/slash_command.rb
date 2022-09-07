@@ -29,7 +29,7 @@ module BaseballDiscord
     end
 
     def log(str, level: :info)
-      @log_tags ||= "[#{target.id}] [#{user.distinct}]"
+      @log_tags ||= "[/#{event.command_name}] [#{user.distinct}]"
 
       str.lines.map(&:strip).each do |line|
         bot.logger.add LOG_LEVELS.index(level), "#{@log_tags} #{line}"
@@ -56,8 +56,6 @@ module BaseballDiscord
     def bot = event.bot
 
     def channel = event.channel
-
-    def target = event.target
 
     def server = event.server
 
