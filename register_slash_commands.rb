@@ -4,7 +4,10 @@ require_relative 'baseball_discord/bot'
 
 @discord_bot = BaseballDiscord::Bot.new
 
-# @discord_bot.register_application_command(:debug_emoji, 'Show all known team emojis')
+# TODO: Limit to admins
+@discord_bot.register_application_command(:debug, 'Show all known team emojis') do |cmd|
+  cmd.string('type', 'Thing to debug', choices: { emoji: 'emoji' })
+end
 
 # @discord_bot.register_application_command(:define, 'Look up a term from FanGraphs') do |cmd|
 #   cmd.string 'term'
@@ -22,7 +25,9 @@ end
 
 # @discord_bot.register_application_command(:player, '')
 
-# @discord_bot.register_application_command(:scores, 'Shows scores and stuff')
+# @discord_bot.register_application_command(:scores, 'Shows scores and stuff') do |cmd|
+#   cmd.string 'date', 'today|yesterday|tomorrow|Date', required: false
+# end
 
 # @discord_bot.register_application_command(:standings, 'Displays the division standings for a team')
 
