@@ -15,7 +15,6 @@ require 'terminal-table'
 require 'tzinfo'
 require 'yaml'
 
-require_relative 'command'
 require_relative 'config'
 require_relative 'redis_connection'
 require_relative 'slash_command'
