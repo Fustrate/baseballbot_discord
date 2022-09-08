@@ -23,9 +23,9 @@ end
   cmd.string 'query', 'a term to search for', required: true
 end
 
-# @discord_bot.register_application_command(:scores, 'Shows scores and stuff') do |cmd|
-#   cmd.string 'date', 'today|yesterday|tomorrow|Date', required: false
-# end
+@discord_bot.register_application_command(:scores, 'Shows scores and stuff') do |cmd|
+  cmd.string 'date', 'Date or today/yesterday/tomorrow', required: false
+end
 
 # @discord_bot.register_application_command(:standings, 'Displays the division standings for a team')
 

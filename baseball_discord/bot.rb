@@ -50,11 +50,11 @@ module BaseballDiscord
       BaseballDiscord::Commands::Glossary.register self
       BaseballDiscord::Commands::Invite.register self
       BaseballDiscord::Commands::Links.register self
-      include! BaseballDiscord::Commands::Scoreboard
+      BaseballDiscord::Commands::Scoreboard.register self
       include! BaseballDiscord::Commands::Standings
       BaseballDiscord::Commands::TeamCalendar.register self
-      include! BaseballDiscord::Commands::TeamRoles
-      include! BaseballDiscord::Commands::Verify
+      BaseballDiscord::Commands::TeamRoles.register self
+      BaseballDiscord::Commands::Verify.register self
       BaseballDiscord::Commands::WCStandings.register self
 
       include! BaseballDiscord::Events::MemberJoin

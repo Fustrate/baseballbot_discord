@@ -3,18 +3,11 @@
 module BaseballDiscord
   module Commands
     module Scoreboard
-      extend Discordrb::Commands::CommandContainer
-
-      command(
-        :scores,
-        description: 'Shows scores and stuff',
-        usage: 'scores [today|yesterday|tomorrow|Date]',
-        aliases: %i[scoreboard]
-      ) do |event, *args|
-        ScoreboardCommand.new(event, *args).run
+      def self.register(bot)
+        bot.application_command(:scores) { ScoreboardCommand.new(_1).run }
       end
 
-      class ScoreboardCommand < Command
+      class ScoreboardCommand < SlashCommand
         SCHEDULE = '/v1/schedule?sportId=1&date=%<date>s&t=%<t>d&hydrate=game(content(summary)),linescore,flags,team'
 
         PREGAME_STATUSES = /Preview|Warmup|Pre-Game|Delayed Start|Scheduled/
@@ -23,17 +16,15 @@ module BaseballDiscord
         IGNORE_CHANNELS = [452550329700188160].freeze
 
         def run
-          return react_to_message('🚫') if IGNORE_CHANNELS.include?(channel.id)
+          date = options['date'] ? BaseballDiscord::Utilities.parse_date(options['date']) : Time.now
 
-          date = BaseballDiscord::Utilities.parse_date raw_args
-
-          return react_to_message('❓') unless date
+          return error_message('Invalid date') unless date
 
           data = load_data_from_stats_api(SCHEDULE, date:)
 
-          return react_to_message('👎') if data['totalGames'].zero?
+          return error_message('No games on this date') if data['totalGames'].zero?
 
-          scores_table(data, date)
+          respond_with content: scores_table(data, date), ephemeral: IGNORE_CHANNELS.include?(channel.id)
         end
 
         protected
