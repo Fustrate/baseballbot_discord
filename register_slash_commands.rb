@@ -37,4 +37,13 @@ end
 
 # @discord_bot.register_application_command(:verify, 'Verify your reddit account')
 
-# @discord_bot.register_application_command(:wcstandings, 'Displays the wildcard standings for a team')
+@discord_bot.register_application_command(:wcstandings, 'Displays the wildcard standings for a league') do |cmd|
+  cmd.string(
+    'league',
+    'The league for which to show standings',
+    choices: { AL: 'AL', NL: 'NL' },
+    required: false
+  )
+
+  cmd.string 'date', 'The date to show standings from', required: false
+end

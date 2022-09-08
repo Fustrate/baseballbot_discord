@@ -3,18 +3,11 @@
 module BaseballDiscord
   module Commands
     module WCStandings
-      extend Discordrb::Commands::CommandContainer
-
-      command(
-        :wcstandings,
-        description: 'Displays the wildcard standings for a team',
-        usage: 'wcstandings [team]',
-        aliases: %i[wildcard]
-      ) do |event, *args|
-        WCStandingsCommand.new(event, *args).run
+      def self.register(bot)
+        bot.application_command(:wcstandings) { WCStandingsCommand.new(_1).run }
       end
 
-      class WCStandingsCommand < Command
+      class WCStandingsCommand < SlashCommand
         STANDINGS = '/v1/standings/regularSeason?leagueId=103,104&season=%<year>d&t=%<t>d&date=%<date>s&hydrate=team'
 
         TABLE_HEADERS = %w[Team W L GB % rDiff STRK].freeze
@@ -22,64 +15,48 @@ module BaseballDiscord
         IGNORE_CHANNELS = [452550329700188160].freeze
 
         def run
-          return react_to_message('🚫') if IGNORE_CHANNELS.include?(channel.id)
+          return error_message('This command cannot be run in this channel') if IGNORE_CHANNELS.include?(channel.id)
 
-          team_name, date = parse_team_and_date
+          league_id = find_league_id
 
-          league_id = find_league_id(team_name)
+          unless league_id
+            return error_message('Could not determine league - please use "/wcstandings AL" or "/wcstandings NL"')
+          end
 
-          return react_to_message('❓') unless league_id
+          date = parse_date
 
-          leaders, others = standings_data(date, league_id)
-            .sort_by { _1['wildCardRank'].to_i }
-            .partition { _1['divisionRank'] == '1' }
+          leaders, others = leaders_and_others(date, league_id)
 
-          standings_table(leaders, others)
+          respond_with content: standings_table(leaders, others)
         end
 
         protected
 
-        def standings_data(date, league_id)
+        def leaders_and_others(date, league_id)
           load_data_from_stats_api(STANDINGS, date:)['records']
             .select { _1.dig('league', 'id') == league_id }
             .flat_map { _1['teamRecords'] }
+            .sort_by { _1['wildCardRank'].to_i }
+            .partition { _1['divisionRank'] == '1' }
         end
 
-        def find_league_id(team_name)
-          team_id = BaseballDiscord::Utilities.find_team_by_name(
-            team_name.empty? ? names_from_context : [team_name]
-          )
-
-          return unless team_id
-
-          BaseballDiscord::Utilities.league_for_team(team_id)
-        end
-
-        # This should be expanded upon to allow for more date formats
-        def parse_team_and_date
-          input = input_or_default_team
-
-          case input
-          when /\A(.*)\s*(\d{4})\z/
-            [Regexp.last_match[1].strip, december_first(Regexp.last_match[2])]
-          when /\A\d{4}\z/
-            [nil, december_first(input)]
+        def find_league_id
+          case options['league']&.upcase
+          when 'AL' then 103
+          when 'NL' then 104
           else
-            [input, Time.now]
+            default = bot.config.dig(server.id, 'default_team')
+
+            team_id = BaseballDiscord::Utilities.find_team_by_name(default.empty? ? names_from_context : [default])
+
+            return unless team_id
+
+            BaseballDiscord::Utilities.league_for_team(team_id)
           end
         end
 
-        def input_or_default_team
-          input = raw_args.downcase
-
-          return bot.config.dig(server.id, 'default_team') || '' if input.empty?
-
-          input
-        end
-
-        def december_first(year)
-          Date.civil(year.to_i, 12, 1)
-        end
+        # This should be expanded upon to allow for more date formats
+        def parse_date = BaseballDiscord::Utilities.parse_date(options['date']&.strip)
 
         def team_standings_data(team)
           r_diff_sign = team['runDifferential'].negative? ? '' : '+'
@@ -105,16 +82,9 @@ module BaseballDiscord
             style: { border: :unicode }
           )
 
-          align_standings_table_columns(table)
+          %i[left right right right left right].each.with_index { |alignment, n| table.align_column(n, alignment) }
 
           format_table table
-        end
-
-        def align_standings_table_columns(table)
-          table.align_column(1, :right)
-          table.align_column(2, :right)
-          table.align_column(3, :right)
-          table.align_column(5, :right)
         end
       end
     end

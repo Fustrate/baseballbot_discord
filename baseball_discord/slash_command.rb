@@ -8,8 +8,6 @@ module BaseballDiscord
 
     def initialize(event)
       @event = event
-
-      # log event.message.content if event.respond_to?(:message)
     end
 
     protected

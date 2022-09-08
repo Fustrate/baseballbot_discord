@@ -23,7 +23,14 @@ module BaseballDiscord
     PLAYER_LOOKUP = 'http://lookup-service-prod.mlb.com/json/named.search_player_all.bam?' \
                     'sport_code=%%27mlb%%27&name_part=%%27%<name>s%%25%%27'
 
-    def self.parse_date(date) = (date.strip == '' ? Time.now : Chronic.parse(date))
+    def self.parse_date(date)
+      return Time.now unless date && date != ''
+
+      # When it's just a year, go to December 1st so we're past the end of the season
+      return Date.civil(date.to_i, 12, 1) if date.match?(/\A\d{4}\z/)
+
+      Chronic.parse(date)
+    end
 
     def self.parse_time(utc, time_zone: 'America/New_York')
       time_zone = TZInfo::Timezone.get(time_zone) if time_zone.is_a? String
