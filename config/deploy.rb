@@ -19,7 +19,8 @@ set :rbenv_prefix, "RBENV_ROOT=#{fetch :rbenv_path} #{fetch :rbenv_path}/bin/rbe
 set :rbenv_map_bins, %w[bundle gem honeybadger rake ruby]
 
 namespace :deploy do
-  after :finished, 'game_chat_bot:restart'
-  after :finished, 'discord_bot:restart'
+  # These don't pull in ENV values
+  # after :finished, 'game_chat_bot:restart'
+  # after :finished, 'discord_bot:restart'
   after :finishing, :cleanup
 end
