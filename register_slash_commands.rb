@@ -27,10 +27,10 @@ require_relative 'baseball_discord/bot'
 #   cmd.string 'date', 'Date or today/yesterday/tomorrow', required: false
 # end
 
-@discord_bot.register_application_command(:standings, 'Displays the division standings for a team') do |cmd|
-  cmd.string 'team', 'The team for which to show standings', required: false
-  cmd.string 'date', 'The date to show standings from', required: false
-end
+# @discord_bot.register_application_command(:standings, 'Displays the division standings for a team') do |cmd|
+#   cmd.string 'team', 'The team for which to show standings', required: false
+#   cmd.string 'date', 'The date to show standings from', required: false
+# end
 
 # @discord_bot.register_application_command(:next, 'Display the next N games for a team') do |cmd|
 #   cmd.number 'amount', 'The number of games to show', min_value: 1, max_value: 15, required: false
@@ -51,13 +51,13 @@ end
 #   cmd.string 'server', 'Server name', required: false
 # end
 
-# @discord_bot.register_application_command(:wcstandings, 'Displays the wildcard standings for a league') do |cmd|
-#   cmd.string(
-#     'league',
-#     'The league for which to show standings',
-#     choices: { AL: 'AL', NL: 'NL' },
-#     required: false
-#   )
+@discord_bot.register_application_command(:wildcard, 'Displays the wildcard standings for a league') do |cmd|
+  cmd.string(
+    'league',
+    'The league for which to show standings',
+    choices: { AL: 'AL', NL: 'NL' },
+    required: false
+  )
 
-#   cmd.string 'date', 'The date to show standings from', required: false
-# end
+  cmd.string 'date', 'The date to show standings from', required: false
+end

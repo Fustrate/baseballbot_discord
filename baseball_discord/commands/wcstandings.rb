@@ -2,12 +2,12 @@
 
 module BaseballDiscord
   module Commands
-    module WCStandings
+    module Wildcard
       def self.register(bot)
-        bot.application_command(:wcstandings) { WCStandingsCommand.new(_1).run }
+        bot.application_command(:wildcard) { WildcardCommand.new(_1).run }
       end
 
-      class WCStandingsCommand < SlashCommand
+      class WildcardCommand < SlashCommand
         STANDINGS = '/v1/standings/regularSeason?leagueId=103,104&season=%<year>d&t=%<t>d&date=%<date>s&hydrate=team'
 
         TABLE_HEADERS = %w[Team W L GB % rDiff STRK].freeze
@@ -18,7 +18,7 @@ module BaseballDiscord
           league_id = find_league_id
 
           unless league_id
-            return error_message('Could not determine league - please use "/wcstandings AL" or "/wcstandings NL"')
+            return error_message('Could not determine league - please use "/wildcard AL" or "/wildcard NL"')
           end
 
           date = parse_date
