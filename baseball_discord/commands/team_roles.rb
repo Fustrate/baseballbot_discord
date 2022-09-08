@@ -3,19 +3,11 @@
 module BaseballDiscord
   module Commands
     module TeamRoles
-      extend Discordrb::Commands::CommandContainer
-
-      command(
-        :team,
-        description: 'Change your team tag',
-        min_args: 1,
-        usage: 'team [name]',
-        aliases: %i[teams]
-      ) do |event, *args|
-        TeamRolesCommand.new(event, *args).update_member_roles
+      def self.register(bot)
+        bot.application_command(:team) { TeamRolesCommand.new(_1).update_member_roles }
       end
 
-      class TeamRolesCommand < Command
+      class TeamRolesCommand < SlashCommand
         NOT_A_MEMBER = <<~PM
           You must be a member of the baseball server to use this command.
         PM
@@ -62,9 +54,9 @@ module BaseballDiscord
         def update_member_roles
           check_member_of_baseball
 
-          find_and_assign_role multiple_inputs
+          find_and_assign_roles
         rescue UserError => e
-          send_pm e.message
+          error_message e.message
         end
 
         protected
@@ -78,19 +70,14 @@ module BaseballDiscord
           raise UserError, NOT_VERIFIED unless member_verified?
         end
 
-        def multiple_inputs
-          raw_args
-            .split(%r{(?:[,&+|/]|\s+and\s+)})
-            .map(&:strip)
-            .reject(&:empty?)
-        end
+        def find_and_assign_roles
+          inputs = [options['team1'], options['team2']].compact
 
-        def find_and_assign_role(inputs)
           team_ids = inputs
             .filter_map { BaseballDiscord::Utilities.find_team_by_name [_1] }
             .uniq
 
-          team_ids.any? ? update_member(team_ids) : react_to_message('❓')
+          team_ids.any? ? update_member(team_ids) : error_message('Team name(s) not found...')
         end
 
         # IDs passed to this message are known to be good
@@ -105,7 +92,7 @@ module BaseballDiscord
 
           update_nickname(team_ids)
 
-          react_to_message '✅'
+          respond_with content: '✅', ephemeral: true
         end
 
         def update_nickname(team_ids)

@@ -2,15 +2,12 @@
 
 module BaseballDiscord
   module Commands
-    # Basic debug commands that should log to the output file
     module Verify
-      extend Discordrb::Commands::CommandContainer
-
-      command(:verify) do |event, *args|
-        RedditAuthCommand.new(event, *args).run
+      def self.register(bot)
+        bot.application_command(:verify) { RedditAuthCommand.new(_1).run }
       end
 
-      class RedditAuthCommand < Command
+      class RedditAuthCommand < SlashCommand
         WELCOME_MESSAGE = <<~PM
           Welcome to the %<server_name>s Discord server!
 

@@ -39,9 +39,14 @@ end
   cmd.string 'team', 'An MLB team', required: false
 end
 
-# @discord_bot.register_application_command(:team, 'Change your team tag')
+@discord_bot.register_application_command(:team, 'Change your team tag') do |cmd|
+  cmd.string 'team1', 'Primary team name', required: true
+  cmd.string 'team2', 'Secondary team name', required: false
+end
 
-# @discord_bot.register_application_command(:verify, 'Verify your reddit account')
+@discord_bot.register_application_command(:verify, 'Verify your reddit account') do |cmd|
+  cmd.string 'server', 'Server name', required: false
+end
 
 @discord_bot.register_application_command(:wcstandings, 'Displays the wildcard standings for a league') do |cmd|
   cmd.string(
