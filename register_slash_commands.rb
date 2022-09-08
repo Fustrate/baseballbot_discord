@@ -30,12 +30,12 @@ end
 # @discord_bot.register_application_command(:standings, 'Displays the division standings for a team')
 
 @discord_bot.register_application_command(:next, 'Display the next N games for a team') do |cmd|
-  cmd.integer 'amount', 'The number of games to show', required: false
+  cmd.number 'amount', 'The number of games to show', min_value: 1, max_value: 15, required: false
   cmd.string 'team', 'An MLB team', required: false
 end
 
 @discord_bot.register_application_command(:last, 'Display the last N games for a team') do |cmd|
-  cmd.integer 'amount', 'The number of games to show', required: false
+  cmd.number 'amount', 'The number of games to show', min_value: 1, max_value: 15, required: false
   cmd.string 'team', 'An MLB team', required: false
 end
 
