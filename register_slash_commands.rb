@@ -23,8 +23,6 @@ end
   cmd.string 'query', 'a term to search for', required: true
 end
 
-# @discord_bot.register_application_command(:player, '')
-
 # @discord_bot.register_application_command(:scores, 'Shows scores and stuff') do |cmd|
 #   cmd.string 'date', 'today|yesterday|tomorrow|Date', required: false
 # end

@@ -50,7 +50,6 @@ module BaseballDiscord
       BaseballDiscord::Commands::Glossary.register self
       include! BaseballDiscord::Commands::Invite
       BaseballDiscord::Commands::Links.register self
-      include! BaseballDiscord::Commands::Players
       include! BaseballDiscord::Commands::Scoreboard
       include! BaseballDiscord::Commands::Standings
       include! BaseballDiscord::Commands::TeamCalendar
