@@ -51,7 +51,7 @@ module BaseballDiscord
       BaseballDiscord::Commands::Invite.register self
       BaseballDiscord::Commands::Links.register self
       BaseballDiscord::Commands::Scoreboard.register self
-      include! BaseballDiscord::Commands::Standings
+      BaseballDiscord::Commands::Standings.register self
       BaseballDiscord::Commands::TeamCalendar.register self
       BaseballDiscord::Commands::TeamRoles.register self
       BaseballDiscord::Commands::Verify.register self

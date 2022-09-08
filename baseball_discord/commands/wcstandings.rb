@@ -47,13 +47,10 @@ module BaseballDiscord
 
             team_id = BaseballDiscord::Utilities.find_team_by_name(default.empty? ? names_from_context : [default])
 
-            return unless team_id
-
-            BaseballDiscord::Utilities.league_for_team(team_id)
+            BaseballDiscord::Utilities.league_for_team(team_id) if team_id
           end
         end
 
-        # This should be expanded upon to allow for more date formats
         def parse_date = BaseballDiscord::Utilities.parse_date(options['date']&.strip)
 
         def team_standings_data(team)
