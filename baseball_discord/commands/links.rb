@@ -15,9 +15,9 @@ module BaseballDiscord
       end
 
       class LinksCommand < SlashCommand
-        def bbref = event.respond(content: format(BBREF, query: CGI.escape(event.options['query'])))
+        def bbref = respond_with(content: format(BBREF, query: CGI.escape(options['query'])))
 
-        def fangraphs = event.respond(content: format(FANGRAPHS, query: CGI.escape(event.options['query'])))
+        def fangraphs = respond_with(content: format(FANGRAPHS, query: CGI.escape(options['query'])))
       end
     end
   end

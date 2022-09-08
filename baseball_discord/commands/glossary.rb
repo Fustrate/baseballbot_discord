@@ -19,9 +19,9 @@ module BaseballDiscord
           definition = terms[options['term'].downcase]
 
           if definition
-            event.respond(embeds: [embed_for_term(definition)])
+            respond_with embed: embed_for_term(definition)
           else
-            event.respond content: "Unknown term: #{options['term']}", ephemeral: true
+            error_message "Unknown term: #{options['term']}"
           end
         end
 

@@ -53,6 +53,12 @@ module BaseballDiscord
 
     def format_table(table) = "```\n#{table}\n```"
 
+    def options = event.options
+
+    def respond_with(content: nil, embed: nil, ephemeral: false)
+      event.respond(content:, embeds: [embed].compact, ephemeral:)
+    end
+
     def bot = event.bot
 
     def channel = event.channel
@@ -60,5 +66,7 @@ module BaseballDiscord
     def server = event.server
 
     def user = event.user
+
+    def error_message(message) = respond_with(content: "⚠️ #{message}", ephemeral: true)
   end
 end

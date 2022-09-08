@@ -12,37 +12,37 @@ module BaseballDiscord
         TYPES = %w[channel emoji pm server user].freeze
 
         def run
-          if TYPES.include?(event.options['type'])
-            public_send "debug_#{event.options['type']}"
+          if TYPES.include?(options['type'])
+            public_send "debug_#{options['type']}"
           else
-            event.respond content: 'Unknown type', ephemeral: true
+            respond_with content: 'Unknown type', ephemeral: true
           end
         end
 
         def debug_channel
-          log event.channel.inspect
+          log channel.inspect
 
-          event.respond(content: 'Check the logs!', ephemeral: true)
+          respond_with content: 'Check the logs!', ephemeral: true
         end
 
         def debug_emoji
           emojis = YAML.safe_load_file(File.expand_path("#{__dir__}/../../config/emoji.yml")).values.map { "<#{_1}>" }
 
-          event.respond content: emojis.join(' '), ephemeral: true
+          respond_with content: emojis.join(' '), ephemeral: true
         end
 
         def debug_pm = send_pm('Hello!')
 
         def debug_server
-          log event.server.inspect
+          log server.inspect
 
-          event.respond(content: 'Check the logs!', ephemeral: true)
+          respond_with content: 'Check the logs!', ephemeral: true
         end
 
         def debug_user
-          log event.user.inspect
+          log user.inspect
 
-          event.respond(content: 'Check the logs!', ephemeral: true)
+          respond_with content: 'Check the logs!', ephemeral: true
         end
       end
     end
