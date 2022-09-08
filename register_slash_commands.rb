@@ -13,7 +13,7 @@ end
   cmd.string 'term', 'a term to search for', required: true
 end
 
-# @discord_bot.register_application_command(:invite_url, '')
+@discord_bot.register_application_command(:invite_url, 'Invite baseballbot to another server (admin only)')
 
 @discord_bot.register_application_command(:bbref, 'Search Baseball Reference') do |cmd|
   cmd.string 'query', 'a term to search for', required: true
@@ -29,9 +29,15 @@ end
 
 # @discord_bot.register_application_command(:standings, 'Displays the division standings for a team')
 
-# @discord_bot.register_application_command(:next, 'Display the next N games for a team')
+@discord_bot.register_application_command(:next, 'Display the next N games for a team') do |cmd|
+  cmd.integer 'amount', 'The number of games to show', required: false
+  cmd.string 'team', 'An MLB team', required: false
+end
 
-# @discord_bot.register_application_command(:last, 'Display the last N games for a team')
+@discord_bot.register_application_command(:last, 'Display the last N games for a team') do |cmd|
+  cmd.integer 'amount', 'The number of games to show', required: false
+  cmd.string 'team', 'An MLB team', required: false
+end
 
 # @discord_bot.register_application_command(:team, 'Change your team tag')
 

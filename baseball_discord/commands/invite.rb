@@ -3,18 +3,16 @@
 module BaseballDiscord
   module Commands
     module Invite
-      extend Discordrb::Commands::CommandContainer
-
-      command(:invite_url, help_available: false) do |event, *args|
-        InviteCommand.new(event, *args).send_invite_url
+      def self.register(bot)
+        bot.application_command(:invite_url) { InviteCommand.new(_1).run }
       end
 
       # Allows the administrator to invite this bot to a server
-      class InviteCommand < Command
-        def send_invite_url
-          return react_to_message('🔒') unless user.id == BaseballDiscord::Bot::ADMIN_ID
+      class InviteCommand < SlashCommand
+        def run
+          return error_message('Restricted command') unless user.id == BaseballDiscord::Bot::ADMIN_ID
 
-          bot.invite_url
+          respond_with content: bot.invite_url, ephemeral: true
         end
       end
     end

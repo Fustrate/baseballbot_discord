@@ -3,22 +3,15 @@
 module BaseballDiscord
   module Commands
     module TeamCalendar
-      extend Discordrb::Commands::CommandContainer
+      def self.register(bot)
+        bot.application_command(:next) { TeamCalendarCommand.new(_1).list_games(:future) }
+        bot.application_command(:last) { TeamCalendarCommand.new(_1).list_games(:past) }
+      end
 
       PREGAME_STATUSES = /Preview|Warmup|Pre-Game|Delayed Start|Scheduled/
       POSTGAME_STATUSES = /Final|Game Over|Postponed|Completed Early/
 
-      command(:next, description: 'Display the next N games for a team', usage: 'next [N=10] [team]') do |event, *args|
-        TeamCalendarCommand.new(event, *args).list_games(:future)
-      end
-
-      command(:last, description: 'Display the last N games for a team', usage: 'last [N=10] [team]') do |event, *args|
-        TeamCalendarCommand.new(event, *args).list_games(:past)
-      end
-
-      class TeamCalendarCommand < Command
-        attr_reader :past_or_future
-
+      class TeamCalendarCommand < SlashCommand
         SCHEDULE = '/v1/schedule?teamId=%<team_id>d&startDate=%<start_date>s&endDate=%<end_date>s&sportId=1&' \
                    'hydrate=team(venue(timezone)),game(content(summary)),linescore,broadcasts(all)&' \
                    'eventTypes=primary&scheduleTypes=games'
@@ -26,37 +19,23 @@ module BaseballDiscord
         IGNORE_CHANNELS = [452550329700188160].freeze
 
         def list_games(past_or_future)
-          return react_to_message('🚫') if IGNORE_CHANNELS.include?(channel.id)
-
           @past_or_future = past_or_future
 
-          determine_team_and_number
+          @team_id = determine_team
 
-          @team_id ? glorious_table_of_games : react_to_message('❓')
+          return error_message('Could not determine a team...') unless @team_id
+
+          @number = (options['amount'] || 10).clamp(1, 15)
+
+          respond_with(content: glorious_table_of_games, ephemeral: IGNORE_CHANNELS.include?(channel.id))
         end
 
         protected
 
         def past? = (@past_or_future == :past)
 
-        def future? = (@past_or_future == :future)
-
-        def determine_team_and_number
-          number, name = parse_input(raw_args)
-
-          @team_id = BaseballDiscord::Utilities.find_team_by_name(name ? [name] : names_from_context)
-
-          @number = number.clamp(1, 15)
-        end
-
-        def parse_input(input)
-          case input
-          when /\A(\d+)\s+(.+)\z/ then [Regexp.last_match[1].to_i, Regexp.last_match[2]]
-          when /\A(\D+)\z/        then [10,                        Regexp.last_match[1]]
-          when /\A(\d+)\z/        then [Regexp.last_match[1].to_i, nil]
-          else
-            [10, nil]
-          end
+        def determine_team
+          BaseballDiscord::Utilities.find_team_by_name(options['team'] ? [options['team']] : names_from_context)
         end
 
         def glorious_table_of_games
@@ -94,7 +73,7 @@ module BaseballDiscord
           )
 
           table.align_column(0, :right)
-          table.align_column(3, :right) if future?
+          table.align_column(3, :right) unless past?
 
           format_table table
         end

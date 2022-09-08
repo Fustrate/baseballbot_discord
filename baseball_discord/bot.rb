@@ -48,11 +48,11 @@ module BaseballDiscord
     def load_commands
       BaseballDiscord::Commands::Debug.register self
       BaseballDiscord::Commands::Glossary.register self
-      include! BaseballDiscord::Commands::Invite
+      BaseballDiscord::Commands::Invite.register self
       BaseballDiscord::Commands::Links.register self
       include! BaseballDiscord::Commands::Scoreboard
       include! BaseballDiscord::Commands::Standings
-      include! BaseballDiscord::Commands::TeamCalendar
+      BaseballDiscord::Commands::TeamCalendar.register self
       include! BaseballDiscord::Commands::TeamRoles
       include! BaseballDiscord::Commands::Verify
       BaseballDiscord::Commands::WCStandings.register self

@@ -15,8 +15,6 @@ module BaseballDiscord
         IGNORE_CHANNELS = [452550329700188160].freeze
 
         def run
-          return error_message('This command cannot be run in this channel') if IGNORE_CHANNELS.include?(channel.id)
-
           league_id = find_league_id
 
           unless league_id
@@ -27,7 +25,7 @@ module BaseballDiscord
 
           leaders, others = leaders_and_others(date, league_id)
 
-          respond_with content: standings_table(leaders, others)
+          respond_with content: standings_table(leaders, others), ephemeral: IGNORE_CHANNELS.include?(channel.id)
         end
 
         protected
