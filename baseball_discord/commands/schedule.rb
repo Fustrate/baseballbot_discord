@@ -2,19 +2,19 @@
 
 module BaseballDiscord
   module Commands
-    module TeamCalendar
+    module Schedule
       def self.register(bot)
-        bot.application_command(:next) { TeamCalendarCommand.new(_1).list_games(:future) }
-        bot.application_command(:last) { TeamCalendarCommand.new(_1).list_games(:past) }
+        bot.application_command(:next) { ScheduleCommand.new(_1).list_games(:future) }
+        bot.application_command(:last) { ScheduleCommand.new(_1).list_games(:past) }
       end
 
-      PREGAME_STATUSES = /Preview|Warmup|Pre-Game|Delayed Start|Scheduled/
-      POSTGAME_STATUSES = /Final|Game Over|Postponed|Completed Early/
-
-      class TeamCalendarCommand < SlashCommand
+      class ScheduleCommand < SlashCommand
         SCHEDULE = '/v1/schedule?teamId=%<team_id>d&startDate=%<start_date>s&endDate=%<end_date>s&sportId=1&' \
                    'hydrate=team(venue(timezone)),game(content(summary)),linescore,broadcasts(all)&' \
                    'eventTypes=primary&scheduleTypes=games'
+
+        PREGAME_STATUSES = /Preview|Warmup|Pre-Game|Delayed Start|Scheduled/
+        POSTGAME_STATUSES = /Final|Game Over|Postponed|Completed Early/
 
         IGNORE_CHANNELS = [452550329700188160].freeze
 

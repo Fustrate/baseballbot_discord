@@ -45,7 +45,7 @@ module BaseballDiscord
           else
             default = bot.config.dig(server.id, 'default_team')
 
-            team_id = BaseballDiscord::Utilities.find_team_by_name(default.empty? ? names_from_context : [default])
+            team_id = BaseballDiscord::Utilities.find_team_by_name(default ? [default] : names_from_context)
 
             BaseballDiscord::Utilities.league_for_team(team_id) if team_id
           end
