@@ -51,13 +51,13 @@ require_relative 'baseball_discord/bot'
 #   cmd.string 'server', 'Server name', required: false
 # end
 
-@discord_bot.register_application_command(:wildcard, 'Displays the wildcard standings for a league') do |cmd|
-  cmd.string(
-    'league',
-    'The league for which to show standings',
-    choices: { AL: 'AL', NL: 'NL' },
-    required: false
-  )
+# @discord_bot.register_application_command(:wildcard, 'Displays the wildcard standings for a league') do |cmd|
+#   cmd.string(
+#     'league',
+#     'The league for which to show standings',
+#     choices: { AL: 'AL', NL: 'NL' },
+#     required: false
+#   )
 
-  cmd.string 'date', 'The date to show standings from', required: false
-end
+#   cmd.string 'date', 'The date to show standings from', required: false
+# end
