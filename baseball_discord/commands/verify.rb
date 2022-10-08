@@ -41,7 +41,7 @@ module BaseballDiscord
         VERIFICATION_NOT_ENABLED = 'This server does not require verification.'
 
         def run
-          start_verification_for_server find_server_by_name(raw_args)
+          start_verification_for_server find_server_by_name(options['server'])
         rescue UserError => e
           send_pm e.message
         end
