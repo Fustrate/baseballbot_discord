@@ -15,7 +15,7 @@ module BaseballDiscord
 
           %<auth_url>s
 
-          This link is active for 7 days, after which you can message me with `!verify %<guild>s` to receive a new link.
+          This link is active for 7 days, after which you can message me with `/verify %<guild>s` to receive a new link.
 
           We look forward to getting to know you!
         PM
@@ -25,11 +25,11 @@ module BaseballDiscord
 
           %<auth_url>s
 
-          This link is active for 7 days, after which you can message me with `!verify %<guild>s` to receive a new link.
+          This link is active for 7 days, after which you can message me with `/verify %<guild>s` to receive a new link.
         PM
 
         MISSING_SERVER_NAME = <<~PM
-          Please enter a server name, e.g. `!verify baseball` for the baseball server.
+          Please enter a server name, e.g. `/verify baseball` for the baseball server.
         PM
 
         INVALID_SERVER_NAME = 'I couldn\'t find a server with that name.'

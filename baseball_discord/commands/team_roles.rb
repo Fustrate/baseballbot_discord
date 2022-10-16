@@ -15,7 +15,7 @@ module BaseballDiscord
         NOT_VERIFIED = <<~PM
           You must be verified on the baseball server to use this command.
 
-          Use `!verify baseball` to do this.
+          Use `/verify baseball` to do this.
         PM
 
         TEAM_ROLES = {
