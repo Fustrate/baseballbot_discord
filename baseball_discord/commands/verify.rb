@@ -96,6 +96,7 @@ module BaseballDiscord
           member.roles.map(&:id).include? bot.config.verified_role_id(member.server.id)
         end
 
+        # The www link seems to freak new reddit out and get stuck in a redirect loop, so let's try forcing old reddit.
         def auth_url(guild = nil)
           Redd.url(
             client_id: ENV.fetch('DISCORD_REDDIT_CLIENT_ID'),
@@ -104,7 +105,7 @@ module BaseballDiscord
             state: generate_state_data(guild || server),
             scope: ['identity'],
             duration: 'temporary'
-          )
+          ).gsub('www.reddit', 'old.reddit')
         end
 
         def generate_state_data(guild)
