@@ -36,7 +36,7 @@ module BaseballDiscord
       super(
         client_id: ENV.fetch('DISCORD_CLIENT_ID'),
         token: ENV.fetch('DISCORD_TOKEN'),
-        prefix: prefix_proc(config.server_prefixes),
+        prefix: '!',
         intents: INTENTS
       )
 
@@ -59,16 +59,6 @@ module BaseballDiscord
       include! BaseballDiscord::Events::MemberJoin
     end
     # rubocop:enable Metrics/MethodLength
-
-    def prefix_proc(prefixes)
-      lambda do |message|
-        (prefixes[message.channel.server&.id] || ['!']).each do |prefix|
-          return message.content[prefix.size..] if message.content.start_with?(prefix)
-        end
-
-        nil
-      end
-    end
 
     def logger = (@logger ||= Logger.new($stdout))
 

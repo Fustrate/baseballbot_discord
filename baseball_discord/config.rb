@@ -17,12 +17,6 @@ module BaseballDiscord
 
     def dig(*path) = servers.dig(*path)
 
-    def server_prefixes
-      servers
-        .select { |_, server| server['prefixes'] }
-        .transform_values { Array(_1['prefixes']) }
-    end
-
     protected
 
     def servers = (@servers ||= YAML.safe_load(File.read(servers_yml_path))['servers'])
