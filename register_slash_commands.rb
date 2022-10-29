@@ -2,6 +2,8 @@
 
 require_relative 'baseball_discord/bot'
 
+# Only uncomment a command when it needs to be updated. Re-comment after the update is deployed and this script is run.
+
 @discord_bot = BaseballDiscord::Bot.new
 
 # TODO: Limit to admins
