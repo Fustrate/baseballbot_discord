@@ -117,31 +117,41 @@ module BaseballDiscord
     def process_member_verification(member, data, reddit_username)
       return unless member
 
-      @bot.logger.debug "[Verified] #{member.distinct} verified as #{reddit_username}"
-
-      member.add_role data['role'].to_i
-
-      @bot.logger.debug "[Role] Added role #{data['role'].to_i} to #{member.distinct}"
+      add_member_role member, data['role'].to_i
 
       update_member_name(member, reddit_username)
 
-      @bot.logger.debug "[Name] Updated name for #{member.distinct} to #{reddit_username}"
-
-      send_verified_message(member)
+      send_verified_message(member, reddit_username)
     end
 
-    def send_verified_message(member)
-      custom_message = @bot.config.server(member.server.id)['verified_message']
+    def send_verified_message(member, reddit_username)
+      member.pm(@bot.config.server(member.server.id)['verified_message'] || VERIFIED_MESSAGE)
 
-      member.pm(custom_message || VERIFIED_MESSAGE)
+      send_to_log_channel "[Verified] #{member.distinct} verified as #{reddit_username}", member.server.id
+    end
+
+    def add_member_role(member, role_id)
+      member.add_role role_id
+
+      @bot.logger.debug "[Role] Added role #{role_id} to #{member.distinct}"
     end
 
     def update_member_name(member, reddit_username)
-      # return if member.display_name == reddit_username
-
       member.nick = reddit_username
+
+      @bot.logger.debug "[Name] Updated name for #{member.distinct} to #{reddit_username}"
     rescue Discordrb::Errors::NoPermission
-      @bot.logger.info "Couldn't update name for #{member.distinct} to #{reddit_username}"
+      send_to_log_channel "Couldn't update name for #{member.distinct} to #{reddit_username}", member.server.id
+    end
+
+    def send_to_log_channel(message, server_id)
+      @bot.logger.debug message
+
+      log_channel_id = @bot.config.server(server_id)['log_channel']
+
+      return unless log_channel_id
+
+      channel(log_channel_id).send_message message
     end
   end
 end

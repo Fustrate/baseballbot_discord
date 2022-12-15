@@ -4,38 +4,31 @@ module GameChatBot
   module Alerts
     IGNORE_ALERT_CATEGORIES = %w[scoring_position_extra].freeze
 
-    def output_alerts
-      alerts.each do |alert|
-        @bot.redis.sadd "#{redis_key}_alerts", alert['alertId']
+    def output_alerts = alerts_to_post.each { process_alert(_1) }
 
-        embed = alert_embed_for(alert)
+    def process_alert(alert)
+      @bot.redis.sadd "#{redis_key}_alerts", alert['alertId']
 
-        send_message embed: embed.to_h, at: embed.post_at
+      embed = alert_embed_for(alert)
 
-        send_lineups if embed.description['Lineups posted']
-      end
+      send_message embed: embed.to_h, at: embed.post_at
+
+      send_lineups if embed.description['Lineups posted']
     end
 
-    def alerts
-      return [] unless @feed.game_data
+    def alerts_to_post = (@feed.game_data ? @feed.game_data['alerts'].select { post_alert?(_1) } : [])
 
-      @feed.game_data['alerts'].select { post_alert?(_1) }
-    end
+    def post_alert?(alert) = !ignore_category?(alert['category']) && !posted?(alert['alertId'])
 
-    def post_alert?(alert)
-      return false if IGNORE_ALERT_CATEGORIES.include?(alert['category'])
+    def ignore_category?(category) = IGNORE_ALERT_CATEGORIES.include?(category)
 
-      !@bot.redis.sismember "#{redis_key}_alerts", alert['alertId']
-    end
+    def posted?(alert_id) = @bot.redis.sismember("#{redis_key}_alerts", alert_id)
 
     def alert_embed_for(alert)
       case alert['category']
-      when 'game_over'
-        Embeds::EndOfGame.new(alert, self)
-      when 'end_of_half_inning'
-        Embeds::EndOfInning.new(alert, self)
-      when 'pitcher_change'
-        Embeds::Alert.new(alert, self, title: 'Pitching Change')
+      when 'game_over'          then Embeds::EndOfGame.new(alert, self)
+      when 'end_of_half_inning' then Embeds::EndOfInning.new(alert, self)
+      when 'pitcher_change'     then Embeds::Alert.new(alert, self, title: 'Pitching Change')
       else
         Embeds::Alert.new(alert, self)
       end
