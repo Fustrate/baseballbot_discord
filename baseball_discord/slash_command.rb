@@ -41,7 +41,7 @@ module BaseballDiscord
 
     def team_name_from_channel_name = channel.name.downcase.tr('-', ' ')
 
-    def team_names_from_roles = user.roles.map(&:name).map(&:downcase)
+    def team_names_from_roles = user.roles.map { _1.name.downcase }
 
     def send_pm(message)
       user.pm message

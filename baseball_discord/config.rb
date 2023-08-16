@@ -15,11 +15,11 @@ module BaseballDiscord
 
     def non_team_roles(server_id) = (servers.dig(server_id, 'non_team_roles') || [])
 
-    def dig(*path) = servers.dig(*path)
+    def dig(...) = servers.dig(...)
 
     protected
 
-    def servers = (@servers ||= YAML.safe_load(File.read(servers_yml_path))['servers'])
+    def servers = (@servers ||= YAML.safe_load_file(servers_yml_path)['servers'])
 
     def servers_yml_path = File.expand_path("#{__dir__}/../config/servers.yml")
   end
