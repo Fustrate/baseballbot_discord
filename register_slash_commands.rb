@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'baseball_discord/bot'
+require_relative 'baseballbot/bot'
 
 # Only uncomment a command when it needs to be updated. Re-comment after the update is deployed and this script is run.
 

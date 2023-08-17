@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'baseball_discord/bot'
+require_relative 'baseballbot/bot'
 
 @discord_bot = BaseballDiscord::Bot.new
 
