@@ -6,7 +6,7 @@ require_relative 'concerns/game_feed'
 require_relative 'concerns/line_score'
 require_relative 'concerns/plays'
 
-require_relative 'output_helpers'
+require_relative '../shared/output_helpers'
 
 module GameChatBot
   # Handles everything related to having a channel for a specific game.

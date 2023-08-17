@@ -7,8 +7,8 @@ require 'rufus-scheduler'
 require 'terminal-table'
 require 'time'
 
-require_relative '../baseball_discord/utilities'
-require_relative 'output_helpers'
+require_relative '../shared/output_helpers'
+require_relative '../shared/utilities'
 
 require_relative 'emoji'
 require_relative 'game_channel'

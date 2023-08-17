@@ -18,7 +18,8 @@ require 'yaml'
 require_relative 'config'
 require_relative 'redis_connection'
 require_relative 'slash_command'
-require_relative 'utilities'
+
+require_relative '../shared/utilities'
 
 # Require all commands and events
 Dir.glob("#{__dir__}/{commands,events}/*").each { require_relative _1 }
