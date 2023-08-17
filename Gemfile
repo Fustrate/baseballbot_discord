@@ -11,7 +11,9 @@ gem 'rake', '~> 13.0'
 # Local services
 gem 'em-hiredis', '~> 0.3'
 gem 'redis', '~> 5.0'
-# gem 'pg'
+
+# Reddit account tokens are stored in Postgres [https://github.com/ged/ruby-pg]
+gem 'pg', '~> 1.4'
 
 # Outside services
 gem 'discordrb', github: 'shardlab/discordrb', branch: 'main'

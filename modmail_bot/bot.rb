@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'discordrb'
+require 'pg'
 require 'redis'
 require 'rufus-scheduler'
 require 'time'
@@ -31,7 +32,13 @@ module ModmailBot
 
     def redis = (@redis ||= Redis.new)
 
-    def client = (@client ||= MLBStatsAPI::Client.new(logger:, cache: Redis.new))
+    def db
+      @db ||= PG::Connection.new(
+        user: ENV.fetch('BASEBALLBOT_PG_USERNAME'),
+        dbname: ENV.fetch('BASEBALLBOT_PG_DATABASE'),
+        password: ENV.fetch('BASEBALLBOT_PG_PASSWORD')
+      )
+    end
 
     protected
 
