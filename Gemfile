@@ -27,22 +27,22 @@ gem 'chronic', '~> 0.10'
 gem 'tzinfo', '~> 2.0'
 
 # Utilities
-gem 'rufus-scheduler', '~> 3.8'
+gem 'rufus-scheduler', '~> 3.9'
 gem 'terminal-table', '~> 3.0'
 gem 'terrapin', '~> 0.6'
 
 # ERROR -- : cannot load such file -- concurrent/concurrent_ruby_ext (LoadError)
-gem 'concurrent-ruby-ext', '~> 1.1'
+gem 'concurrent-ruby-ext', '~> 1.2'
 
 group :development do
   # Deploy with Capistrano
   gem 'capistrano', '~> 3.17', require: false
   gem 'capistrano-bundler', '~> 2.1', require: false
-  gem 'capistrano-rbenv', '~> 2.1', require: false
+  gem 'capistrano-rbenv', '~> 2.2', require: false
 
-  gem 'minitest', '~> 5.16'
+  gem 'minitest', '~> 5.19'
 
   # Linters
-  gem 'rubocop', '~> 1.30'
-  gem 'rubocop-performance', '~> 1.14', require: false
+  gem 'rubocop', '~> 1.56'
+  gem 'rubocop-performance', '~> 1.19', require: false
 end
