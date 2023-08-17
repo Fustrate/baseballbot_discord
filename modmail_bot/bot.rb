@@ -9,9 +9,11 @@ require 'time'
 require_relative '../shared/output_helpers'
 require_relative '../shared/utilities'
 
+require_relative 'reddit_client'
+
 module ModmailBot
   class Bot < Discordrb::Commands::CommandBot
-    attr_reader :scheduler
+    attr_reader :reddit, :scheduler
 
     INTENTS = %i[servers server_messages server_message_reactions].freeze
 
@@ -26,6 +28,8 @@ module ModmailBot
         prefix: '!',
         intents: INTENTS
       )
+
+      @reddit = RedditClient.new(self)
     end
 
     def logger = (@logger ||= Logger.new($stdout))
@@ -39,6 +43,8 @@ module ModmailBot
         password: ENV.fetch('BASEBALLBOT_PG_PASSWORD')
       )
     end
+
+    def with_reddit_account(&) = @reddit.with_account(&)
 
     protected
 
