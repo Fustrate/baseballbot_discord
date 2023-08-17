@@ -57,8 +57,6 @@ module ModmailBot
       @scheduler.join
     end
 
-    def check_modmail
-      logger.info 'Checking modmail'
-    end
+    def check_modmail; end
   end
 end
