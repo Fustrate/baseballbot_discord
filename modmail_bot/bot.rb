@@ -86,8 +86,6 @@ module ModmailBot
     def post_thread!(conversation)
       thread = modmail_channel.start_thread(name, 7 * 24 * 60, type: :forum)
 
-
-
       redis.hset('discord_threads', conversation.id, conversation.last_updated.to_i)
     end
 
