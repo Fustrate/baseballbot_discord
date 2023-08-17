@@ -15,8 +15,12 @@ gem 'redis', '~> 4.6'
 
 # Outside services
 gem 'discordrb', github: 'shardlab/discordrb', branch: 'main'
+
+# MLB Stats API
 gem 'mlb_stats_api', '>= 0.2.5'
-gem 'redd', '~> 0.8'
+
+# Reddit interaction [https://github.com/Fustrate/redd]
+gem 'redd', '>= 0.9.0.pre.3', github: 'Fustrate/redd'
 
 # Parse dates and times
 gem 'chronic', '~> 0.10'
