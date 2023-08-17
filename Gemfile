@@ -10,7 +10,7 @@ gem 'rake', '~> 13.0'
 
 # Local services
 gem 'em-hiredis', '~> 0.3'
-gem 'redis', '~> 4.6'
+gem 'redis', '~> 5.0'
 # gem 'pg'
 
 # Outside services
