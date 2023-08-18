@@ -90,7 +90,7 @@ module ModmailBot
 
     def post_thread!(conversation)
       channel = modmail_channel.start_forum_thread(
-        "#{conversation.user[:name]}: #{conversation.subject}",
+        "#{conversation.user[:name] || 'Reddit'}: #{conversation.subject}",
         { content: conversation_to_discord(conversation) }
       )
 
