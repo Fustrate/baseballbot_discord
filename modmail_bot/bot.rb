@@ -110,7 +110,7 @@ module ModmailBot
       conversation.messages.each do |message|
         next if message.date.to_i < since
 
-        thread.send_message message_to_discord(message)
+        thread.send_message message_to_discord(message) unless internal_message?(message)
 
         sleep 0.5
       end
@@ -146,6 +146,10 @@ module ModmailBot
       redis.hset('modmail_to_discord', conversation.id, thread.id)
       redis.hset('discord_to_modmail', thread.id, conversation.id)
       redis.hset('discord_threads', conversation.id, conversation.last_updated.to_i)
+    end
+
+    def internal_message?(message)
+      message.author[:name] == 'BaseballBot' && message.markdown_body.match?(/\A(Archived|Unarchived) by/)
     end
   end
 end
