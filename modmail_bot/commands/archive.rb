@@ -56,7 +56,7 @@ module ModmailBot
             conversation = modmail.get(modmail_id)
 
             conversation.reply(
-              ["#{archived ? 'Archived' : 'Unarchived'} by #{user.nick}", reason].compact.join(': '),
+              ["#{archived ? 'Archived' : 'Unarchived'} by #{user.distinct}", reason].compact.join(': '),
               internal: true
             )
 
