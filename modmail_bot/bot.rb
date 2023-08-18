@@ -6,11 +6,11 @@ require 'redis'
 require 'rufus-scheduler'
 require 'time'
 
+require_relative '../shared/discordrb_forum_threads'
 require_relative '../shared/output_helpers'
 require_relative '../shared/utilities'
 
 require_relative 'reddit_client'
-require_relative '../shared/discordrb_forum_threads'
 
 # Require all commands and events
 Dir.glob("#{__dir__}/{commands,events}/*").each { require_relative _1 }

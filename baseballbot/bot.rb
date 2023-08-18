@@ -17,8 +17,8 @@ require 'yaml'
 
 require_relative 'config'
 require_relative 'redis_connection'
-require_relative 'slash_command'
 
+require_relative '../shared/slash_command'
 require_relative '../shared/utilities'
 
 # Require all commands and events
