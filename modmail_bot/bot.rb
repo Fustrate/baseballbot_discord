@@ -83,7 +83,7 @@ module ModmailBot
     def process_modmail(conversation)
       conversation_last_updated = conversation.last_updated.to_i
 
-      thread_last_updated = redis.hget('discord_threads', conversation.id)
+      thread_last_updated = redis.hget('discord_threads', conversation.id)&.to_i
       thread_id = redis.hget('modmail_to_discord', conversation.id)
 
       return post_thread!(conversation) unless thread_id && thread_last_updated
@@ -144,6 +144,7 @@ module ModmailBot
 
     def update_redis!(conversation, thread)
       redis.hset('modmail_to_discord', conversation.id, thread.id)
+      redis.hset('discord_to_modmail', thread.id, conversation.id)
       redis.hset('discord_threads', conversation.id, conversation.last_updated.to_i)
     end
   end
