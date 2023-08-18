@@ -103,7 +103,7 @@ module ModmailBot
     end
 
     def update_thread!(conversation, thread_id, after:)
-      since = Time.at(after)
+      since = Time.at(after).to_i
 
       thread = channel thread_id
 
