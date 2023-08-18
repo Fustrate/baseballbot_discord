@@ -12,10 +12,11 @@ require_relative '../shared/utilities'
 require_relative 'reddit_client'
 require_relative '../shared/discordrb_forum_threads'
 
+# Require all commands and events
+Dir.glob("#{__dir__}/{commands,events}/*").each { require_relative _1 }
+
 module ModmailBot
   class Bot < Discordrb::Commands::CommandBot
-    attr_reader :reddit, :scheduler
-
     INTENTS = %i[servers server_messages server_message_reactions].freeze
 
     def initialize
@@ -30,12 +31,14 @@ module ModmailBot
         intents: INTENTS
       )
 
-      @reddit = RedditClient.new(self)
+      include! ModmailBot::Events::Reaction
     end
 
     def logger = (@logger ||= Logger.new($stdout))
 
     def redis = (@redis ||= Redis.new)
+
+    def reddit = (@reddit ||= RedditClient.new(self))
 
     def db
       @db ||= PG::Connection.new(
@@ -44,8 +47,6 @@ module ModmailBot
         password: ENV.fetch('BASEBALLBOT_PG_PASSWORD')
       )
     end
-
-    def with_reddit_account(&) = @reddit.with_account(&)
 
     protected
 
@@ -67,9 +68,9 @@ module ModmailBot
     end
 
     def check_modmail
-      @modmail ||= @reddit.session.modmail
+      @modmail ||= reddit.session.modmail
 
-      with_reddit_account do
+      reddit.with_account do
         @modmail.conversations(subreddits: [subreddit], limit: 25, sort: :recent).each { process_modmail(_1) }
       end
     end
