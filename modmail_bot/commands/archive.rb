@@ -51,7 +51,7 @@ module ModmailBot
           }
         end
 
-        def update_modmail!(conversation, archived, reason)
+        def update_modmail!(modmail_id, archived, reason)
           bot.reddit.with_account do
             conversation = modmail.get(modmail_id)
 
