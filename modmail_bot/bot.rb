@@ -8,12 +8,13 @@ require 'time'
 
 require_relative '../shared/discordrb_forum_threads'
 require_relative '../shared/output_helpers'
+require_relative '../shared/slash_command'
 require_relative '../shared/utilities'
 
 require_relative 'reddit_client'
 
-# Require all commands and events
-Dir.glob("#{__dir__}/{commands,events}/*").each { require_relative _1 }
+# Require all commands
+Dir.glob("#{__dir__}/{commands}/*").each { require_relative _1 }
 
 module ModmailBot
   class Bot < Discordrb::Commands::CommandBot
@@ -31,7 +32,7 @@ module ModmailBot
         intents: INTENTS
       )
 
-      include! ModmailBot::Events::Reaction
+      load_commands
     end
 
     def logger = (@logger ||= Logger.new($stdout))
@@ -49,6 +50,10 @@ module ModmailBot
     end
 
     protected
+
+    def load_commands
+      ModmailBot::Commands::Archive.register self
+    end
 
     def subreddit = (@subreddit ||= @reddit.session.subreddit('baseball'))
 
