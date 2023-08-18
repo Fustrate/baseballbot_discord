@@ -91,8 +91,7 @@ module ModmailBot
     def post_thread!(conversation)
       channel = modmail_channel.start_forum_thread(
         "#{conversation.user[:name]}: #{conversation.subject}",
-        { content: conversation_to_discord(conversation) },
-        applied_tags: tags_for(conversation)
+        { content: conversation_to_discord(conversation) }
       )
 
       update_redis!(conversation, channel)
