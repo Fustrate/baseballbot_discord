@@ -10,6 +10,7 @@ require_relative '../shared/output_helpers'
 require_relative '../shared/utilities'
 
 require_relative 'reddit_client'
+require_relative '../shared/discordrb_forum_threads'
 
 module ModmailBot
   class Bot < Discordrb::Commands::CommandBot
@@ -69,7 +70,7 @@ module ModmailBot
       @modmail ||= @reddit.session.modmail
 
       with_reddit_account do
-        @modmail.conversations(subreddits: [subreddit], limit: 10, sort: :recent).each { process_modmail(_1) }
+        @modmail.conversations(subreddits: [subreddit], limit: 25, sort: :recent).each { process_modmail(_1) }
       end
     end
 
@@ -77,48 +78,69 @@ module ModmailBot
       conversation_last_updated = conversation.last_updated.to_i
 
       thread_last_updated = redis.hget('discord_threads', conversation.id)
+      thread_id = redis.hget('modmail_to_discord', conversation.id)
 
-      return post_thread!(conversation) unless thread_last_updated
+      return post_thread!(conversation) unless thread_id && thread_last_updated
 
-      update_thread!(conversation, after: thread_last_updated) if conversation_last_updated > thread_last_updated
+      return unless conversation_last_updated > thread_last_updated
+
+      update_thread!(conversation, thread_id, after: thread_last_updated)
     end
 
     def post_thread!(conversation)
-      thread = modmail_channel.start_thread(name, 7 * 24 * 60, type: :forum)
+      channel = modmail_channel.start_forum_thread(
+        "#{conversation.user[:name]}: #{conversation.subject}",
+        10080,
+        message: { content: conversation_to_discord(conversation) },
+        applied_tags: tags_for(conversation)
+      )
 
-      redis.hset('discord_threads', conversation.id, conversation.last_updated.to_i)
+      update_redis!(conversation, channel)
     end
 
-    def update_thread!(conversation, after:)
+    def update_thread!(conversation, thread_id, after:)
       since = Time.at(after)
 
-      thread = modmail_channel
+      thread = channel thread_id
 
       conversation.messages.each do |message|
         next if message.date.to_i < since
 
-        post_message_to_thread!(thread, message)
+        thread.send_message message_to_discord(message)
+
+        sleep 0.5
       end
 
       redis.hset('discord_threads', conversation.id, conversation.last_updated.to_i)
     end
-  end
-end
 
-module Discordrb
-  # A Discord channel, including data like the topic
-  class Channel
-    def start_thread(name, auto_archive_duration, message: nil, type: 11)
-      message_id = message&.id || message
-      type = TYPES[type] || type
+    def conversation_to_discord(conversation)
+      message = conversation.messages.first
 
-      data = if message
-              API::Channel.start_thread_with_message(@bot.token, @id, message_id, name, auto_archive_duration)
-            else
-              API::Channel.start_thread_without_message(@bot.token, @id, name, auto_archive_duration, type)
-            end
+      <<~MARKDOWN
+        #{message.markdown_body}
 
-      Channel.new(JSON.parse(data), @bot, @server)
+        [View on Reddit](https://mod.reddit.com/mail/all/#{conversation.id})
+      MARKDOWN
+    end
+
+    def message_to_discord(message)
+      <<~MARKDOWN
+        Reply from #{message.author[:name]}:
+
+        #{message.markdown_body}
+      MARKDOWN
+    end
+
+    def tags_for(conversation)
+      return [] unless conversation.user[:name] == 'AutoModerator'
+
+      [{ name: 'Automod' }]
+    end
+
+    def update_redis!(conversation, thread)
+      redis.hset('modmail_to_discord', conversation.id, thread.id)
+      redis.hset('discord_threads', conversation.id, conversation.last_updated.to_i)
     end
   end
 end
