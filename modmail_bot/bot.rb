@@ -96,7 +96,8 @@ module ModmailBot
     def post_thread!(conversation)
       channel = modmail_channel.start_forum_thread(
         "#{conversation.user[:name] || 'Reddit'}: #{conversation.subject}",
-        { content: conversation_to_discord(conversation) }
+        { content: conversation_to_discord(conversation) },
+        applied_tags: tags_for(conversation)
       )
 
       update_redis!(conversation, channel)
@@ -139,7 +140,7 @@ module ModmailBot
     def tags_for(conversation)
       return [] unless conversation.user[:name] == 'AutoModerator'
 
-      [{ name: 'Automod' }]
+      ['1142133675203506266']
     end
 
     def update_redis!(conversation, thread)
