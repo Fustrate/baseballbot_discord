@@ -141,6 +141,8 @@ module ModmailBot
         Reply from #{message.author[:name]}:
 
         #{message.markdown_body}
+
+        t:#{message.date.to_i}
       MARKDOWN
     end
 
