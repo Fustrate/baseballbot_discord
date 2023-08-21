@@ -143,7 +143,7 @@ module ModmailBot
     end
 
     def tags_for(conversation)
-      return [TAGS[:ban]] if conversation.subject[/permanently banned from participating|is temporarily banned/]
+      return [TAG_IDS[:ban]] if conversation.subject[/permanently banned from participating|is temporarily banned/]
 
       return [TAG_IDS[:automod]] if conversation.user[:name] == 'AutoModerator'
 
