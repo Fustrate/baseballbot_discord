@@ -20,6 +20,15 @@ module ModmailBot
   class Bot < Discordrb::Commands::CommandBot
     INTENTS = %i[servers server_messages server_message_reactions].freeze
 
+    CHANNEL_IDS = {
+      modmail: 1141768383797416018
+    }.freeze
+
+    TAG_IDS = {
+      automod: 1142133675203506266,
+      ban: 1142133717695995954
+    }.freeze
+
     def initialize
       ready { start_loop }
 
@@ -57,10 +66,6 @@ module ModmailBot
 
     def subreddit = (@subreddit ||= @reddit.session.subreddit('baseball'))
 
-    def discord_server = (@discord_server ||= server 709901748445249628)
-
-    def modmail_channel = (@modmail_channel ||= channel 1141768383797416018)
-
     def start_loop
       @scheduler = Rufus::Scheduler.new
 
@@ -94,13 +99,13 @@ module ModmailBot
     end
 
     def post_thread!(conversation)
-      channel = modmail_channel.start_forum_thread(
+      thread = channel(CHANNEL_IDS[:modmail]).start_forum_thread(
         "#{conversation.user[:name] || 'Reddit'}: #{conversation.subject}",
         { content: conversation_to_discord(conversation) },
         applied_tags: tags_for(conversation)
       )
 
-      update_redis!(conversation, channel)
+      update_redis!(conversation, thread)
     end
 
     def update_thread!(conversation, thread_id, after:)
@@ -138,9 +143,11 @@ module ModmailBot
     end
 
     def tags_for(conversation)
-      return [] unless conversation.user[:name] == 'AutoModerator'
+      return [TAGS[:ban]] if conversation.subject['permanently banned from participating']
 
-      ['1142133675203506266']
+      return [TAG_IDS[:automod]] if conversation.user[:name] == 'AutoModerator'
+
+      []
     end
 
     def update_redis!(conversation, thread)
