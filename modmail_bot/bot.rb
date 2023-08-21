@@ -20,13 +20,15 @@ module ModmailBot
   class Bot < Discordrb::Commands::CommandBot
     INTENTS = %i[servers server_messages server_message_reactions].freeze
 
+    # Automod and bans might be separated into other channels later
     CHANNEL_IDS = {
       modmail: 1141768383797416018
     }.freeze
 
     TAG_IDS = {
       automod: 1142133675203506266,
-      ban: 1142133717695995954
+      ban: 1142133717695995954,
+      other: 1143038222730014780
     }.freeze
 
     def initialize
@@ -147,7 +149,7 @@ module ModmailBot
 
       return [TAG_IDS[:automod]] if conversation.user[:name] == 'AutoModerator'
 
-      []
+      [TAG_IDS[:other]]
     end
 
     def update_redis!(conversation, thread)
