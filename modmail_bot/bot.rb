@@ -116,9 +116,9 @@ module ModmailBot
       thread = channel thread_id
 
       conversation.messages.each do |message|
-        next if message.date.to_i < since
+        next unless message.date.to_i > since
 
-        thread.send_message message_to_discord(message) unless internal_message?(message)
+        thread.send_message message_to_discord(message, since) unless internal_message?(message)
 
         sleep 0.5
       end
@@ -136,13 +136,13 @@ module ModmailBot
       MARKDOWN
     end
 
-    def message_to_discord(message)
+    def message_to_discord(message, since)
       <<~MARKDOWN
         Reply from #{message.author[:name]}:
 
         #{message.markdown_body}
 
-        t:#{message.date.to_i}
+        t:#{message.date.to_i - since}
       MARKDOWN
     end
 
