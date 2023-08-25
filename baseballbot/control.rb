@@ -7,8 +7,8 @@ options = {
   backtrace: true,
   output_logfilename: '../log/baseballbot_output.txt',
   logfilename: '../log/baseballbot.log',
-  dir: './tmp',
+  dir: '../tmp',
   dir_mode: :normal
 }
 
-Daemons.run 'baseballbot.rb', options
+Daemons.run 'run.rb', options
