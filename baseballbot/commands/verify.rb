@@ -11,21 +11,24 @@ module BaseballDiscord
         WELCOME_MESSAGE = <<~PM
           Welcome to the %<server_name>s Discord server!
 
-          In order to join, please click the following link to verify your reddit account:
+          In order to join, please click the following link and send the pre-filled message to verify your reddit
+          account:
 
           %<auth_url>s
 
           This link is active for 7 days, after which you can message me with `/verify %<guild>s` to receive a new link.
+          Note that verification may take up to 60 seconds to sync after the message is sent.
 
           We look forward to getting to know you!
         PM
 
         VERIFY_MESSAGE = <<~PM
-          Please click the following link to verify your reddit account:
+          Please click the following link and send the pre-filled message to verify your reddit account:
 
           %<auth_url>s
 
           This link is active for 7 days, after which you can message me with `/verify %<guild>s` to receive a new link.
+          Note that verification may take up to 60 seconds to sync after the message is sent.
         PM
 
         MISSING_SERVER_NAME = <<~PM
@@ -39,6 +42,8 @@ module BaseballDiscord
         NOT_A_MEMBER = 'It doesn\'t look like you\'re a member of this server.'
 
         VERIFICATION_NOT_ENABLED = 'This server does not require verification.'
+
+        VERIFICATION_LINK = 'https://reddit.com/message/compose/?to=%<to>s&subject=%<subject>s&message=%<message>s'
 
         def run
           start_verification_for_server find_server_by_name(options['server'])
@@ -73,7 +78,7 @@ module BaseballDiscord
           send_pm format(
             (welcome ? WELCOME_MESSAGE : VERIFY_MESSAGE),
             server_name: guild.name,
-            auth_url: auth_url(guild),
+            auth_url: auth_url(guild || server),
             guild: bot.config.server(guild.id)['short_name']
           )
         end
@@ -96,16 +101,13 @@ module BaseballDiscord
           member.roles.map(&:id).include? bot.config.verified_role_id(member.server.id)
         end
 
-        # The www link seems to freak new reddit out and get stuck in a redirect loop, so let's try forcing old reddit.
-        def auth_url(guild = nil)
-          Redd.url(
-            client_id: ENV.fetch('DISCORD_REDDIT_CLIENT_ID'),
-            redirect_uri: 'https://baseballbot.io/discord/reddit-callback',
-            response_type: 'code',
-            state: generate_state_data(guild || server),
-            scope: ['identity'],
-            duration: 'temporary'
-          ).gsub('www.reddit', 'old.reddit')
+        def auth_url(guild)
+          format(
+            VERIFICATION_LINK,
+            to: '/u/baseballbot',
+            subject: 'Discord Verification',
+            message: "verify:#{generate_state_data(guild)}"
+          )
         end
 
         def generate_state_data(guild)
