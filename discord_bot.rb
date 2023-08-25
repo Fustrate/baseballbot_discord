@@ -11,10 +11,8 @@ require_relative 'shared/config'
 require_relative 'shared/reddit_client'
 
 class DiscordBot < Discordrb::Commands::CommandBot
-  LOOP_EVERY = nil
-
   def initialize(**options)
-    ready { start_loop } if self.class::LOOP_EVERY
+    ready { start_loop }
 
     super(**options)
 
