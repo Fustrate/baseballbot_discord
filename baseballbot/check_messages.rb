@@ -9,7 +9,9 @@ module BaseballDiscord
     end
 
     def check!
-      reddit.session.my_messages(category: 'unread', mark: false, limit: 10)&.each { process_message(_1) }
+      reddit.with_account do
+        reddit.session.my_messages(category: 'unread', mark: false, limit: 10)&.each { process_message(_1) }
+      end
     end
 
     protected
