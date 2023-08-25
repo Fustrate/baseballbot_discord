@@ -8,7 +8,8 @@ options = {
   output_logfilename: '../log/modmail_bot_output.txt',
   logfilename: '../log/modmail_bot.log',
   dir: '../tmp',
-  dir_mode: :normal
+  dir_mode: :normal,
+  app_name: 'BaseballModBot'
 }
 
 Daemons.run 'run.rb', options

@@ -8,7 +8,8 @@ options = {
   output_logfilename: '../log/baseballbot_output.txt',
   logfilename: '../log/baseballbot.log',
   dir: '../tmp',
-  dir_mode: :normal
+  dir_mode: :normal,
+  app_name: 'BaseballBot'
 }
 
 Daemons.run 'run.rb', options
