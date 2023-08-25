@@ -5,8 +5,6 @@ require_relative 'bot'
 @bot = ModmailBot::Bot.new
 
 trap('TERM') do
-  @bot.logger.debug '[TERM] Term signal received.'
-
   # No sync because we're in a trap context
   @bot.stop(true)
 
