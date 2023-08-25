@@ -14,7 +14,7 @@ module BaseballDiscord
           In order to join, please click the following link and send the pre-filled message to verify your reddit
           account:
 
-          %<auth_url>s
+          [Click here to send the verification message.](%<auth_url>s)
 
           This link is active for 7 days, after which you can message me with `/verify %<guild>s` to receive a new link.
           Note that verification may take up to 60 seconds to sync after the message is sent.
@@ -25,7 +25,7 @@ module BaseballDiscord
         VERIFY_MESSAGE = <<~PM
           Please click the following link and send the pre-filled message to verify your reddit account:
 
-          %<auth_url>s
+          [Click here to send the verification message.](%<auth_url>s)
 
           This link is active for 7 days, after which you can message me with `/verify %<guild>s` to receive a new link.
           Note that verification may take up to 60 seconds to sync after the message is sent.
@@ -86,7 +86,7 @@ module BaseballDiscord
         def find_server_by_name(name)
           normal = name&.strip&.downcase&.gsub(/[^a-z]/, '')
 
-          raise UserError, MISSING_SERVER_NAME if normal.empty?
+          raise UserError, MISSING_SERVER_NAME unless normal
 
           server_id = bot.config.short_name_to_server_id(normal)
 

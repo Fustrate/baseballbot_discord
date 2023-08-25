@@ -21,7 +21,7 @@ class DiscordBot < Discordrb::Commands::CommandBot
     load_commands
   end
 
-  def config = (@config ||= Config.new)
+  def config = (@config ||= DiscordBot::Config.new)
 
   def db
     @db ||= PG::Connection.new(
