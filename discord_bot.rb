@@ -47,7 +47,7 @@ class DiscordBot < Discordrb::Commands::CommandBot
 
     @scheduler = Rufus::Scheduler.new
 
-    @scheduler.every('30s', event_loop)
+    @scheduler.every('30s') { event_loop }
 
     @scheduler.join
   rescue NotImplementedError
