@@ -84,7 +84,7 @@ module BaseballDiscord
         end
 
         def find_server_by_name(name)
-          normal = name.strip.downcase.gsub(/[^a-z]/, '')
+          normal = name&.strip&.downcase&.gsub(/[^a-z]/, '')
 
           raise UserError, MISSING_SERVER_NAME if normal.empty?
 

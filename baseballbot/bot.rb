@@ -2,7 +2,6 @@
 
 require 'chronic'
 require 'date'
-require 'eventmachine'
 require 'json'
 require 'open-uri'
 require 'securerandom'
@@ -17,7 +16,7 @@ require_relative '../shared/slash_command'
 require_relative '../shared/utilities'
 
 # Require all commands and events
-Dir.glob("#{__dir__}/baseballbot/{commands,events}/*").each { require_relative _1 }
+Dir.glob("#{__dir__}/{commands,events}/*").each { require_relative _1 }
 
 module BaseballDiscord
   class Bot < DiscordBot
