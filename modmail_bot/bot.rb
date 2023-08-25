@@ -8,10 +8,9 @@ require 'time'
 
 require_relative '../shared/discordrb_forum_threads'
 require_relative '../shared/output_helpers'
+require_relative '../shared/reddit_client'
 require_relative '../shared/slash_command'
 require_relative '../shared/utilities'
-
-require_relative 'reddit_client'
 
 # Require all commands
 Dir.glob("#{__dir__}/{commands}/*").each { require_relative _1 }
