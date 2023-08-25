@@ -10,11 +10,13 @@ require 'mlb_stats_api'
 require 'open-uri'
 require 'redd'
 require 'redis'
+require 'rufus-scheduler'
 require 'securerandom'
 require 'terminal-table'
 require 'tzinfo'
 require 'yaml'
 
+require_relative 'check_messages'
 require_relative 'config'
 require_relative 'redis_connection'
 
@@ -34,6 +36,8 @@ module BaseballDiscord
     ].freeze
 
     def initialize
+      ready { start_loop }
+
       super(
         client_id: ENV.fetch('DISCORD_CLIENT_ID'),
         token: ENV.fetch('DISCORD_TOKEN'),
@@ -68,6 +72,21 @@ module BaseballDiscord
     def mlb = (@mlb ||= MLBStatsAPI::Client.new(logger:, cache: Redis.new))
 
     def config = (@config ||= Config.new)
+
+    protected
+
+    def start_loop
+      @scheduler = Rufus::Scheduler.new
+
+      @check_messages = BaseballDiscord::CheckMessages.new(self)
+
+      @scheduler.every('31s') { @check_messages.check! }
+
+      # Start right away
+      @check_messages.check!
+
+      @scheduler.join
+    end
   end
 
   class UserError < RuntimeError; end
