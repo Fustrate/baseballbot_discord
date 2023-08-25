@@ -28,8 +28,6 @@ module ModmailBot
     }.freeze
 
     def initialize
-      ready { start_loop }
-
       super(
         client_id: ENV.fetch('DISCORD_MODMAIL_CLIENT_ID'),
         token: ENV.fetch('DISCORD_MODMAIL_TOKEN'),
@@ -48,18 +46,7 @@ module ModmailBot
 
     def subreddit = (@subreddit ||= @reddit.session.subreddit('baseball'))
 
-    def start_loop
-      @scheduler = Rufus::Scheduler.new
-
-      @scheduler.every('20s') { check_modmail }
-
-      # Start right away
-      check_modmail
-
-      @scheduler.join
-    end
-
-    def check_modmail
+    def event_loop
       @modmail ||= reddit.session.modmail
 
       reddit.with_account do
