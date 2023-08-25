@@ -8,6 +8,7 @@ require 'eventmachine'
 require 'json'
 require 'mlb_stats_api'
 require 'open-uri'
+require 'pg'
 require 'redd'
 require 'redis'
 require 'rufus-scheduler'
@@ -72,6 +73,14 @@ module BaseballDiscord
     def mlb = (@mlb ||= MLBStatsAPI::Client.new(logger:, cache: Redis.new))
 
     def config = (@config ||= Config.new)
+
+    def db
+      @db ||= PG::Connection.new(
+        user: ENV.fetch('BASEBALLBOT_PG_USERNAME'),
+        dbname: ENV.fetch('BASEBALLBOT_PG_DATABASE'),
+        password: ENV.fetch('BASEBALLBOT_PG_PASSWORD')
+      )
+    end
 
     protected
 
