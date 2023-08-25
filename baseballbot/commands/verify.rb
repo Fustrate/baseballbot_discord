@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'uri'
+
 module BaseballDiscord
   module Commands
     module Verify
@@ -105,7 +107,7 @@ module BaseballDiscord
           format(
             VERIFICATION_LINK,
             to: '/u/baseballbot',
-            subject: 'Discord Verification',
+            subject: URI.encode_uri_component('Discord Verification'),
             message: "verify:#{generate_state_data(guild)}"
           )
         end
