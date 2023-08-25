@@ -1,11 +1,9 @@
 # frozen_string_literal: true
 
-module GameChatBot
-  module OutputHelpers
-    def squish(text) = text.gsub(/\s{2,}/, ' ').strip
+module OutputHelpers
+  def squish(text) = text.gsub(/\s{2,}/, ' ').strip
 
-    def titleize(text) = text&.tr('_', ' ')&.gsub(/\b[a-z]/, &:capitalize)
+  def titleize(text) = text&.tr('_', ' ')&.gsub(/\b[a-z]/, &:capitalize)
 
-    def format_table(table) = "```\n#{table}\n```"
-  end
+  def format_table(table) = "```\n#{table}\n```"
 end
