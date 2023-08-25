@@ -1,11 +1,9 @@
 # frozen_string_literal: true
 
-require 'discordrb'
-require 'mlb_stats_api'
-require 'redis'
-require 'rufus-scheduler'
 require 'terminal-table'
 require 'time'
+
+require_relative '../discord_bot'
 
 require_relative '../shared/output_helpers'
 require_relative '../shared/utilities'
@@ -29,18 +27,13 @@ require_relative 'embeds/video'
 
 module GameChatBot
   # The master bot that controls all of the game channels
-  class Bot < Discordrb::Commands::CommandBot
+  class Bot < DiscordBot
     attr_reader :scheduler
 
     INTENTS = %i[servers server_messages server_message_reactions].freeze
 
     def initialize
       @games = {}
-
-      ready { start_loop }
-
-      register_basic_commands
-      register_commands_with_arguments
 
       super(
         client_id: ENV.fetch('DISCORD_GAMETHREAD_CLIENT_ID'),
@@ -55,20 +48,17 @@ module GameChatBot
       end
     end
 
-    def logger = (@logger ||= Logger.new($stdout))
-
-    def redis = (@redis ||= Redis.new)
-
-    def client = (@client ||= MLBStatsAPI::Client.new(logger:, cache: Redis.new))
-
     protected
 
     def baseball = (@baseball ||= server 400516567735074817)
 
-    def register_basic_commands
+    # TODO: Migrate to application commands
+    def load_commands
       command(:linescore) { feed_for_event(_1)&.send_line_score }
       command(:lineups) { feed_for_event(_1)&.send_lineups }
       command(:umpires) { feed_for_event(_1)&.send_umpires }
+
+      register_commands_with_arguments
     end
 
     def register_commands_with_arguments
@@ -78,18 +68,11 @@ module GameChatBot
 
     def feed_for_event(event) = @games[event.channel&.id]
 
-    def start_loop
-      @scheduler = Rufus::Scheduler.new
-
-      @scheduler.every('20s') { update_games }
-
+    def event_loop
       # Make sure we've cached the list of channels in this server
-      baseball.channels
+      @all_channels ||= baseball.channels
 
-      # Start right away
       update_games
-
-      @scheduler.join
     end
 
     def update_games

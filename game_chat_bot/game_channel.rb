@@ -26,7 +26,7 @@ module GameChatBot
 
       @game_pk = game_pk
       @channel = channel
-      @feed = @bot.client.live_feed(game_pk)
+      @feed = @bot.stats_api.live_feed(game_pk)
       @color_feed = load_color_feed
 
       @starts_at = Time.parse @feed.game_data.dig('datetime', 'dateTime')
@@ -106,7 +106,7 @@ module GameChatBot
     protected
 
     def load_color_feed
-      @bot.client.color_feed(game_pk)
+      @bot.stats_api.color_feed(game_pk)
     rescue MLBStatsAPI::NotFoundError
       # No color feed
     end

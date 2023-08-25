@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'pg'
 require 'redd'
 
 class RedditClient
@@ -69,7 +68,7 @@ class RedditClient
   end
 
   def update_token_expiration!(new_expiration)
-    db.exec_params(
+    @bot.db.exec_params(
       'UPDATE accounts SET access_token = $1, expires_at = $2 WHERE refresh_token = $3',
       [
         client.access.access_token,

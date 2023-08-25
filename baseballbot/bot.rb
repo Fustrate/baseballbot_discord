@@ -2,33 +2,25 @@
 
 require 'chronic'
 require 'date'
-require 'discordrb'
-require 'em-hiredis'
 require 'eventmachine'
 require 'json'
-require 'mlb_stats_api'
 require 'open-uri'
-require 'pg'
-require 'redd'
-require 'redis'
-require 'rufus-scheduler'
 require 'securerandom'
 require 'terminal-table'
 require 'tzinfo'
 require 'yaml'
 
 require_relative 'check_messages'
-require_relative 'config'
-require_relative 'redis_connection'
 
+require_relative '../discord_bot'
 require_relative '../shared/slash_command'
 require_relative '../shared/utilities'
 
 # Require all commands and events
-Dir.glob("#{__dir__}/{commands,events}/*").each { require_relative _1 }
+Dir.glob("#{__dir__}/baseballbot/{commands,events}/*").each { require_relative _1 }
 
 module BaseballDiscord
-  class Bot < Discordrb::Commands::CommandBot
+  class Bot < DiscordBot
     # ID of the user allowed to administrate the bot
     ADMIN_ID = 429364871121993728
 
@@ -37,64 +29,26 @@ module BaseballDiscord
     ].freeze
 
     def initialize
-      ready { start_loop }
-
       super(
         client_id: ENV.fetch('DISCORD_CLIENT_ID'),
         token: ENV.fetch('DISCORD_TOKEN'),
         prefix: '!',
         intents: INTENTS
       )
-
-      load_commands
     end
 
-    # rubocop:disable Metrics/MethodLength
     def load_commands
-      BaseballDiscord::Commands::Debug.register self
-      BaseballDiscord::Commands::Glossary.register self
-      BaseballDiscord::Commands::Invite.register self
-      BaseballDiscord::Commands::Links.register self
-      BaseballDiscord::Commands::Scoreboard.register self
-      BaseballDiscord::Commands::Standings.register self
-      BaseballDiscord::Commands::Schedule.register self
-      BaseballDiscord::Commands::TeamRoles.register self
-      BaseballDiscord::Commands::Verify.register self
-      BaseballDiscord::Commands::Wildcard.register self
+      BaseballDiscord::Commands.constants.each { BaseballDiscord::Commands.const_get(_1).register(self) }
 
-      include! BaseballDiscord::Events::MemberJoin
-    end
-    # rubocop:enable Metrics/MethodLength
-
-    def logger = (@logger ||= Logger.new($stdout))
-
-    def redis = (@redis ||= RedisConnection.new(self))
-
-    def mlb = (@mlb ||= MLBStatsAPI::Client.new(logger:, cache: Redis.new))
-
-    def config = (@config ||= Config.new)
-
-    def db
-      @db ||= PG::Connection.new(
-        user: ENV.fetch('BASEBALLBOT_PG_USERNAME'),
-        dbname: ENV.fetch('BASEBALLBOT_PG_DATABASE'),
-        password: ENV.fetch('BASEBALLBOT_PG_PASSWORD')
-      )
+      BaseballDiscord::Events.constants.each { include! BaseballDiscord::Events.const_get(_1) }
     end
 
     protected
 
-    def start_loop
-      @scheduler = Rufus::Scheduler.new
+    def event_loop
+      @check_messages ||= BaseballDiscord::CheckMessages.new(self)
 
-      @check_messages = BaseballDiscord::CheckMessages.new(self)
-
-      @scheduler.every('31s') { @check_messages.check! }
-
-      # Start right away
       @check_messages.check!
-
-      @scheduler.join
     end
   end
 

@@ -1,14 +1,11 @@
 # frozen_string_literal: true
 
-require 'discordrb'
-require 'pg'
-require 'redis'
-require 'rufus-scheduler'
 require 'time'
+
+require_relative '../discord_bot'
 
 require_relative '../shared/discordrb_forum_threads'
 require_relative '../shared/output_helpers'
-require_relative '../shared/reddit_client'
 require_relative '../shared/slash_command'
 require_relative '../shared/utilities'
 
@@ -16,7 +13,7 @@ require_relative '../shared/utilities'
 Dir.glob("#{__dir__}/{commands}/*").each { require_relative _1 }
 
 module ModmailBot
-  class Bot < Discordrb::Commands::CommandBot
+  class Bot < DiscordBot
     INTENTS = %i[servers server_messages server_message_reactions].freeze
 
     # Automod and bans might be separated into other channels later
@@ -40,22 +37,6 @@ module ModmailBot
         help_command: false,
         prefix: '!',
         intents: INTENTS
-      )
-
-      load_commands
-    end
-
-    def logger = (@logger ||= Logger.new($stdout))
-
-    def redis = (@redis ||= Redis.new)
-
-    def reddit = (@reddit ||= RedditClient.new(self))
-
-    def db
-      @db ||= PG::Connection.new(
-        user: ENV.fetch('BASEBALLBOT_PG_USERNAME'),
-        dbname: ENV.fetch('BASEBALLBOT_PG_DATABASE'),
-        password: ENV.fetch('BASEBALLBOT_PG_PASSWORD')
       )
     end
 

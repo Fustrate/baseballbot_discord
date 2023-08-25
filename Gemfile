@@ -9,7 +9,6 @@ gem 'daemons', '~> 1.4'
 gem 'rake', '~> 13.0'
 
 # Local services
-gem 'em-hiredis', '~> 0.3'
 gem 'redis', '~> 5.0'
 
 # Reddit account tokens are stored in Postgres [https://github.com/ged/ruby-pg]
