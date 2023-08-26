@@ -79,7 +79,7 @@ module BaseballDiscord
     end
 
     def send_to_log_channel(title, description, server_id)
-      @bot.logger.debug message
+      @bot.logger.debug "[#{title}] #{description}"
 
       log_channel_id = @bot.config.server(server_id)['log_channel']
 
