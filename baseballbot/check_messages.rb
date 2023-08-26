@@ -4,6 +4,8 @@ require_relative '../shared/reddit_client'
 
 module BaseballDiscord
   class CheckMessages
+    VERIFIED_MESSAGE = 'Thanks for verifying your account! You should now have access to the server.'
+
     def initialize(bot)
       @bot = bot
     end
