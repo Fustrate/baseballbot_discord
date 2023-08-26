@@ -48,7 +48,7 @@ module BaseballDiscord
         VERIFICATION_LINK = 'https://reddit.com/message/compose/?to=%<to>s&subject=%<subject>s&message=%<message>s'
 
         def run
-          start_verification_for_server find_server_by_name(options['server'])
+          start_verification_for_server(server || find_server_by_name(options['server']))
         rescue UserError => e
           send_pm e.message
         end
