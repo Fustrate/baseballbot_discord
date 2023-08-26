@@ -57,21 +57,24 @@ module BaseballDiscord
     def send_verified_message(member, reddit_username)
       member.pm(@bot.config.server(member.server.id)['verified_message'] || VERIFIED_MESSAGE)
 
-      send_to_log_channel "[Verified] #{member.distinct} verified as #{reddit_username}", member.server.id
+      send_to_log_channel "[Verified] #{mention(member)} verified as #{reddit_link(reddit_username)}", member.server.id
     end
 
     def add_member_role(member, role_id)
       member.add_role role_id
 
-      @bot.logger.debug "[Role] Added role #{role_id} to #{member.distinct}"
+      @bot.logger.debug "[Role] Added role #{role_id} to #{mention(member)}"
     end
 
     def update_member_name(member, reddit_username)
       member.nick = reddit_username
 
-      @bot.logger.debug "[Name] Updated name for #{member.distinct} to #{reddit_username}"
+      @bot.logger.debug "[Name] Updated name for #{mention(member)} to #{reddit_username}"
     rescue Discordrb::Errors::NoPermission
-      send_to_log_channel "Couldn't update name for #{member.distinct} to #{reddit_username}", member.server.id
+      send_to_log_channel(
+        "[Error] Couldn't update name for #{mention(member)} to #{reddit_link(reddit_username)}",
+        member.server.id
+      )
     end
 
     def send_to_log_channel(message, server_id)
@@ -83,5 +86,9 @@ module BaseballDiscord
 
       @bot.channel(log_channel_id).send_message message
     end
+
+    def mention(member) = "#{member.distinct} (<@#{member.id}>)"
+
+    def reddit_link(username) = "[/u/#{username}](https://reddit.com/u/#{username})"
   end
 end
