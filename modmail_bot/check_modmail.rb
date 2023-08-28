@@ -30,6 +30,8 @@ module ModmailBot
 
     protected
 
+    def modmails = (@modmails ||= bot.db[:modmails])
+
     def process_modmail(conversation)
       conversation_last_updated = conversation.last_updated.to_i
 
@@ -51,6 +53,7 @@ module ModmailBot
       )
 
       update_redis!(conversation, thread)
+      insert_modmail(conversation, thread)
     end
 
     def update_thread!(conversation, thread_id, after:)
@@ -67,6 +70,7 @@ module ModmailBot
       end
 
       bot.redis.hset('discord_threads', conversation.id, conversation.last_updated.to_i)
+      update_modmail(conversation)
     end
 
     def conversation_to_discord(conversation)
@@ -106,5 +110,23 @@ module ModmailBot
     def internal_message?(message)
       message.author[:name] == 'BaseballBot' && message.markdown_body.match?(/\A(Archived|Unarchived) by/)
     end
+
+    def insert_modmail(conversation, thread)
+      modmails.insert(
+        subreddit_id: 15,
+        reddit_id: conversation.id,
+        subject: conversation.subject,
+        thread_id: thread.id,
+        username: conversation.user[:name],
+        status: 'active',
+        **timestamps
+      )
+    end
+
+    def update_modmail(conversation)
+      modmails.where(reddit_id: conversation.id).update(**timestamps)
+    end
+
+    def timestamps = { created_at: Time.now, updated_at: Time.now }
   end
 end
