@@ -45,15 +45,13 @@ class RedditClient
   end
 
   def account_access(row)
-    expires_at = Time.parse row[:expires_at]
-
     Redd::Models::Access.new(
       access_token: row[:access_token],
       refresh_token: row[:refresh_token],
       scope: row[:scope][1..-2].split(','),
-      # Remove 60 seconds so we don't run into invalid credentials
-      expires_at: expires_at - 60,
-      expires_in: expires_at - Time.now
+      # Remove 30 seconds so we don't run into invalid credentials
+      expires_at: row[:expires_at] - 30,
+      expires_in: row[:expires_at] - Time.now
     )
   end
 

@@ -4,6 +4,8 @@ require 'time'
 
 require_relative '../discord_bot'
 
+require_relative 'check_modmail'
+
 require_relative '../shared/discordrb_forum_threads'
 require_relative '../shared/output_helpers'
 require_relative '../shared/slash_command'

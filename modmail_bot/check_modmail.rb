@@ -118,7 +118,7 @@ module ModmailBot
         subject: conversation.subject,
         thread_id: thread.id,
         username: conversation.user[:name],
-        status: 'active',
+        status: true,
         **timestamps
       )
     end
