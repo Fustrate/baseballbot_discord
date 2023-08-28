@@ -3,6 +3,8 @@
 require 'redd'
 
 class RedditClient
+  attr_reader :bot
+
   def initialize(bot)
     @bot = bot
 
@@ -30,7 +32,7 @@ class RedditClient
   protected
 
   def access
-    @access ||= account_access(@bot.db.exec('SELECT * FROM accounts WHERE id = 1').first)
+    @access ||= account_access(bot.db[:accounts].first(id: 1))
   end
 
   def auth_strategy
@@ -43,12 +45,12 @@ class RedditClient
   end
 
   def account_access(row)
-    expires_at = Time.parse row['expires_at']
+    expires_at = Time.parse row[:expires_at]
 
     Redd::Models::Access.new(
-      access_token: row['access_token'],
-      refresh_token: row['refresh_token'],
-      scope: row['scope'][1..-2].split(','),
+      access_token: row[:access_token],
+      refresh_token: row[:refresh_token],
+      scope: row[:scope][1..-2].split(','),
       # Remove 60 seconds so we don't run into invalid credentials
       expires_at: expires_at - 60,
       expires_in: expires_at - Time.now
@@ -68,13 +70,7 @@ class RedditClient
   end
 
   def update_token_expiration!(new_expiration)
-    @bot.db.exec_params(
-      'UPDATE accounts SET access_token = $1, expires_at = $2 WHERE refresh_token = $3',
-      [
-        client.access.access_token,
-        new_expiration.strftime('%F %T'),
-        client.access.refresh_token
-      ]
-    )
+    bot.db[:accounts].where(refresh_token: client.access.refresh_token)
+      .update(access_token: client.access.access_token, expires_at: new_expiration.strftime('%F %T'))
   end
 end

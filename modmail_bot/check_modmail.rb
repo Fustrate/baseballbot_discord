@@ -21,15 +21,14 @@ module ModmailBot
 
     def check!
       @modmail ||= bot.reddit.session.modmail
+      @subreddit ||= bot.reddit.session.subreddit('baseball')
 
       bot.reddit.with_account do
-        @modmail.conversations(subreddits: [subreddit], limit: 25, sort: :recent).each { process_modmail(_1) }
+        @modmail.conversations(subreddits: [@subreddit], limit: 25, sort: :recent).each { process_modmail(_1) }
       end
     end
 
     protected
-
-    def subreddit = (@subreddit ||= bot.reddit.session.subreddit('baseball'))
 
     def process_modmail(conversation)
       conversation_last_updated = conversation.last_updated.to_i
