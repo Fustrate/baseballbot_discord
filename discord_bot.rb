@@ -10,6 +10,14 @@ require 'sequel'
 require_relative 'shared/config'
 require_relative 'shared/reddit_client'
 
+# Connect to the database immediately so that model classes can be created.
+DB = Sequel.connect(
+  adapter: :postgres,
+  database: ENV.fetch('BASEBALLBOT_PG_DATABASE'),
+  password: ENV.fetch('BASEBALLBOT_PG_PASSWORD'),
+  user: ENV.fetch('BASEBALLBOT_PG_USERNAME'),
+)
+
 class DiscordBot < Discordrb::Commands::CommandBot
   def initialize(**options)
     ready { start_loop }
@@ -21,14 +29,7 @@ class DiscordBot < Discordrb::Commands::CommandBot
 
   def config = (@config ||= Config.new)
 
-  def db
-    @db ||= Sequel.connect(
-      adapter: :postgres,
-      database: ENV.fetch('BASEBALLBOT_PG_DATABASE'),
-      password: ENV.fetch('BASEBALLBOT_PG_PASSWORD'),
-      user: ENV.fetch('BASEBALLBOT_PG_USERNAME'),
-    )
-  end
+  def db = DB
 
   def logger = (@logger ||= Logger.new($stdout))
 
