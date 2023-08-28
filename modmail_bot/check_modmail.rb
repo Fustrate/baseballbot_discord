@@ -59,7 +59,7 @@ module ModmailBot
 
       return if new_messages.none?
 
-      new_messages.each { thread.send_message(_1) }
+      new_messages.each { thread.send_message('', false, _1) }
 
       modmail.update(**timestamps)
     end
@@ -75,11 +75,23 @@ module ModmailBot
     end
 
     def message_to_discord(message)
-      <<~MARKDOWN
-        Reply from #{message.author[:name]}:
+      {
+        title: "#{message.author[:name]} replied",
+        description: message.markdown_body,
+        color: embed_color(message.author)
+      }
+    end
 
-        #{message.markdown_body}
-      MARKDOWN
+    def embed_color(author)
+      return 15158332 if author[:isAdmin]
+
+      return 2895667 if author[:isHidden]
+
+      return 3066993 if author[:isMod]
+
+      return 3447003 if author[:isOp]
+
+      0
     end
 
     def tags_for(conversation)
