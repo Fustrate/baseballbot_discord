@@ -33,16 +33,11 @@ module ModmailBot
     def modmails = (@modmails ||= bot.db[:modmails])
 
     def process_modmail(conversation)
-      conversation_last_updated = conversation.last_updated.to_i
+      modmail = modmails.first(reddit_id: conversation.id)
 
-      thread_last_updated = bot.redis.hget('discord_threads', conversation.id)&.to_i
-      thread_id = bot.redis.hget('modmail_to_discord', conversation.id)
+      return post_thread!(conversation) unless modmail
 
-      return post_thread!(conversation) unless thread_id && thread_last_updated
-
-      return unless conversation_last_updated > thread_last_updated
-
-      update_thread!(conversation, thread_id, after: thread_last_updated)
+      update_thread!(conversation, modmail)
     end
 
     def post_thread!(conversation)
@@ -52,24 +47,20 @@ module ModmailBot
         applied_tags: tags_for(conversation)
       )
 
-      update_redis!(conversation, thread)
       insert_modmail(conversation, thread)
     end
 
-    def update_thread!(conversation, thread_id, after:)
-      since = Time.at(after).to_i
+    def update_thread!(conversation, modmail)
+      thread = channel modmail.thread_id
 
-      thread = channel thread_id
-
-      conversation.messages.each do |message|
-        next unless message.date.to_i > since && !internal_message?(message)
-
-        thread.send_message message_to_discord(message, since)
-
-        sleep 0.5
+      new_messages = conversation.messages.filter_map do |message|
+        message_to_discord(message) unless internal_message?(message) || message.date < modmail.updated_at
       end
 
-      bot.redis.hset('discord_threads', conversation.id, conversation.last_updated.to_i)
+      return if new_messages.none?
+
+      new_messages.each { thread.send_message(_1) }
+
       update_modmail(conversation)
     end
 
@@ -83,13 +74,11 @@ module ModmailBot
       MARKDOWN
     end
 
-    def message_to_discord(message, since)
+    def message_to_discord(message)
       <<~MARKDOWN
         Reply from #{message.author[:name]}:
 
         #{message.markdown_body}
-
-        t:#{message.date.to_i - since}
       MARKDOWN
     end
 
@@ -99,12 +88,6 @@ module ModmailBot
       return [TAG_IDS[:automod]] if conversation.user[:name] == 'AutoModerator'
 
       [TAG_IDS[:other]]
-    end
-
-    def update_redis!(conversation, thread)
-      redis.hset('modmail_to_discord', conversation.id, thread.id)
-      redis.hset('discord_to_modmail', thread.id, conversation.id)
-      redis.hset('discord_threads', conversation.id, conversation.last_updated.to_i)
     end
 
     def internal_message?(message)
