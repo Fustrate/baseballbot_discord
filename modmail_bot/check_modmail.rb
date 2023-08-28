@@ -64,9 +64,9 @@ module ModmailBot
       thread = channel thread_id
 
       conversation.messages.each do |message|
-        next unless message.date.to_i > since
+        next unless message.date.to_i > since && !internal_message?(message)
 
-        thread.send_message message_to_discord(message, since) unless internal_message?(message)
+        thread.send_message message_to_discord(message, since)
 
         sleep 0.5
       end
