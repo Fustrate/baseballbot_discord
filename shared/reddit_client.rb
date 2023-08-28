@@ -62,15 +62,13 @@ class RedditClient
 
     return if client.access.to_h[:error]
 
-    new_expiration = Time.now + client.access.expires_in
-
-    update_token_expiration!(new_expiration)
+    update_token_expiration!(Time.now + client.access.expires_in)
 
     client
   end
 
-  def update_token_expiration!(new_expiration)
+  def update_token_expiration!(expires_at)
     bot.db[:accounts].where(refresh_token: client.access.refresh_token)
-      .update(access_token: client.access.access_token, expires_at: new_expiration.strftime('%F %T'))
+      .update(access_token: client.access.access_token, expires_at:)
   end
 end
