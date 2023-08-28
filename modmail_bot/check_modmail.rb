@@ -41,7 +41,7 @@ module ModmailBot
     end
 
     def post_thread!(conversation)
-      thread = channel(CHANNEL_IDS[:modmail]).start_forum_thread(
+      thread = bot.channel(CHANNEL_IDS[:modmail]).start_forum_thread(
         "#{conversation.user[:name] || 'Reddit'}: #{conversation.subject}",
         { content: conversation_to_discord(conversation) },
         applied_tags: tags_for(conversation)
@@ -51,7 +51,7 @@ module ModmailBot
     end
 
     def update_thread!(conversation, modmail)
-      thread = channel modmail.thread_id
+      thread = bot.channel modmail.thread_id
 
       new_messages = conversation.messages.filter_map do |message|
         message_to_discord(message) unless internal_message?(message) || message.date < modmail.updated_at
