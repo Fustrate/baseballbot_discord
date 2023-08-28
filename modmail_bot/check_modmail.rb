@@ -76,21 +76,35 @@ module ModmailBot
 
     def message_to_discord(message)
       {
-        title: "#{message.author[:name]} replied",
+        title: title_for(message),
         description: message.markdown_body,
-        color: embed_color(message.author)
+        color: embed_color(message)
       }
     end
 
-    def embed_color(author)
+    def title_for(message)
+      message.internal? ? "#{message.author[:name]} left a private note" : "#{message.author[:name]} replied"
+    end
+
+    def embed_color(message)
+      # Dark Green
+      return 2067276 if message.internal?
+
+      author = message[:author]
+
+      # Red
       return 15158332 if author[:isAdmin]
 
+      # Dark But Not Black
       return 2895667 if author[:isHidden]
 
+      # Green
       return 3066993 if author[:isMod]
 
+      # Blue
       return 3447003 if author[:isOp]
 
+      # None
       0
     end
 
