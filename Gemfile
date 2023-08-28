@@ -4,17 +4,20 @@ source 'https://rubygems.org'
 
 ruby '3.2.2'
 
-# Run the script as a daemon
+# All of the bots have to be run as daemons so that their connection to discord persists
 gem 'daemons', '~> 1.4'
 gem 'rake', '~> 13.0'
 
-# Local services
+# Use redis as our cache
 gem 'redis', '~> 5.0'
 
 # Reddit account tokens are stored in Postgres [https://github.com/ged/ruby-pg]
 gem 'pg', '~> 1.4'
 
-# Outside services
+# Use an ORM instead of interacting with pg directly
+gem 'sequel', '~> 5.71'
+
+# Discord interaction
 gem 'discordrb', github: 'shardlab/discordrb', branch: 'main'
 
 # MLB Stats API

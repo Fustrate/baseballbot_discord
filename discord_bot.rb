@@ -3,9 +3,9 @@
 require 'discordrb'
 require 'logger'
 require 'mlb_stats_api'
-require 'pg'
 require 'redis'
 require 'rufus-scheduler'
+require 'sequel'
 
 require_relative 'shared/config'
 require_relative 'shared/reddit_client'
@@ -22,10 +22,11 @@ class DiscordBot < Discordrb::Commands::CommandBot
   def config = (@config ||= Config.new)
 
   def db
-    @db ||= PG::Connection.new(
+    @db ||= Sequel.connect(
+      adapter: :postgres,
+      database: ENV.fetch('BASEBALLBOT_PG_DATABASE'),
+      password: ENV.fetch('BASEBALLBOT_PG_PASSWORD'),
       user: ENV.fetch('BASEBALLBOT_PG_USERNAME'),
-      dbname: ENV.fetch('BASEBALLBOT_PG_DATABASE'),
-      password: ENV.fetch('BASEBALLBOT_PG_PASSWORD')
     )
   end
 
