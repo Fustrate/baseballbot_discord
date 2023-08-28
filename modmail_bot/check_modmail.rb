@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative '../shared/reddit_client'
-
 module ModmailBot
   class CheckModmail
     # Automod and bans might be separated into other channels later
@@ -22,18 +20,16 @@ module ModmailBot
     end
 
     def check!
-      @modmail ||= reddit.session.modmail
+      @modmail ||= bot.reddit.session.modmail
 
-      reddit.with_account do
+      bot.reddit.with_account do
         @modmail.conversations(subreddits: [subreddit], limit: 25, sort: :recent).each { process_modmail(_1) }
       end
     end
 
     protected
 
-    def reddit = (@reddit ||= RedditClient.new(@bot))
-
-    def subreddit = (@subreddit ||= reddit.session.subreddit('baseball'))
+    def subreddit = (@subreddit ||= bot.reddit.session.subreddit('baseball'))
 
     def process_modmail(conversation)
       conversation_last_updated = conversation.last_updated.to_i

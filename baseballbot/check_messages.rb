@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative '../shared/reddit_client'
-
 module BaseballDiscord
   class CheckMessages
     VERIFIED_MESSAGE = 'Thanks for verifying your account! You should now have access to the server.'
@@ -11,14 +9,12 @@ module BaseballDiscord
     end
 
     def check!
-      reddit.with_account do
-        reddit.session.my_messages(category: 'unread', mark: false, limit: 10)&.each { process_message(_1) }
+      bot.reddit.with_account do
+        bot.reddit.session.my_messages(category: 'unread', mark: false, limit: 10)&.each { process_message(_1) }
       end
     end
 
     protected
-
-    def reddit = (@reddit ||= RedditClient.new(@bot))
 
     def process_message(message)
       match_data = message.body.match(/verify:(?<state>[a-z0-9_-]{22})/i)
