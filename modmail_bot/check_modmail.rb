@@ -30,10 +30,8 @@ module ModmailBot
 
     protected
 
-    def modmails = (@modmails ||= bot.db[:modmails])
-
     def process_modmail(conversation)
-      modmail = modmails.first(reddit_id: conversation.id)
+      modmail = Modmail.find(reddit_id: conversation.id)
 
       return post_thread!(conversation) unless modmail
 
@@ -51,17 +49,17 @@ module ModmailBot
     end
 
     def update_thread!(conversation, modmail)
-      thread = bot.channel modmail[:thread_id]
+      thread = bot.channel modmail.thread_id
 
       new_messages = conversation.messages.filter_map do |message|
-        message_to_discord(message) unless internal_message?(message) || message.date < modmail[:updated_at]
+        message_to_discord(message) unless message.date <= modmail.updated_at
       end
 
       return if new_messages.none?
 
       new_messages.each { thread.send_message('', false, _1) }
 
-      modmail.update(**timestamps)
+      modmail.update(updated_at: Time.now)
     end
 
     def conversation_to_discord(conversation)
@@ -75,6 +73,8 @@ module ModmailBot
     end
 
     def message_to_discord(message)
+      return if internal_message?(message)
+
       {
         title: title_for(message),
         description: message.markdown_body,
@@ -121,17 +121,18 @@ module ModmailBot
     end
 
     def insert_modmail(conversation, thread)
-      modmails.insert(
+      Modmail.create(
         subreddit_id: 15,
         reddit_id: conversation.id,
         subject: conversation.subject,
         thread_id: thread.id,
         username: conversation.user[:name],
         status: true,
-        **timestamps
+        created_at: Time.now,
+        updated_at: Time.now
       )
     end
-
-    def timestamps = { created_at: Time.now, updated_at: Time.now }
   end
+
+  class Modmail < Sequel::Model(:modmails); end
 end
