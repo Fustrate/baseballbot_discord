@@ -51,17 +51,17 @@ module ModmailBot
     end
 
     def update_thread!(conversation, modmail)
-      thread = bot.channel modmail.thread_id
+      thread = bot.channel modmail[:thread_id]
 
       new_messages = conversation.messages.filter_map do |message|
-        message_to_discord(message) unless internal_message?(message) || message.date < modmail.updated_at
+        message_to_discord(message) unless internal_message?(message) || message.date < modmail[:updated_at]
       end
 
       return if new_messages.none?
 
       new_messages.each { thread.send_message(_1) }
 
-      update_modmail(conversation)
+      modmail.update(**timestamps)
     end
 
     def conversation_to_discord(conversation)
@@ -104,10 +104,6 @@ module ModmailBot
         status: true,
         **timestamps
       )
-    end
-
-    def update_modmail(conversation)
-      modmails.where(reddit_id: conversation.id).update(**timestamps)
     end
 
     def timestamps = { created_at: Time.now, updated_at: Time.now }
