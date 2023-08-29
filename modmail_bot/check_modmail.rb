@@ -52,7 +52,7 @@ module ModmailBot
       thread = bot.channel modmail.thread_id
 
       new_messages = conversation.messages.filter_map do |message|
-        message_to_discord(message) unless message.date <= modmail.updated_at
+        message_to_discord(message) if message.date > modmail.updated_at
       end
 
       return if new_messages.none?
