@@ -15,7 +15,7 @@ DB = Sequel.connect(
   adapter: :postgres,
   database: ENV.fetch('BASEBALLBOT_PG_DATABASE'),
   password: ENV.fetch('BASEBALLBOT_PG_PASSWORD'),
-  user: ENV.fetch('BASEBALLBOT_PG_USERNAME'),
+  user: ENV.fetch('BASEBALLBOT_PG_USERNAME')
 )
 
 class DiscordBot < Discordrb::Commands::CommandBot
