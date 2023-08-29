@@ -31,7 +31,7 @@ module ModmailBot
     protected
 
     def process_modmail(conversation)
-      modmail = Modmail.find(reddit_id: conversation.id)
+      modmail = Modmail.first(reddit_id: conversation.id)
 
       return post_thread!(conversation) unless modmail
 
