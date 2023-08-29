@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'chronic'
 require 'date'
 require 'json'
 require 'open-uri'
