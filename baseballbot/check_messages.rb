@@ -17,6 +17,8 @@ module BaseballDiscord
     protected
 
     def process_message(message)
+      return unless message.new?
+
       match_data = message.body.match(/verify:(?<state>[a-z0-9_-]{22})/i)
 
       return unless match_data
