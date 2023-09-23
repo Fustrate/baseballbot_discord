@@ -11,8 +11,8 @@ module BaseballDiscord
     end
 
     def check!
-      bot.reddit.with_account do
-        bot.reddit.session.my_messages(category: 'unread', mark: false, limit: 10)&.each { process_message(_1) }
+      @bot.reddit.with_account do
+        @bot.reddit.session.my_messages(category: 'unread', mark: false, limit: 10)&.each { process_message(_1) }
       end
     end
 
