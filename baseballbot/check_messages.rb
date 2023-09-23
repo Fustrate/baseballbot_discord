@@ -4,6 +4,8 @@ module BaseballDiscord
   class CheckMessages
     VERIFIED_MESSAGE = 'Thanks for verifying your account! You should now have access to the server.'
 
+    VERIFY_REGEX = /verify:(?<state>[a-z0-9_-]{22})/i
+
     def initialize(bot)
       @bot = bot
     end
@@ -19,7 +21,7 @@ module BaseballDiscord
     def process_message(message)
       return unless message.new?
 
-      match_data = message.body.match(/verify:(?<state>[a-z0-9_-]{22})/i)
+      match_data = message.body.match(VERIFY_REGEX)
 
       return unless match_data
 
@@ -31,7 +33,7 @@ module BaseballDiscord
     def verification_message?(message)
       message.is_a?(Redd::Models::PrivateMessage) &&
         message.subject.match?(/discord verification/i) &&
-        message.body.match?(/verify:[a-z_-]{22}/i)
+        message.body.match?(VERIFY_REGEX)
     end
 
     def received_verification_message(message, data)
