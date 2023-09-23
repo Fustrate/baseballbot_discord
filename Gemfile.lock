@@ -25,7 +25,7 @@ GEM
   specs:
     addressable (2.8.5)
       public_suffix (>= 2.0.2, < 6.0)
-    airbrussh (1.4.2)
+    airbrussh (1.5.0)
       sshkit (>= 1.6.1, != 1.7.0)
     ast (2.4.2)
     base64 (0.1.1)
@@ -132,9 +132,9 @@ GEM
       unicode-display_width (>= 2.4.0, < 3.0)
     rubocop-ast (1.29.0)
       parser (>= 3.2.1.0)
-    rubocop-minitest (0.31.1)
+    rubocop-minitest (0.32.0)
       rubocop (>= 1.39, < 2.0)
-    rubocop-performance (1.19.0)
+    rubocop-performance (1.19.1)
       rubocop (>= 1.7.0, < 2.0)
       rubocop-ast (>= 0.4.0)
     rubocop-rake (0.6.0)
@@ -159,7 +159,7 @@ GEM
       unf_ext
     unf_ext (0.0.8.2)
     unicode-display_width (2.4.2)
-    websocket (1.2.9)
+    websocket (1.2.10)
     websocket-client-simple (0.8.0)
       event_emitter
       websocket

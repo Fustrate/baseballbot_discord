@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-ruby file: '.ruby-version'
+ruby file: "#{File.expand_path(__dir__)}/.ruby-version"
 
 # All of the bots have to be run as daemons so that their connection to discord persists
 gem 'daemons', '~> 1.4'
