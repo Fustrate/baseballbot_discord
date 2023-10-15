@@ -19,7 +19,7 @@ module BaseballDiscord
     protected
 
     def process_message(message)
-      return unless message.new?
+      return unless unread_verification_message?(message)
 
       match_data = message.body.match(VERIFY_REGEX)
 
@@ -30,10 +30,8 @@ module BaseballDiscord
       received_verification_message(message, JSON.parse(state_data)) if state_data
     end
 
-    def verification_message?(message)
-      message.is_a?(Redd::Models::PrivateMessage) &&
-        message.subject.match?(/discord verification/i) &&
-        message.body.match?(VERIFY_REGEX)
+    def unread_verification_message?(message)
+      message.new? && message.is_a?(Redd::Models::PrivateMessage) && message.subject.match?(/discord verification/i)
     end
 
     def received_verification_message(message, data)
