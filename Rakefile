@@ -5,7 +5,7 @@ require 'rake/testtask'
 %i[start stop restart status].each do |command|
   desc "Discord Bot Control: #{command}"
   task(command) do
-    ruby "discord_bot_control.rb #{command}"
+    ruby "baseballbot/control.rb #{command}"
   end
 end
 

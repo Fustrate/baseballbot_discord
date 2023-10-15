@@ -6,7 +6,7 @@ namespace :game_chat_bot do
     task action do
       on roles(:web) do
         within release_path do
-          execute :bundle, :exec, :ruby, 'game_chat_bot_control.rb', action
+          execute :bundle, :exec, :ruby, 'game_chat_bot/control.rb', action
         end
       end
     end

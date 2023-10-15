@@ -6,7 +6,7 @@ namespace :discord_bot do
     task action do
       on roles(:web) do
         within release_path do
-          execute :bundle, :exec, :ruby, 'discord_bot_control.rb', action
+          execute :bundle, :exec, :ruby, 'baseballbot/control.rb', action
         end
       end
     end
