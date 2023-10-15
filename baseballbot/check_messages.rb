@@ -49,9 +49,7 @@ module BaseballDiscord
     def process_member_verification(member, data, reddit_username)
       return unless member
 
-      add_member_role member, data['role'].to_i
-
-      update_member_name(member, reddit_username)
+      return unless add_member_role(member, data['role'].to_i) || update_member_name(member, reddit_username)
 
       send_verified_message(member, reddit_username)
     end
@@ -63,21 +61,27 @@ module BaseballDiscord
     end
 
     def add_member_role(member, role_id)
+      return false if member.role?(role_id)
+
       member.add_role role_id
 
       @bot.logger.debug "[Role] Added role #{role_id} to #{mention(member)}"
+
+      true
     end
 
     def update_member_name(member, reddit_username)
+      return false if member.nick == reddit_username
+
       member.nick = reddit_username
 
       @bot.logger.debug "[Name] Updated name for #{mention(member)} to #{reddit_username}"
+
+      true
     rescue Discordrb::Errors::NoPermission
-      send_to_log_channel(
-        'Verification Error',
-        "Couldn't update name for #{mention(member)} to #{reddit_username}",
-        member.server.id
-      )
+      send_to_log_channel('Error', "Couldn't rename #{mention(member)} to #{reddit_username}", member.server.id)
+
+      false
     end
 
     def send_to_log_channel(title, description, server_id)
