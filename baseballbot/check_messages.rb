@@ -28,6 +28,10 @@ module BaseballDiscord
       state_data = @bot.redis.get "discord.verification.#{match_data[:state]}"
 
       received_verification_message(message, JSON.parse(state_data)) if state_data
+
+      # Always delete the message and the redis data if we got this far
+      message.delete
+      @bot.redis.del "discord.verification.#{match_data[:state]}"
     end
 
     def unread_verification_message?(message)
@@ -40,8 +44,6 @@ module BaseballDiscord
       member = @bot.server(data['server'].to_i).member(data['user'].to_i)
 
       process_member_verification(member, data, reddit_username)
-
-      message.mark_as_read
     end
 
     def process_member_verification(member, data, reddit_username)
