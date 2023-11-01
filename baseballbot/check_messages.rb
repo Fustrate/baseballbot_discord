@@ -52,7 +52,7 @@ module BaseballDiscord
       # If their name and roles were both unchanged, don't bother sending the verification message
       return if [add_member_role(member, data['role'].to_i), update_member_name(member, reddit_username)].none?
 
-      send_verified_message(member, reddit_username) if changed
+      send_verified_message(member, reddit_username)
     end
 
     def send_verified_message(member, reddit_username)
