@@ -46,9 +46,10 @@ GEM
     concurrent-ruby-ext (1.2.3)
       concurrent-ruby (= 1.2.3)
     connection_pool (2.4.1)
+    csv (3.3.0)
     daemons (1.4.1)
     domain_name (0.6.20240107)
-    et-orbi (1.2.9)
+    et-orbi (1.2.11)
       tzinfo
     event_emitter (0.2.6)
     ffi (1.16.3)
@@ -112,7 +113,7 @@ GEM
     rake (13.1.0)
     redis (5.1.0)
       redis-client (>= 0.17.0)
-    redis-client (0.21.0)
+    redis-client (0.21.1)
       connection_pool
     regexp_parser (2.9.0)
     rest-client (2.1.0)
@@ -167,7 +168,8 @@ GEM
       websocket
 
 PLATFORMS
-  ruby
+  arm64-darwin-23
+  x86_64-linux
 
 DEPENDENCIES
   capistrano (~> 3.17)
@@ -175,6 +177,7 @@ DEPENDENCIES
   capistrano-rbenv (~> 2.2)
   chronic (~> 0.10)
   concurrent-ruby-ext (~> 1.2)
+  csv (~> 3.3)
   daemons (~> 1.4)
   discordrb!
   minitest (~> 5.19)

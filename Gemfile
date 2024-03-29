@@ -53,3 +53,6 @@ group :development do
   gem 'rubocop-rake', '~> 0.6', require: false
   gem 'rubocop-sequel', '~> 0.3', require: false
 end
+
+# HTTParty requires the CSV gem, but it's no longer going to be bundled with Ruby as of 3.4
+gem 'csv', '~> 3.3'
