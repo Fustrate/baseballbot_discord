@@ -10,9 +10,9 @@ class Config
 
   def server(server_id) = servers[server_id]
 
-  def non_team_channels(server_id) = (servers.dig(server_id, 'non_team_channels') || [])
+  def non_team_channels(server_id) = servers.dig(server_id, 'non_team_channels') || []
 
-  def non_team_roles(server_id) = (servers.dig(server_id, 'non_team_roles') || [])
+  def non_team_roles(server_id) = servers.dig(server_id, 'non_team_roles') || []
 
   def dig(...) = servers.dig(...)
 

@@ -13,7 +13,7 @@ module BaseballDiscord
 
         def run
           if TYPES.include?(options['type'])
-            public_send "debug_#{options['type']}"
+            public_send :"debug_#{options['type']}"
           else
             respond_with content: 'Unknown type', ephemeral: true
           end

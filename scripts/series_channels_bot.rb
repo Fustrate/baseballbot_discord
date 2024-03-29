@@ -34,7 +34,7 @@ class SeriesChannelsBot
     to_remove = existing.reject { |_, channel| goal.include?(channel['name']) }
 
     to_create.each { create_channel(_1) }
-    to_remove.each { |channel_id, _channel| remove_channel(channel_id) }
+    to_remove.each_key { remove_channel(_1) }
   end
 
   def move_channels
