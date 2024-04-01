@@ -138,9 +138,9 @@ GEM
     rubocop-minitest (0.35.0)
       rubocop (>= 1.61, < 2.0)
       rubocop-ast (>= 1.31.1, < 2.0)
-    rubocop-performance (1.20.2)
+    rubocop-performance (1.21.0)
       rubocop (>= 1.48.1, < 2.0)
-      rubocop-ast (>= 1.30.0, < 2.0)
+      rubocop-ast (>= 1.31.1, < 2.0)
     rubocop-rake (0.6.0)
       rubocop (~> 1.0)
     rubocop-sequel (0.3.4)
@@ -148,9 +148,10 @@ GEM
     ruby-progressbar (1.13.0)
     rufus-scheduler (3.9.1)
       fugit (~> 1.1, >= 1.1.6)
-    sequel (5.78.0)
+    sequel (5.79.0)
       bigdecimal
-    sshkit (1.22.0)
+    sshkit (1.22.1)
+      base64
       mutex_m
       net-scp (>= 1.1.2)
       net-sftp (>= 2.1.2)
