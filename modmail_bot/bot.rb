@@ -36,9 +36,8 @@ module ModmailBot
     end
 
     def event_loop
-      @check_modmail ||= ModmailBot::CheckModmail.new(self)
-
-      @check_modmail.check!
+      # Maybe memoizing this is causing it to not see new messages?
+      ModmailBot::CheckModmail.new(self).check!
     end
   end
 end
