@@ -45,9 +45,8 @@ module BaseballDiscord
     protected
 
     def event_loop
-      @check_messages ||= BaseballDiscord::CheckMessages.new(self)
-
-      @check_messages.check!
+      # Maybe memoizing this is causing it to not see new messages?
+      BaseballDiscord::CheckMessages.new(self).check!
     end
   end
 
