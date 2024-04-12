@@ -35,7 +35,7 @@ module BaseballDiscord
     end
 
     def unread_verification_message?(message)
-      message.new? && message.is_a?(Redd::Models::PrivateMessage) && message.subject.match?(/discord verification/i)
+      message.is_a?(Redd::Models::PrivateMessage) && message.new? && message.subject.match?(/discord verification/i)
     end
 
     def received_verification_message(message, data)
