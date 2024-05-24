@@ -5,7 +5,7 @@ require 'daemons'
 options = {
   log_output: true,
   backtrace: true,
-  output_logfilename: '../log/baseballbot_output.txt',
+  output_logfilename: '../log/baseballbot_output.log',
   logfilename: '../log/baseballbot.log',
   dir: '../tmp',
   dir_mode: :normal,
