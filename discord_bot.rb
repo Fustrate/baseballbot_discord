@@ -19,10 +19,10 @@ DB = Sequel.connect(
 )
 
 class DiscordBot < Discordrb::Commands::CommandBot
-  def initialize(**options)
+  def initialize(**)
     ready { start_loop }
 
-    super(**options)
+    super
 
     load_commands
   end
