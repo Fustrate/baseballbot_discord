@@ -62,7 +62,7 @@ module BaseballDiscord
         protected
 
         # Sometimes this isn't set?
-        def server = super || bot.server(400516567735074817)
+        def server = event.server_id ? super : bot.server(400516567735074817)
 
         def start_verification_for_server(guild, welcome: false)
           return unless guild

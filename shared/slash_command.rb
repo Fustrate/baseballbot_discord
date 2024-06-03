@@ -60,7 +60,7 @@ class SlashCommand
 
   def channel = event.channel
 
-  def server = event.server
+  def server = event.server_id ? event.server : nil
 
   def user = event.user
 
