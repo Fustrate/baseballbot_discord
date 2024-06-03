@@ -10,7 +10,7 @@ require 'capistrano/deploy'
 require 'capistrano/rbenv'
 require 'capistrano/bundler'
 require 'capistrano/scm/git'
-# require 'capistrano/honeybadger'
+require 'capistrano/honeybadger'
 
 # Load custom tasks from `lib/capistrano/tasks` if you have any defined
 Dir.glob('lib/capistrano/tasks/*.rake').each { import _1 }

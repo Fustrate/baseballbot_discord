@@ -8,6 +8,8 @@ require 'terminal-table'
 require 'tzinfo'
 require 'yaml'
 
+require 'honeybadger'
+
 require_relative '../discord_bot'
 
 require_relative 'check_messages'
