@@ -38,6 +38,8 @@ gem 'terrapin', '~> 0.6'
 # ERROR -- : cannot load such file -- concurrent/concurrent_ruby_ext (LoadError)
 gem 'concurrent-ruby-ext', '~> 1.2'
 
+gem 'honeybadger', '~> 5.10'
+
 group :development do
   # Deploy with Capistrano
   gem 'capistrano', '~> 3.17', require: false

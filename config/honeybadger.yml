@@ -1,0 +1,22 @@
+---
+# For more options, see https://docs.honeybadger.io/lib/ruby/gem-reference/configuration
+
+api_key: "<%= ENV.fetch('DISCORD_HONEYBADGER') %>"
+
+# The environment your app is running in.
+env: production
+
+# The absolute path to your project folder.
+root: /home/baseballbot/apps/discord_bot
+
+# Honeybadger won't report errors in these environments.
+development_environments:
+- test
+- development
+
+# By default, Honeybadger won't report errors in the development_environments.
+# You can override this by explicitly setting report_data to true or false.
+# report_data: true
+
+# Enable verbose debug logging (useful for troubleshooting).
+debug: false
