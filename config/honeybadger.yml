@@ -1,10 +1,10 @@
 ---
 # For more options, see https://docs.honeybadger.io/lib/ruby/gem-reference/configuration
 
-api_key: "<%= ENV.fetch('DISCORD_HONEYBADGER') %>"
+api_key: ''
 
 # The environment your app is running in.
-env: production
+env: development
 
 # The absolute path to your project folder.
 root: /home/baseballbot/apps/discord_bot
