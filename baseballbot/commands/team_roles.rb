@@ -33,7 +33,7 @@ module BaseballDiscord
           119 => ['LAD', 448515263965691906], # Los Angeles Dodgers
           120 => ['WAS', 448517695948980224], # Washington Nationals
           121 => ['NYM', 448515313546559488], # New York Mets
-          133 => ['OAK', 448515319007281162], # Oakland Athletics
+          133 => ['ATH', 448515319007281162], # Nowhere Athletics
           134 => ['PIT', 448515386522992670], # Pittsburgh Pirates
           135 => ['SD',  448517669948227594], # San Diego Padres
           136 => ['SEA', 448517678693351434], # Seattle Mariners
