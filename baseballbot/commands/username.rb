@@ -10,7 +10,7 @@ module BaseballDiscord
       # Allows the administrator to invite this bot to a server
       class UsernameCommand < SlashCommand
         def run
-          username = options['username'].gsub(/[^a-zA-Z]/, '').strip
+          username = options['username'].gsub(/[^a-zA-Z0-9_-]/, '').strip
 
           raise UserError, 'Username contains invalid characters or is blank.' if username.empty?
 
