@@ -3,6 +3,11 @@
 module BaseballDiscord
   module Commands
     module Username
+      PROFANITY = /
+        faggot|nigga|cunt|nigger|retard|bootlick|trump|chink|republican|democrat|maga|snowflake|libtard|qanon|antifa|
+        incel
+      /ix
+
       def self.register(bot)
         bot.application_command(:username) { UsernameCommand.new(_1).run }
       end
@@ -25,6 +30,8 @@ module BaseballDiscord
 
         def change_username!(username)
           raise UserError, 'Username is too long.' if username.length > 32
+
+          raise UserError, 'Username is invalid.' if username.match?(PROFANITY)
 
           user.nick = username
 
