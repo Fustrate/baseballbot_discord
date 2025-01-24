@@ -10,19 +10,23 @@ module BaseballDiscord
       # Allows the administrator to invite this bot to a server
       class UsernameCommand < SlashCommand
         def run
-          username = options['username'].gsub(/[^a-zA-Z]/, '').presence
+          username = options['username'].gsub(/[^a-zA-Z]/, '').strip
 
-          raise UserError, 'Username contains invalid characters or is blank.' unless username
+          raise UserError, 'Username contains invalid characters or is blank.' if username.empty?
 
           tag = member.nick.match(/(?<tag>\[.*\])$/)
 
-          full_username = [username, tag ? tag[:tag] : nil].compact.join(' ')
+          change_username!([username, tag ? tag[:tag] : nil].compact.join(' '))
+        end
 
-          raise UserError, 'Username is too long.' if full_username.length > 32
+        protected
 
-          member.nick = full_username
+        def change_username!(username)
+          raise UserError, 'Username is too long.' if username.length > 32
 
-          respond_with content: "Your username has been changed to **#{full_username}**.", ephemeral: true
+          member.nick = username
+
+          respond_with content: "Your username has been changed to **#{username}**.", ephemeral: true
         end
       end
     end

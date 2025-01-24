@@ -49,9 +49,9 @@ require_relative 'bot'
 #   cmd.string 'team2', 'Secondary team name', required: false
 # end
 
-@discord_bot.register_application_command(:username, 'Change your username') do |cmd|
-  cmd.string 'username', 'Your new username', required: true
-end
+# @discord_bot.register_application_command(:username, 'Change your username') do |cmd|
+#   cmd.string 'username', 'Your new username', required: true
+# end
 
 # @discord_bot.register_application_command(:verify, 'Verify your reddit account') do |cmd|
 #   cmd.string 'server', 'Server name', required: false
