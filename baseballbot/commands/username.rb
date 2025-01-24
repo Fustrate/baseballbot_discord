@@ -14,9 +14,11 @@ module BaseballDiscord
 
           raise UserError, 'Username contains invalid characters or is blank.' if username.empty?
 
-          tag = member.nick.match(/(?<tag>\[.*\])$/)
+          tag = user.nick.match(/(?<tag>\[.*\])$/)
 
           change_username!([username, tag ? tag[:tag] : nil].compact.join(' '))
+        rescue UserError => e
+          error_message e.message
         end
 
         protected
@@ -24,9 +26,11 @@ module BaseballDiscord
         def change_username!(username)
           raise UserError, 'Username is too long.' if username.length > 32
 
-          member.nick = username
+          user.nick = username
 
           respond_with content: "Your username has been changed to **#{username}**.", ephemeral: true
+        rescue Discordrb::Errors::NoPermission
+          raise UserError, "The bot doesn't have permission to change your username to #{username}."
         end
       end
     end
