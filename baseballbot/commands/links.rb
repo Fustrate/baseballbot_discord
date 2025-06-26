@@ -9,9 +9,9 @@ module BaseballDiscord
       FANGRAPHS = 'https://www.fangraphs.com/players.aspx?new=y&lastname=%<query>s'
 
       def self.register(bot)
-        bot.application_command(:bbref) { LinksCommand.new(_1).bbref }
+        bot.application_command(:bbref) { LinksCommand.new(it).bbref }
 
-        bot.application_command(:fangraphs) { LinksCommand.new(_1).fangraphs }
+        bot.application_command(:fangraphs) { LinksCommand.new(it).fangraphs }
       end
 
       class LinksCommand < SlashCommand

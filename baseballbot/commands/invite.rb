@@ -4,7 +4,7 @@ module BaseballDiscord
   module Commands
     module Invite
       def self.register(bot)
-        bot.application_command(:invite_url) { InviteCommand.new(_1).run }
+        bot.application_command(:invite_url) { InviteCommand.new(it).run }
       end
 
       # Allows the administrator to invite this bot to a server

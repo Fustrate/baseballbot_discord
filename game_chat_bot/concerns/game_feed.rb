@@ -74,17 +74,17 @@ module GameChatBot
     end
 
     def lineup_data(flag)
-      ids = @feed.boxscore.dig('teams', flag, 'battingOrder').map { "ID#{_1}" }
+      ids = @feed.boxscore.dig('teams', flag, 'battingOrder').map { "ID#{it}" }
 
       lineup_positions(flag, ids).zip(lineup_names(ids))
     end
 
-    def lineup_names(ids) = @feed.game_data['players'].values_at(*ids).map { _1['lastName'] }
+    def lineup_names(ids) = @feed.game_data['players'].values_at(*ids).map { it['lastName'] }
 
     def lineup_positions(flag, ids)
       @feed.boxscore.dig('teams', flag, 'players')
         .values_at(*ids)
-        .map { _1.dig('position', 'abbreviation') }
+        .map { it.dig('position', 'abbreviation') }
     end
   end
 end

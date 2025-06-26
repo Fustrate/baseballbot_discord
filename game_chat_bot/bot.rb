@@ -54,9 +54,9 @@ module GameChatBot
 
     # TODO: Migrate to application commands
     def load_commands
-      command(:linescore) { feed_for_event(_1)&.send_line_score }
-      command(:lineups) { feed_for_event(_1)&.send_lineups }
-      command(:umpires) { feed_for_event(_1)&.send_umpires }
+      command(:linescore) { feed_for_event(it)&.send_line_score }
+      command(:lineups) { feed_for_event(it)&.send_lineups }
+      command(:umpires) { feed_for_event(it)&.send_umpires }
 
       register_commands_with_arguments
     end

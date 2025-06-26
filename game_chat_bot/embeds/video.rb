@@ -26,7 +26,7 @@ module GameChatBot
 
       def thumbnail
         thumbnail_url = @item.dig('data', 'thumbnails', 'thumb')
-          .find { _1['type'] == 13 }
+          .find { it['type'] == 13 }
           &.dig('_')
 
         {

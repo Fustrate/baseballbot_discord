@@ -4,7 +4,7 @@ module GameChatBot
   module Alerts
     IGNORE_ALERT_CATEGORIES = %w[scoring_position_extra].freeze
 
-    def output_alerts = alerts_to_post.each { process_alert(_1) }
+    def output_alerts = alerts_to_post.each { process_alert(it) }
 
     def process_alert(alert)
       @bot.redis.sadd "#{redis_key}_alerts", alert['alertId']
@@ -16,7 +16,7 @@ module GameChatBot
       send_lineups if embed.description['Lineups posted']
     end
 
-    def alerts_to_post = (@feed.game_data ? @feed.game_data['alerts'].select { post_alert?(_1) } : [])
+    def alerts_to_post = (@feed.game_data ? @feed.game_data['alerts'].select { post_alert?(it) } : [])
 
     def post_alert?(alert) = !ignore_category?(alert['category']) && !posted?(alert['alertId'])
 

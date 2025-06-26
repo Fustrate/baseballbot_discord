@@ -9,7 +9,7 @@ module BaseballDiscord
       /ix
 
       def self.register(bot)
-        bot.application_command(:username) { UsernameCommand.new(_1).run }
+        bot.application_command(:username) { UsernameCommand.new(it).run }
       end
 
       # Allows the administrator to invite this bot to a server

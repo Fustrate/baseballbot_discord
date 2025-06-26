@@ -4,7 +4,7 @@ module BaseballDiscord
   module Commands
     module TeamRoles
       def self.register(bot)
-        bot.application_command(:team) { TeamRolesCommand.new(_1).update_member_roles }
+        bot.application_command(:team) { TeamRolesCommand.new(it).update_member_roles }
       end
 
       class TeamRolesCommand < SlashCommand
@@ -72,7 +72,7 @@ module BaseballDiscord
           inputs = [options['team1'], options['team2']].compact
 
           team_ids = inputs
-            .filter_map { BaseballDiscord::Utilities.find_team_by_name [_1] }
+            .filter_map { BaseballDiscord::Utilities.find_team_by_name [it] }
             .uniq
 
           team_ids.any? ? update_member(team_ids) : error_message('Team name(s) not found...')
@@ -83,7 +83,7 @@ module BaseballDiscord
           # Only one role is actually assigned
           role_id = TEAM_ROLES.dig(team_ids.first, 1)
 
-          add = @baseball.roles.select { role_id == _1.id }
+          add = @baseball.roles.select { role_id == it.id }
 
           # Add the proper team role(s), remove all others
           @member.modify_roles add, all_team_roles_on_server
@@ -94,7 +94,7 @@ module BaseballDiscord
         end
 
         def update_nickname(team_ids)
-          abbrs = team_ids.first(2).map { "[#{TEAM_ROLES.dig(_1, 0)}]" }
+          abbrs = team_ids.first(2).map { "[#{TEAM_ROLES.dig(it, 0)}]" }
 
           # return unless abbrs.count > 1
 
@@ -108,7 +108,7 @@ module BaseballDiscord
         def all_team_roles_on_server
           all_snowflakes = TEAM_ROLES.map { |_, data| data[1] }
 
-          @baseball.roles.select { all_snowflakes.include?(_1.id) }
+          @baseball.roles.select { all_snowflakes.include?(it.id) }
         end
 
         def member_verified?

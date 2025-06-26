@@ -4,7 +4,7 @@ module BaseballDiscord
   module Commands
     module Standings
       def self.register(bot)
-        bot.application_command(:standings) { StandingsCommand.new(_1).run }
+        bot.application_command(:standings) { StandingsCommand.new(it).run }
       end
 
       class StandingsCommand < SlashCommand
@@ -19,8 +19,8 @@ module BaseballDiscord
           return error_message('Could not determine a division to show.') unless division_id
 
           rows = standings_data(date, division_id)
-            .sort_by { _1['divisionRank'] }
-            .map { team_standings_data(_1) }
+            .sort_by { it['divisionRank'] }
+            .map { team_standings_data(it) }
 
           respond_with content: standings_table(rows), ephemeral: IGNORE_CHANNELS.include?(channel.id)
         end
@@ -31,7 +31,7 @@ module BaseballDiscord
           clamped_date = clamp_date_to_regular_season(date)
 
           load_data_from_stats_api(STANDINGS, date: clamped_date)['records']
-            .find { _1.dig('division', 'id') == division_id }['teamRecords']
+            .find { it.dig('division', 'id') == division_id }['teamRecords']
         end
 
         def find_division_id

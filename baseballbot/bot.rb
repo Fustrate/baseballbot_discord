@@ -18,7 +18,7 @@ require_relative '../shared/slash_command'
 require_relative '../shared/utilities'
 
 # Require all commands and events
-Dir.glob("#{__dir__}/{commands,events}/*").each { require_relative _1 }
+Dir.glob("#{__dir__}/{commands,events}/*").each { require_relative it }
 
 module BaseballDiscord
   class Bot < DiscordBot
@@ -39,9 +39,9 @@ module BaseballDiscord
     end
 
     def load_commands
-      BaseballDiscord::Commands.constants.each { BaseballDiscord::Commands.const_get(_1).register(self) }
+      BaseballDiscord::Commands.constants.each { BaseballDiscord::Commands.const_get(it).register(self) }
 
-      BaseballDiscord::Events.constants.each { include! BaseballDiscord::Events.const_get(_1) }
+      BaseballDiscord::Events.constants.each { include! BaseballDiscord::Events.const_get(it) }
     end
 
     protected

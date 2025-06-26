@@ -4,8 +4,8 @@ module BaseballDiscord
   module Commands
     module Schedule
       def self.register(bot)
-        bot.application_command(:next) { ScheduleCommand.new(_1).list_games(:future) }
-        bot.application_command(:last) { ScheduleCommand.new(_1).list_games(:past) }
+        bot.application_command(:next) { ScheduleCommand.new(it).list_games(:future) }
+        bot.application_command(:last) { ScheduleCommand.new(it).list_games(:past) }
       end
 
       class ScheduleCommand < SlashCommand
@@ -125,7 +125,7 @@ module BaseballDiscord
           data['dates'].send(order).each do |date|
             next unless date['totalGames'].positive?
 
-            games.concat(date['games'].send(order).filter_map { game_data(_1) if include_game?(_1) })
+            games.concat(date['games'].send(order).filter_map { game_data(it) if include_game?(it) })
 
             break if games.length >= @number
           end

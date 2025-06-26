@@ -4,7 +4,7 @@ module BaseballDiscord
   module Commands
     module Wildcard
       def self.register(bot)
-        bot.application_command(:wildcard) { WildcardCommand.new(_1).run }
+        bot.application_command(:wildcard) { WildcardCommand.new(it).run }
       end
 
       class WildcardCommand < SlashCommand
@@ -32,10 +32,10 @@ module BaseballDiscord
 
         def leaders_and_others(date, league_id)
           load_data_from_stats_api(STANDINGS, date:)['records']
-            .select { _1.dig('league', 'id') == league_id }
-            .flat_map { _1['teamRecords'] }
-            .sort_by { _1['wildCardRank'].to_i }
-            .partition { _1['divisionRank'] == '1' }
+            .select { it.dig('league', 'id') == league_id }
+            .flat_map { it['teamRecords'] }
+            .sort_by { it['wildCardRank'].to_i }
+            .partition { it['divisionRank'] == '1' }
         end
 
         def find_league_id
@@ -68,8 +68,8 @@ module BaseballDiscord
         end
 
         def standings_table(leaders, others)
-          leader_rows = leaders.map { team_standings_data(_1) }
-          other_rows = others.map { team_standings_data(_1) }
+          leader_rows = leaders.map { team_standings_data(it) }
+          other_rows = others.map { team_standings_data(it) }
 
           table = Terminal::Table.new(
             rows: (leader_rows + [:separator] + other_rows),

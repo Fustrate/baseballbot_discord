@@ -4,7 +4,7 @@ module BaseballDiscord
   module Commands
     module Scoreboard
       def self.register(bot)
-        bot.application_command(:scores) { ScoreboardCommand.new(_1).run }
+        bot.application_command(:scores) { ScoreboardCommand.new(it).run }
       end
 
       class ScoreboardCommand < SlashCommand
@@ -45,7 +45,7 @@ module BaseballDiscord
         def scores_table_rows(games)
           rows = []
 
-          games.map { process_game(_1) }.each_slice(2) do |pair|
+          games.map { process_game(it) }.each_slice(2) do |pair|
             append_game_rows(rows, pair)
 
             rows << :separator

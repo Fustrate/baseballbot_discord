@@ -5,7 +5,7 @@ module BaseballDiscord
     # Basic debug commands that should log to the output file
     module Debug
       def self.register(bot)
-        bot.application_command(:debug) { DebugCommand.new(_1).run }
+        bot.application_command(:debug) { DebugCommand.new(it).run }
       end
 
       class DebugCommand < SlashCommand
@@ -26,7 +26,7 @@ module BaseballDiscord
         end
 
         def debug_emoji
-          emojis = YAML.safe_load_file(File.expand_path("#{__dir__}/../../config/emoji.yml")).values.map { "<#{_1}>" }
+          emojis = YAML.safe_load_file(File.expand_path("#{__dir__}/../../config/emoji.yml")).values.map { "<#{it}>" }
 
           respond_with content: emojis.join(' '), ephemeral: true
         end

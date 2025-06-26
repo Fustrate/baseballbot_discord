@@ -11,7 +11,7 @@ module BaseballDiscord
       }.freeze
 
       def self.register(bot)
-        bot.application_command(:define) { DefineCommand.new(_1).define_term }
+        bot.application_command(:define) { DefineCommand.new(it).define_term }
       end
 
       class DefineCommand < SlashCommand
