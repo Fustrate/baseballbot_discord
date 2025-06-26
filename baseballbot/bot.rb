@@ -46,10 +46,7 @@ module BaseballDiscord
 
     protected
 
-    def event_loop
-      # Maybe memoizing this is causing it to not see new messages?
-      BaseballDiscord::CheckMessages.new(self).check!
-    end
+    def event_loop; end
   end
 
   class UserError < RuntimeError; end
