@@ -32,8 +32,7 @@ gem 'tzinfo', '~> 2.0'
 
 # Utilities
 gem 'rufus-scheduler', '~> 3.9'
-gem 'terminal-table', '~> 3.0'
-gem 'terrapin', '~> 0.6'
+gem 'terminal-table', '~> 4.0'
 
 # ERROR -- : cannot load such file -- concurrent/concurrent_ruby_ext (LoadError)
 gem 'concurrent-ruby-ext', '~> 1.2'
