@@ -12,8 +12,6 @@ require 'honeybadger'
 
 require_relative '../discord_bot'
 
-require_relative 'check_messages'
-
 require_relative '../shared/slash_command'
 require_relative '../shared/utilities'
 
