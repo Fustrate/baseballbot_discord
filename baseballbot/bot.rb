@@ -24,7 +24,7 @@ module BaseballDiscord
     ADMIN_ID = 429364871121993728
 
     INTENTS = %i[
-      servers server_members server_messages server_message_reactions direct_messages direct_message_reactions
+      servers server_messages server_message_reactions direct_messages direct_message_reactions
     ].freeze
 
     def initialize
