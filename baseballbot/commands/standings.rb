@@ -29,7 +29,12 @@ module BaseballDiscord
           clamped_date = clamp_date_to_regular_season(date)
 
           bot.stats_api
-            .standings(leagues: %i[al nl], season: clamped_date.year, date: clamped_date, t: Time.now.to_i)['records']
+            .standings(
+              leagues: %i[al nl],
+              season: clamped_date.year,
+              date: clamped_date.strftime('%F'),
+              t: Time.now.to_i
+            )['records']
             .find { it.dig('division', 'id') == division_id }['teamRecords']
         end
 

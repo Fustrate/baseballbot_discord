@@ -30,7 +30,7 @@ module BaseballDiscord
 
         def leaders_and_others(date, league_id)
           bot.stats_api
-            .standings(leagues: %i[al nl], season: date.year, date:, t: Time.now.to_i)['records']
+            .standings(leagues: %i[al nl], season: date.year, date: date.strftime('%F'), t: Time.now.to_i)['records']
             .select { it.dig('league', 'id') == league_id }
             .flat_map { it['teamRecords'] }
             .sort_by { it['wildCardRank'].to_i }
