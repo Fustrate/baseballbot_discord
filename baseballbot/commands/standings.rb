@@ -8,8 +8,6 @@ module BaseballDiscord
       end
 
       class StandingsCommand < SlashCommand
-        STANDINGS = '/v1/standings/regularSeason?leagueId=103,104&season=%<year>d&t=%<t>d&date=%<date>s&hydrate=team'
-
         IGNORE_CHANNELS = [452550329700188160].freeze
 
         def run
@@ -30,7 +28,8 @@ module BaseballDiscord
         def standings_data(date, division_id)
           clamped_date = clamp_date_to_regular_season(date)
 
-          load_data_from_stats_api(STANDINGS, date: clamped_date)['records']
+          bot.stats_api
+            .standings(leagues: %i[al nl], season: clamped_date.year, date: clamped_date, t: Time.now.to_i)['records']
             .find { it.dig('division', 'id') == division_id }['teamRecords']
         end
 

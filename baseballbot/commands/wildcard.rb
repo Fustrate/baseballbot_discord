@@ -8,8 +8,6 @@ module BaseballDiscord
       end
 
       class WildcardCommand < SlashCommand
-        STANDINGS = '/v1/standings/regularSeason?leagueId=103,104&season=%<year>d&t=%<t>d&date=%<date>s&hydrate=team'
-
         TABLE_HEADERS = %w[Team W L GB % rDiff STRK].freeze
 
         IGNORE_CHANNELS = [452550329700188160].freeze
@@ -31,7 +29,8 @@ module BaseballDiscord
         protected
 
         def leaders_and_others(date, league_id)
-          load_data_from_stats_api(STANDINGS, date:)['records']
+          bot.stats_api
+            .standings(leagues: %i[al nl], season: date.year, date:, t: Time.now.to_i)['records']
             .select { it.dig('league', 'id') == league_id }
             .flat_map { it['teamRecords'] }
             .sort_by { it['wildCardRank'].to_i }
