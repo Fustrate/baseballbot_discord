@@ -53,8 +53,6 @@ require_relative 'bot'
 #   cmd.string 'username', 'Your new username', required: true
 # end
 
-@discord_bot.delete_application_command(:verify)
-
 # @discord_bot.register_application_command(:wildcard, 'Displays the wildcard standings for a league') do |cmd|
 #   cmd.string(
 #     'league',
