@@ -11,20 +11,6 @@ class SlashCommand
 
   protected
 
-  def load_data_from_stats_api(path, **interpolations)
-    url = "https://statsapi.mlb.com/api#{interpolate_path(path, interpolations)}"
-
-    log "[URL Load] #{url}", level: :debug
-
-    JSON.parse(URI.parse(url).open.read)
-  end
-
-  def interpolate_path(path, interpolations)
-    date = interpolations[:date] || (Time.now - 7200)
-
-    format path, interpolations.merge(year: date.year, t: Time.now.to_i, date: date.strftime('%m/%d/%Y'))
-  end
-
   def log(str, level: :info)
     @log_tags ||= "[/#{event.command_name}] [#{user.distinct}]"
 

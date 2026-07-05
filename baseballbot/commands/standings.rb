@@ -80,13 +80,10 @@ module BaseballDiscord
         def clamp_date_to_regular_season(date)
           formatted = date.strftime('%F')
 
-          data = load_data_from_stats_api(
-            '/v1/seasons?sportId=1&season=%<season>d',
-            season: date.year
-          )
+          season = bot.stats_api.season(date.year).dig('seasons', 0)
 
-          end_date = data.dig('seasons', 0, 'regularSeasonEndDate')
-          start_date = data.dig('seasons', 0, 'regularSeasonStartDate')
+          end_date = season['regularSeasonEndDate']
+          start_date = season['regularSeasonStartDate']
 
           return Time.parse(end_date) if formatted > end_date
           return Time.parse(start_date) if formatted < start_date

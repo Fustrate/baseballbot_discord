@@ -9,10 +9,6 @@ module BaseballDiscord
       end
 
       class ScheduleCommand < SlashCommand
-        SCHEDULE = '/v1/schedule?teamId=%<team_id>d&startDate=%<start_date>s&endDate=%<end_date>s&sportId=1&' \
-                   'hydrate=team(venue(timezone)),game(content(summary)),linescore,broadcasts(all)&' \
-                   'eventTypes=primary&scheduleTypes=games'
-
         PREGAME_STATUSES = /Preview|Warmup|Pre-Game|Delayed Start|Scheduled/
         POSTGAME_STATUSES = /Final|Game Over|Postponed|Completed Early/
 
@@ -41,11 +37,13 @@ module BaseballDiscord
         def glorious_table_of_games
           start_date, end_date = calendar_dates
 
-          data = load_data_from_stats_api(
-            SCHEDULE,
+          data = bot.stats_api.schedule(
             team_id: @team_id,
             start_date: start_date.strftime('%m/%d/%Y'),
-            end_date: end_date.strftime('%m/%d/%Y')
+            end_date: end_date.strftime('%m/%d/%Y'),
+            hydrate: 'team(venue(timezone)),game(content(summary)),linescore,broadcasts(all)',
+            eventTypes: 'primary',
+            scheduleTypes: 'games'
           )
 
           games_table process_games(data)

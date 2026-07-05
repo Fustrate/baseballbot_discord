@@ -8,7 +8,7 @@ module BaseballDiscord
       end
 
       class ScoreboardCommand < SlashCommand
-        SCHEDULE = '/v1/schedule?sportId=1&date=%<date>s&t=%<t>d&hydrate=game(content(summary)),linescore,flags,team'
+        SCHEDULE = 'hydrate=game(content(summary)),linescore,flags,team'
 
         PREGAME_STATUSES = /Preview|Warmup|Pre-Game|Delayed Start|Scheduled/
         POSTGAME_STATUSES = /Final|Game Over|Postponed|Completed Early/
@@ -20,7 +20,10 @@ module BaseballDiscord
 
           return error_message('Invalid date') unless date
 
-          data = load_data_from_stats_api(SCHEDULE, date:)
+          data = bot.stats_api.schedule(
+            date: date.strftime('%m/%d/%Y'),
+            hydrate: 'hydrate=game(content(summary)),linescore,flags,team'
+          )
 
           return error_message('No games on this date') if data['totalGames'].zero?
 
